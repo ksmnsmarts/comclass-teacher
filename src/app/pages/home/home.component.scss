@@ -1,0 +1,151 @@
+.home {
+	min-width: 1024px;
+	// height:100vh;
+    height: calc(100vh - 16px);
+	background-size:cover;
+	background-position:center center;
+	background-image: url("../../../assets/img/bg/background.jpg");
+
+    // .md-padding {
+    // 		background-color: white;
+	// }
+	
+	.title {	
+
+		padding-top:50px;
+		
+		h1 {
+			font-family:'Signika', sans-serif;
+			font-weight: bold;
+		}
+
+		span:nth-child(4n) { color:hsl(50, 75%, 55%); text-shadow:1px 1px hsl(50, 75%, 45%), 2px 2px hsl(50, 45%, 45%), 3px 3px hsl(50, 45%, 45%), 4px 4px hsl(50, 75%, 45%); }
+		span:nth-child(4n-1) { color:hsl(135, 35%, 55%); text-shadow:1px 1px hsl(135, 35%, 45%), 2px 2px hsl(135, 35%, 45%), 3px 3px hsl(135, 35%, 45%), 4px 4px hsl(135, 35%, 45%); }
+		span:nth-child(4n-2) { color:hsl(155, 35%, 60%); text-shadow:1px 1px hsl(155, 25%, 50%), 2px 2px hsl(155, 25%, 50%), 3px 3px hsl(155, 25%, 50%), 4px 4px hsl(140, 25%, 50%); }
+		span:nth-child(4n-3) { color:hsl(30, 65%, 60%); text-shadow:1px 1px hsl(30, 45%, 50%), 2px 2px hsl(30, 45%, 50%), 3px 3px hsl(30, 45%, 50%), 4px 4px hsl(30, 45%, 50%); }
+
+		#state {
+			margin-left: 10px;
+			width: 60px;
+			height: auto;
+		}
+	}
+
+	.body {
+		height: calc(100vh - 174px - 50px);
+        display: flex;
+        justify-content: center;
+		// div {
+		//     border: 1px solid;
+		// }
+
+		// #offLine:hover,
+		// #setClass:hover,
+		// #setNetwork:hover {
+		//     position: abolute;
+		//     opacity: 0.7;
+		//     cursor: pointer;
+		//     -webkit-transform: scale(1.2);
+		//     transform: scale(1.1);
+		// }   
+
+	
+		//https://www.w3schools.com/howto/howto_css_image_overlay.asp	
+			
+
+
+		//https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_image_overlay_fade
+		.container {
+			position: relative;
+			// width: 50%;
+			font-family:'Nanum';
+
+			&.offline {
+				.image {
+					opacity: 0.3;
+					cursor: pointer;
+				}
+			}
+
+		}
+				
+		.container:hover {
+			.image {
+				opacity: 0.3;
+				cursor: pointer;
+			}
+		}
+		.img-container {
+			text-align: center;
+			width:100%;
+		}
+
+        .img-container:hover {
+            cursor: pointer;
+    	}
+
+		.image {
+			//display: block;
+			width: 90%;
+			height: auto;
+			border-radius: 50%;		
+		}
+		
+		.overlay {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 100%;
+			width: 100%;
+			opacity: 0;
+			transition: .3s ease;
+			border-radius: 50%;
+		}
+
+        .overlay:hover {
+            cursor: pointer;
+        }
+		
+		.container:hover .overlay {
+			opacity: 0.8;
+		}
+		
+		// Floating Shadow Pseudoelement 
+		//https://codepen.io/cfarm/pen/FHxnr
+	.container:after { 
+		content:'';
+			display: block;
+			//position: absolute;
+			//left: 50%;
+			//bottom: 0px;
+			//top:30px;
+			width: 70%;
+			//max-width: 210px;
+			height: 10px;
+			background: transparent;
+			border-radius: 50%;
+			box-shadow: 0 70px 50px rgba(0,0,0,0.7);
+		}
+
+		
+		.text {
+			color: black;
+			position: absolute;
+            top: 40%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			-ms-transform: translate(-50%, -50%);
+			text-align: center;
+			font-family:'Nanum';
+			font-weight:bold;
+		}
+		
+		//click시 파란색 outline 방지.
+		*:focus {outline:none}
+
+	}
+    
+}
+

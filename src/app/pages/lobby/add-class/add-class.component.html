@@ -1,0 +1,56 @@
+<div id="popupContainer" aria-label="add class" style=" border-radius: 10px;">
+    <form [formGroup]="addClassForm">
+
+        <div  style="background-color: rgb(255, 174, 0);">
+            <div class="md-toolbar-tools">
+                <h2 class="title" style="color: black;">수업 추가</h2>
+                <span flex></span>
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <h3 class="mat_dialog_content">선생님과 과목을 입력해주세요.</h3>
+                <br>
+
+                <div class="mat_dialog_inner">
+                    <div layout-gt-sm="row">
+                        <mat-form-field class="companyFormFieldBox">
+                            <!-- <mat-label>Company Name</mat-label> -->
+                            <input  placeholder="선생님"  matInput type="text" name="teacher" formControlName="teacher" required/>
+                        </mat-form-field>
+                    </div>
+                    <div layout-gt-sm="row">
+                        <mat-form-field class="companyFormFieldBox">
+                            <!-- <mat-label>Company Name</mat-label> -->
+                            <input placeholder="과목" matInput type="text" name="subject" formControlName="subject" required/>
+                        </mat-form-field>
+                    </div>
+                    <div layout-gt-sm="row">
+                        <div id="errmsg" style="color:red;"></div>
+                    </div>
+    
+                    <div>
+                        <label> 사진 </label>
+                        <br>
+                        <input #uploadInput ngf-select type="file" (change)="onFileChange($event)" name="upload_file" > 
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+
+
+        <div class="btnContainer" layout="row">
+            <button mat-raised-button class="cancelBtn" (click)="cancel();" style="color: rgb(235, 79, 79);">
+                취소
+            </button>
+            <button mat-raised-button class="addBtn" type="submit" (click)="add();" style="color: rgb(96, 96, 221); ">
+                추가
+            </button>
+        </div>
+
+
+    </form>
+
+</div>

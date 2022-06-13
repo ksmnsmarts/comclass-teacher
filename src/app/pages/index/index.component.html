@@ -1,0 +1,49 @@
+<nav class="navbar-header primary" (scroll)="onScroll($event);"
+	[className]="isNavbarOnTop ? 'navbar-header primary top' : 'navbar-header primary down'">
+    <div class="logoImg">
+        <button mat-button tabindex="0" routerLinkActive="active">
+            <img src="assets/img/home/class.png" height="30px" [routerLink]="['']">
+            <i class="fa fa-chalkboard"></i>
+        </button>
+    </div>
+	
+	<div class="nav-profile" fxLayout="row" fxLayoutGap="15px">
+		<span class="span-signup" [routerLink]="['/sign-up']" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="7px">
+			<div>
+				<mat-icon>person</mat-icon>
+			</div>
+			<div>
+				SIGN UP
+			</div>
+		</span>
+		<span class="span-signup" [routerLink]="['/sign-in']" fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="7px">
+			<div>
+				<mat-icon>person</mat-icon>
+			</div>
+			<div>
+				SIGN IN
+			</div>
+		</span>
+	</div>
+</nav>
+
+<!-- https://www.w3schools.com/howto/howto_css_blurred_background.asp -->
+<div class="landing-main">
+	<div class="landing-bg"></div>
+	<div class="landing-overlay"></div>
+	<div class="landing-text">
+		<div class="content_desc">
+			<div>
+				<h3>
+					Admin Page of a ComClass.
+				</h3>
+			</div>
+			<!-- <div>
+				<div class="tempSize">
+					이미지 삽입
+				</div>
+			</div> -->
+		</div>
+
+	</div>
+</div>

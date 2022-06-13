@@ -1,0 +1,89 @@
+.lobby {
+	min-width:1024px;
+	min-height:100vh; 
+    background-color:#eee;
+    
+
+    .lobby_container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mat-toolbar-tools {
+        display: flex;
+        width: 100%;
+        background-color: rgb(40,53,147);
+        color: rgba(255,255,255,0.87);
+        align-items: center;
+
+    }
+
+    .toolbar_container {}
+
+    mat-toolbar {
+        padding: 0;
+    }
+
+    .exitBtn {
+        float: right;
+    }
+
+
+	.bottom-toolbar {
+		background: linear-gradient(60deg, #2c297d,#3f51b5);	
+		box-shadow: 0 12px 20px -10px rgba(0, 188, 212, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 188, 212, 0.2);
+	}
+
+
+    span {
+        background-color: white;
+    }
+    .add-class-btn, .delete-class-btn {
+        //background-color: rgb(204, 147, 139);
+        background-color: #795548;
+        color: white;
+        text-align: center;
+        border-radius: 20px;
+    }
+
+    .add-class-btn:hover, .delete-class-btn:hover {
+        //background-color:  rgb(218, 107, 92);
+        background-color: #5D4037;
+    }
+    // div {
+    //     border: 1px solid;
+    // }
+
+    .header{
+        margin-left: 2%;
+    }
+
+    #home {
+        width: 70%;
+        height: auto;
+    }
+
+    mat-card {
+        //border: 5px outset #795548;
+        border-radius: 20px;
+    }
+    .mat-headline {
+        text-align: center;
+    }
+    
+    .mat-subheader {
+        text-align: right;
+    }
+
+	// https://stackoverflow.com/questions/21537806/css-height-same-as-width
+    .class-img {
+        border-radius: 50%;		
+		width:90%;
+		padding-top:90%;
+		margin:auto;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position:center;
+    }
+	
+}

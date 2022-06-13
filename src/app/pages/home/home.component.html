@@ -1,0 +1,47 @@
+<div class="home" ng-cloak aria-label="home">
+	<div  class="md-padding title " layout="row" layout-align="center center">
+		<!-- connectStateImg는 설정 위에 표시해주기 -->
+		<!-- <h1 class="md-display-4">Comclass-A</h1> -->
+		<!-- <img ng-src="{{vm.connectStateImg}}" id="state"> -->
+		<!-- https://stackoverflow.com/questions/13999659/conditionally-change-img-src-based-on-model-data -->
+        <h1 class="md-display-4 ">
+            <span>C</span><span>O</span><span>M</span><span>C</span><span>L</span><span>A</span><span>S</span><span>S</span><span>-</span><span>A</span>
+        </h1>
+
+		<!-- <img ng-src="{{vm.isConnected && vm.connectedImg || vm.notConnectedImg}}" id="state"> -->
+	</div>
+	<!-- <div flex="10" class="md-padding"></div> -->
+	<div layout="row" layout-align="center center" class="body">
+
+		<!-- <div class="container animated zoomIn" layout="column" flex="30" layout-align="center center" id="offLine" ng-click="vm.openOffLineClass()">
+			<div class="img-container">
+				<img src="assets/img/home/school-material.png" class="image">
+			</div>
+			<div class="overlay">
+				<div class="text md-display-2">혼자하기</div>
+			</div>
+		</div> -->
+
+		<div class="container animated zoomIn" ng-class="(!vm.isConnected)?'offline':''"
+			layout="column" flex="30" layout-align="center center" id="setClass" ng-click="vm.openClassList()">
+			<div class="img-container">
+				<img src="assets/img/home/presentation.png" class="image" style="border:12px solid #3949ab">
+			</div>
+			
+			<div class="overlay" (click)="openClassList()">
+				<div class="text md-display-2">수업목록</div>
+			</div>
+		</div>
+
+
+		<!-- <div class="container animated zoomIn" layout="column" flex="30" layout-align="center center" id="setNetwork" ng-click="vm.openNetworkConfig()">
+			<div class="img-container">
+				<img src="assets/img/home/wifi.png" class="image">
+			</div>
+			<div class="overlay">
+				<div class="text md-display-2">네트워크<br>설정</div>
+			</div>
+		</div> -->
+
+	</div>
+</div>

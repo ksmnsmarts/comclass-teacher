@@ -1,0 +1,33 @@
+::ng-deep .mat-dialog-container{
+    padding: 0 !important;
+}
+
+::ng-deep .mat-form-field{
+    width: 100% !important;
+}
+
+.title {
+    margin: 0;
+    padding: 20px;
+}
+
+.mat_dialog_content {
+    text-align: center;
+}
+
+.mat_dialog_inner {
+    padding: 0 30px;
+}
+
+.btnContainer {
+    padding: 20px;
+    float: right;
+
+    .cancelBtn {
+        margin-right: 10px;
+    }
+
+    .addBtn {
+        margin-left: 10px;
+    }
+}

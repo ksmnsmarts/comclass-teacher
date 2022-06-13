@@ -1,0 +1,74 @@
+<div class="card-container" fxLayoutAlign="center center" fxLayout="column">
+	<mat-card class="cardBox">
+		<mat-card-header fxLayoutAlign="center center" fxLayout="column">
+			<div class="title">
+				<!-- <img src="assets/logo/logo-title2-rm.png" alt=""> -->
+                <h1 class="md-display-4 ">
+                    <span>C</span><span>O</span><span>M</span><span>C</span><span>L</span><span>A</span><span>S</span><span>S</span><span>-</span><span>A</span>
+                </h1>
+			</div>
+			<div>
+				<mat-card-title>
+					Register for an account
+				</mat-card-title>
+			</div>
+			<div class="cardSubTitle">
+				Simply fill out the form below
+			</div>
+		</mat-card-header>
+		<mat-card-content>
+			<form #signUpForm="ngForm" class="example-form" (ngSubmit)="(signUpForm.form.valid) && (signUpFormData.password == signUpFormData.confirmedPassword) && signUp()">
+				<mat-form-field class="example-full-width" appearance="fill">
+					<input matInput 
+						type="text" 
+						placeholder="E-Mail *" 
+						[(ngModel)]="signUpFormData.email" 
+						name="email" 
+						spellcheck="false" 
+						pattern="[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z.-]{2,3}$" 
+						required>
+				</mat-form-field>
+
+				<mat-form-field class="example-full-width" appearance="fill">
+					<input matInput 
+						type="text" 
+						placeholder="Name *" 
+						[(ngModel)]="signUpFormData.name" 
+						name="name" 
+						required>
+				</mat-form-field>
+
+				<mat-form-field class="example-full-width" appearance="fill">
+					<input matInput 
+						type="password" 
+						placeholder="Password"
+						[(ngModel)]="signUpFormData.password" 
+						name="password" 
+						minlength="5" 
+						maxlength="14"
+						required>
+						<mat-error *ngIf="(signUpFormData.password != signUpFormData.confirmedPassword)">password must be match with Confirmed Password</mat-error>
+				</mat-form-field>
+				
+
+				<mat-form-field class="example-full-width" appearance="fill">
+					<input matInput 
+						type="password" 
+						placeholder="Password (Confirm)"
+						[(ngModel)]="signUpFormData.confirmedPassword" 
+						name="confirmedPassword" 
+						minlength="5" 
+						maxlength="14"
+						required>
+
+						<mat-error *ngIf="(signUpFormData.password != signUpFormData.confirmedPassword)">password must be match with Confirmed Password</mat-error>
+				</mat-form-field>
+			  
+				<div fxLayoutAlign="center" fxLayout="column wrap">
+					<button type="submit" mat-raised-button class="signupBtn" [disabled]="!signUpForm.form.valid">SIGN UP</button>
+				</div>
+				
+			  </form>
+		</mat-card-content>
+	</mat-card>
+</div>

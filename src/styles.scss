@@ -1,1 +1,33 @@
 /* You can add global styles to this file, and also import other style files */
+// @import "~bootstrap/dist/css/bootstrap.css";
+@import './theme';
+
+html {
+	overflow: hidden;
+}
+
+html, 
+body { 
+	height: 100%; 
+	padding: 0;
+	margin: 0;
+}
+
+em { 
+	font-style: initial;
+}
+body { margin: 0; font-family: 'Noto Sans', 'Roboto', "Helvetica Neue", sans-serif; }
+
+
+.search-snackbar button{
+    color: rgb(1, 132, 255);
+}
+
+
+// breakpointObserver
+// sidebar auto change error solution ( because of dialog ) 
+@media screen and (min-width: 1280px) {
+	body {
+		font-family: 'Noto Sans', 'Roboto', "Helvetica Neue", sans-serif;
+	}
+}
