@@ -1,0 +1,27 @@
+		
+<!-- drag scroll : zoom / pan의 경우에 사용 (PC) -->
+<div id="canvasContainer" drag-scroll="vm.mode=='move'?true:false">
+	<!------------------------[ Background Image (pdf) ] ------------------------- -->
+	<div class="canvasBackground">
+		<canvas id="bg"></canvas>
+	</div>
+	<!-- ------------------------------------------------------------- -->
+
+	<!------------------------[ 선생님 판서 canvas : 1개로 사용 ] ------------------------- -->
+	<div class="canvasTeacher">
+		<canvas id="teacherCanvas" ></canvas>
+	</div>
+	
+	<!------------------------[ 선생님 판서 Guidance. ] ------------------------- -->
+	<div class="guidance" ng-show="vm.isGuideMode">					
+		<canvas id="studentGuideCanvas"></canvas>
+		<canvas id="teacherGuideCanvas"></canvas>
+	</div>
+	
+	<!------------------------[ 선생님 판서 cover canvas ] ------------------------- -->
+	<div class="cover" ng-show="vm.mode!='move' && vm.isDocLoaded && !vm.isReplayShown">               
+		<canvas id="coverCanvas"></canvas>									
+	</div>
+	
+</div>
+

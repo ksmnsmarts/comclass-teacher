@@ -19,6 +19,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { AdminGuard } from './0.shared/guard/admin.guard';
 import { SignInGuard } from './0.shared/guard/signIn.guard';
 import { ClassManagementComponent } from './pages/class-management/class-management.component';
+import { ClassManagementModule } from './pages/class-management/class-management.module';
+import { ComclassCanvasComponent } from './pages/class-management/comclass-canvas/comclass-canvas.component';
+import { ComclassFabsComponent } from './pages/class-management/comclass-fabs/comclass-fabs.component';
+import { ComclassNavComponent } from './pages/class-management/comclass-nav/comclass-nav.component';
+import { ComclassNewpageComponent } from './pages/class-management/comclass-newpage/comclass-newpage.component';
+import { ComclassStudentComponent } from './pages/class-management/comclass-student/comclass-student.component';
+import { ComclassThumbComponent } from './pages/class-management/comclass-thumb/comclass-thumb.component';
+
+
+
+
 
 export function tokenGetter() {
 	return localStorage.getItem(environment.tokenName);
@@ -29,7 +40,14 @@ export function tokenGetter() {
     declarations: [
         AppComponent,
         IndexComponent,
+        
         ClassManagementComponent,
+        ComclassCanvasComponent,
+        ComclassFabsComponent,
+        ComclassNavComponent,
+        ComclassNewpageComponent,
+        ComclassStudentComponent,
+        ComclassThumbComponent
     ],
     imports: [
         BrowserModule,
@@ -51,6 +69,7 @@ export function tokenGetter() {
         DialogModule,
         ReactiveFormsModule,
         MatIconModule,
+        
     ],
     providers: [SignInGuard, AdminGuard],
     bootstrap: [AppComponent]

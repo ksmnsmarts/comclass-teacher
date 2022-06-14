@@ -1,0 +1,22 @@
+<div class="thumbnail-container" drag-scroll="true" axis="y">		
+	<div class="thumb-item" 
+		ng-class="{'select':vm.currentPage === ()}"
+		ng-repeat="item in vm.thumbArray track by $index" ng-click="vm.clickThumb()">		
+		
+		<!-- thumbnail 배경 image -->
+		<img id="" class="thumbBg" width="" height=""> 
+		<!-- thumbnail 판서 canvas -->
+		<canvas id="" class="thumbCanvas" width="" height="" >
+		</canvas>
+
+		<div class="page-number"> 
+			<span></span>	
+		</div>
+
+		<div class="thumb-window-container" ng-if="vm.currentPage === ()">
+			<div id="thumb-window" ng-style="{'width':vm.thumbWindowSize.w,'height':vm.thumbWindowSize.h}">
+			</div>
+		</div>
+
+	</div>
+</div>

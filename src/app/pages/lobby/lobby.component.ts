@@ -52,7 +52,6 @@ export class LobbyComponent implements OnInit {
 
     // 수업 개설
     openClass(_id) {
-        console.log(_id);
         this.router.navigate([`comclass/${_id}`]);
     }
 

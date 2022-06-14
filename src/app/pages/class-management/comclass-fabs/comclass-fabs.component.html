@@ -1,0 +1,99 @@
+
+
+<div class="fabs-container">
+	<!------------------------------------------
+		Floating Fab buttons 
+		- zoom
+		- blind
+	------------------------------------------ -->
+
+	<div class="floating-fabs-container">
+		<button aria-label="pen" class="md-fab md-raised md-mini" 						
+			ng-click="vm.clickZoom('fitToWidth')">
+			<mat-icon style="color:#777">fullscreen</mat-icon>				
+		</button>
+		<button aria-label="pen" class="md-fab md-raised md-mini" 						
+			ng-click="vm.clickZoom('fitToPage')">
+			<mat-icon style="color:#777">fullscreen_exit</mat-icon>				
+		</button>
+		
+		<button aria-label="pen" class="md-fab md-raised md-mini" style="margin-top:20px;"
+			ng-click="vm.clickZoom('zoomIn')">
+			<mat-icon style="color:#777">add</mat-icon>				
+		</button>
+		<button aria-label="pen" class="md-fab md-raised md-mini" 
+			ng-click="vm.clickZoom('zoomOut')">
+			<mat-icon style="color:#777">remove</mat-icon>				
+		</button>
+
+		<button aria-label="close" class="md-fab md-raised md-mini md-warn" style="margin-top:20px;"
+			ng-click="vm.clickBlind()">
+			<mat-icon>video_label</mat-icon>
+		</button>
+	</div>
+
+
+	<!-- Play Test -->
+	<div class="play-fabs-container" ng-if="vm.isReplayShown">
+		<button aria-label="play" class="md-fab md-raised md-mini"
+			ng-click="vm.clickReplay('play')">
+			<mat-icon style="color:#777">play_arrow</mat-icon>				
+		</button>		
+
+		<button aria-label="pause" class="md-fab md-raised md-mini"	
+			ng-click="vm.clickReplay('pause')">
+			<mat-icon style="color:#777">pause</mat-icon>				
+		</button>
+		
+		<button aria-label="reverse" class="md-fab md-raised md-mini"
+			ng-click="vm.clickReplay('reverse')">
+			<!-- <mat-icon style="color:#777">replay_5</mat-icon>				 -->
+			<mat-icon style="color:#777">skip_previous</mat-icon>				
+		</button>
+
+		<button aria-label="forward" class="md-fab md-raised md-mini" 						
+			ng-click="vm.clickReplay('forward')">
+			<!-- <mat-icon style="color:#777">forward_5</mat-icon>				 -->
+			<mat-icon style="color:#777">skip_next</mat-icon>				
+		</button>
+	
+
+		<button aria-label="stop" class="md-fab md-raised md-mini" 
+			ng-click="vm.clickReplay('stop')">
+			<mat-icon style="color:#777">stop</mat-icon>				
+		</button>
+
+		
+
+		<button aria-label="pause" class="md-fab md-raised md-mini"	
+			ng-click="vm.clickReplay('close')">
+			<mat-icon style="color:#777">close</mat-icon>				
+		</button>
+		
+	</div>
+		
+	<!------------------------------------
+		1:1 Guide Fab Button
+		- 학생 이름 표시
+		- 닫기 버튼. 		
+	-------------------------------------- -->
+	<div ng-show="vm.isGuideMode"
+		md-direction="down" ng-cloak
+		class="md-scale md-fab-top-right" >
+		<!-- Main Button (close) -->
+		<div>
+			<button aria-label="close" class="md-fab md-primary animated fadeIn">
+				<span style="font-size:12px"></span>
+			</button>
+		</div>
+
+		<div>
+			<button aria-label="end" class="md-fab md-raised" 			
+				ng-click="vm.clickGuideCloseBtn()">
+				<mat-icon style="color:#777">close</mat-icon>
+			</button>
+		</div>
+	</div>
+	<!-- End of Fab Test -->
+	
+</div>

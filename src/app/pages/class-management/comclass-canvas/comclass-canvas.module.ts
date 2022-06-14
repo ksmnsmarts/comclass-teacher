@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ClassManagementRoutingModule } from './class-management-routing.module';
-
-
 
 
 
@@ -13,8 +10,6 @@ import { ClassManagementRoutingModule } from './class-management-routing.module'
   ],
   imports: [
     CommonModule,
-    ClassManagementRoutingModule,
-
   ]
 })
-export class ClassManagementModule { }
+export class ComclassCanvasModule { }
