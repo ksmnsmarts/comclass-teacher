@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import * as moment from 'moment';
+import { ClassService } from 'src/app/0.shared/services/class/class.service';
 import { AddClassComponent } from './add-class/add-class.component';
 
 
@@ -11,19 +13,22 @@ import { AddClassComponent } from './add-class/add-class.component';
 })
 export class LobbyComponent implements OnInit {
 
+    meetingData;
+
     constructor(
         public dialog: MatDialog,
+        private classService: ClassService,
+        private router: Router,
     ) { }
 
     ngOnInit(): void {
+
+        this.getClass()
     }
 
 
 
     addClass() {
-        const convertDate = moment().format("YYYY-MM-DD")
-   
-    
         const dialogRef = this.dialog.open(AddClassComponent, {
             data: {
             },
@@ -31,13 +36,24 @@ export class LobbyComponent implements OnInit {
         });
     
         dialogRef.afterClosed().subscribe((data) => {
-            
+            this.getClass();
         })
     }
     
 
-    deleteAll() {
+    // 수업 목록 가져오기
+    getClass() {
+        this.classService.getClass().subscribe((data)=> {
+            console.log(data)
+            this.meetingData = data;
 
+        })
+    }
+
+    // 수업 개설
+    openClass(_id) {
+        console.log(_id);
+        this.router.navigate([`comclass/${_id}`]);
     }
 
 

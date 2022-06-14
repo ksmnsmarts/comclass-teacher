@@ -1,27 +1,60 @@
 <div class="lobby">
     <mat-toolbar class="lobby_container">
         <div class="mat-toolbar-tools ">
-			<button class="mat-icon-button" aria-label="Settings" ng-disabled="true">
-				<mat-icon style="color:#ccc" >list</mat-icon>
-			</button>		
-			<h2 flex mat-truncate>수업 목록</h2>
+            <button class="mat-icon-button" aria-label="Settings" ng-disabled="true">
+                <mat-icon style="color:#ccc">list</mat-icon>
+            </button>
+            <h2 flex mat-truncate>수업 목록</h2>
 
-			<button ui-sref="home" class="mat-icon-button exitBtn" aria-label="exit" style="margin-right: 10px; padding:0;">
-			<mat-icon style="font-size:40px;width:40px;height:40px">exit_to_app</mat-icon>
-			</button>
-			
-		</div>
+            <button ui-sref="home" class="mat-icon-button exitBtn" aria-label="exit"
+                style="margin-right: 10px; padding:0;">
+                <mat-icon style="font-size:40px;width:40px;height:40px">exit_to_app</mat-icon>
+            </button>
 
-		<div class="mat-toolbar-tools bottom-toolbar animated fadeInDown">					
-			<h2 flex mat-truncate style="margin-left:20px;"> 총 개의 수업이 있습니다. </h2>
-			<button mat-raised-button class="mat-raised mat-primary" aria-label="add class" (click)="addClass();">
-				수업 추가
-			</button>
-	
-			<button mat-raised-button class="mat-raised mat-primary" aria-label="remove classes" (click)="deleteAll();">
-				수업 모두 삭제
-			</button>
-		</div>
+        </div>
+
+        <div class="mat-toolbar-tools bottom-toolbar animated fadeInDown">
+            <h2 flex mat-truncate style="margin-left:20px;"> 총 개의 수업이 있습니다. </h2>
+            <button mat-raised-button class="mat-raised mat-primary" aria-label="add class" (click)="addClass();">
+                수업 추가
+            </button>
+
+            <button mat-raised-button class="mat-raised mat-primary" aria-label="remove classes">
+                수업 모두 삭제
+            </button>
+        </div>
     </mat-toolbar>
+
+
+
+    <div fxLayout="row" class="mat-padding" layout-wrap >
+        <div fxFlex="30" fxFlex.gt-md="20" layout-padding *ngFor="let meeting of meetingData">
+            <mat-card>
+                <mat-card-title class="mat-card-title">
+                    <mat-card-title>
+                        <span class="mat-headline">
+                            {{meeting?.subject}}
+                        </span>
+                        <br>
+                        <span class="mat-subheader">
+                            <!-- {{val.teacher}} 선생님 -->
+                            {{meeting?.teacher}} 선생님
+                        </span>
+                    </mat-card-title>
+                </mat-card-title>
+                <mat-card-content>
+                    <div class="class-img">
+                        <img src="assets/img/teacher/noimage.png" height="30px" [routerLink]="['']">
+                    </div>
+                </mat-card-content>
+                <mat-card-actions layout="row" layout-align="center center" style="margin-bottom: 20px; display: flex;  justify-content: center;">
+                    <button mat-raised-button style="color: rgb(96, 96, 221);" (click)="openClass(meeting._id)">개설</button>
+                    <button mat-raised-button style="color: rgb(235, 79, 79);">삭제</button>
+                </mat-card-actions>
+
+            </mat-card>
+        </div>
+    </div>
+
 
 </div>

@@ -18,6 +18,7 @@ import { DialogModule } from './0.shared/dialog/dialog.module';
 import { MatIconModule } from '@angular/material/icon';
 import { AdminGuard } from './0.shared/guard/admin.guard';
 import { SignInGuard } from './0.shared/guard/signIn.guard';
+import { ClassManagementComponent } from './pages/class-management/class-management.component';
 
 export function tokenGetter() {
 	return localStorage.getItem(environment.tokenName);
@@ -28,6 +29,7 @@ export function tokenGetter() {
     declarations: [
         AppComponent,
         IndexComponent,
+        ClassManagementComponent,
     ],
     imports: [
         BrowserModule,

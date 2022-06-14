@@ -30,11 +30,11 @@
                         <div id="errmsg" style="color:red;"></div>
                     </div>
     
-                    <div>
+                    <!-- <div>
                         <label> 사진 </label>
                         <br>
                         <input #uploadInput ngf-select type="file" (change)="onFileChange($event)" name="upload_file" > 
-                    </div>
+                    </div> -->
                 </div>
                 
             </div>
@@ -42,12 +42,13 @@
 
 
         <div class="btnContainer" layout="row">
+            <button mat-raised-button class="addBtn" type="submit" (click)="addClass();" style="color: rgb(96, 96, 221);" [disabled]="!addClassForm.valid">
+                추가
+            </button>
             <button mat-raised-button class="cancelBtn" (click)="cancel();" style="color: rgb(235, 79, 79);">
                 취소
             </button>
-            <button mat-raised-button class="addBtn" type="submit" (click)="add();" style="color: rgb(96, 96, 221); ">
-                추가
-            </button>
+            
         </div>
 
 

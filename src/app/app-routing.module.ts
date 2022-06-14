@@ -33,6 +33,11 @@ const routes: Routes = [
 				path: 'lobby',
                 canActivate: [AdminGuard],
 				loadChildren: () => import(`./pages/lobby/lobby.module`).then(m => m.LobbyModule),
+			},
+            {
+				path: ':id',
+                canActivate: [AdminGuard],
+				loadChildren: () => import(`./pages/class-management/class-management.module`).then(m => m.ClassManagementModule),
 			}
         ]
     },

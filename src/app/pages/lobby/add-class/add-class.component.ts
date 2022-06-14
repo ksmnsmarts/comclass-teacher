@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { DialogService } from 'src/app/0.shared/dialog/dialog.service';
+import { ClassService } from 'src/app/0.shared/services/class/class.service';
 
 @Component({
     selector: 'app-add-class',
@@ -13,35 +15,59 @@ export class AddClassComponent implements OnInit {
     addClassForm: FormGroup;
     public fileData: File;
 
+   
+
     constructor(
         private formBuilder: FormBuilder,
         private dialogService: DialogService,
+        private classService: ClassService,
+        public dialogRef: MatDialogRef<AddClassComponent>,
     ) { 
         this.addClassForm = this.formBuilder.group({
             teacher: ['', [Validators.required]],
             subject: ['', [Validators.required]],
-            upload_file: ['']
+            // upload_file: ['']
         });
     }
 
     ngOnInit(): void {
 
-
+        
     }
 
 
-    add() {
-        const formData = new FormData();
-        formData.append('teacher', this.addClassForm.value.teacher);
-        formData.append('subject', this.addClassForm.value.subject);
     
 
-        console.log(this.addClassForm.value)
+
+    // 수업 등록
+    addClass() {
+        // const formData = new FormData();
+        // formData.append('teacher', this.addClassForm.value.teacher);
+        // formData.append('subject', this.addClassForm.value.subject);
+
+        console.log(this.addClassForm.value.teacher, this.addClassForm.value.subject)
+
+        const data = {
+            teacher : this.addClassForm.value.teacher,
+            subject : this.addClassForm.value.subject
+        }
+
+        this.dialogService.openDialogConfirm('수업을 등록하시겠습니까?').subscribe((result:any)=> {
+            if(result) {
+                this.classService.addClass(data).subscribe((data:any)=> {
+                    if(data.message == 'Success saved class') {
+
+                        this.dialogRef.close();
+                    }
+                    console.log(data)
+                })
+            }
+        })
     }
 
 
     cancel() {
-
+        this.dialogRef.close();
     }
 
 
