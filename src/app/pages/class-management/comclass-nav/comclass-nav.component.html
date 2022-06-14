@@ -78,28 +78,28 @@
                         </button>
                         
                         <mat-menu width="4" #menu="matMenu">
-                            <div>
+                            <div class="menuBtn">
                                 <button mat-raised-button  ng-click="vm.clickMenu('open',  $event)" ng-disabled="vm.isGuideMode">
                                     <mat-icon >folder_open</mat-icon>
                                     파일열기
                                 </button>
                             </div>
-                            <div>
+                            <div class="menuBtn">
                                 <button mat-raised-button ng-click="vm.clickMenu('save', $event)" 
                                     ng-disabled='!vm.isDocLoaded || vm.isGuideMode'>
                                     <mat-icon >save</mat-icon>
                                     저장
                                 </button>
                             </div>      
-                            <div>
+                            <div class="menuBtn">
                                 <button mat-raised-button ng-click="vm.clickMenu('init',  $event)" ng-disabled="!vm.isDocLoaded || vm.isGuideMode">
                                     <mat-icon >refresh</mat-icon>
                                     초기화
                                 </button>
                             </div>
                     
-                            <div>
-                                <button mat-raised-button ng-click="vm.clickMenu('exam', $event)" ng-disabled='vm.offLine'>
+                            <div class="menuBtn">
+                                <button  mat-raised-button ng-click="vm.clickMenu('exam', $event)" ng-disabled='vm.offLine'>
                                     <mat-icon >view_list</mat-icon>
                                     시험출제
                                 </button>
