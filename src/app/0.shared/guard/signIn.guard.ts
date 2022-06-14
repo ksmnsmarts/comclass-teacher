@@ -34,19 +34,26 @@ export class SignInGuard implements CanActivate, OnInit {
 
 		} else {
 
+            console.log(this.auth.isAuthenticated())
+
 			if (routePath == '') {
-				this.router.navigate(['leave/main']);
+				this.router.navigate(['comclass/main']);
 				return true;
 			} else if (routePath == 'find-pw') {
-				this.router.navigate(['leave/main']);
+				this.router.navigate(['comclass/main']);
 				return true;
 			} else if (routePath == 'sign-up') {
-				this.router.navigate(['leave/main']);
+				this.router.navigate(['comclass/main']);
 				return true;
 			} else if (routePath == 'sign-in') {
-				this.router.navigate(['leave/main']);
+				this.router.navigate(['comclass/main']);
 				return true;
-			} else {
+            }else if (routePath == 'welcome') {
+                    this.router.navigate(['comclass/main']);
+                    return true;
+            }
+                
+			else {
 				return true;
 			}
 
