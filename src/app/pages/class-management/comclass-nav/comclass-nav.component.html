@@ -58,56 +58,48 @@
                     </button> 
                     <!-- Eraser -->
                     <button class="toolBtn" ng-click="vm.changeTool('eraser', $event);" aria-label="change tool">
-                        <!-- <ic-icon [icon]="eraserIcon" [width]="40" [height]="40" [ngClass]="(currentTool == 'eraser')"></ic-icon> -->
+                        <ic-icon [icon]="eraserIcon" [width]="40" [height]="40" [ngClass]="(currentTool == 'eraser')"></ic-icon>
 					</button>
 					
 					  <!-- Pan -->
 					<button class="toolBtn" ng-click="vm.changeToMoveMode($event);" aria-label="move">
-						<i class="fas fa-2x fa-arrows-alt" 
-							ng-class="(vm.mode == 'move')?'active':''">							
-						</i>
+						<mat-icon> open_with </mat-icon>
 					</button>
 
 					<!-- sync button -->
 					<button class="toolBtn" ng-if="!vm.offLine" ng-click="vm.changeSyncState($event);" aria-label="link">
-						<!-- <i class="fas fa-2x fa-link" style="color:#8bc34a" >							
-						</i> -->
-						<!-- 수연 -->
-						<i class="fas fa-2x" ng-class="(vm.isSyncMode?'fa-link sync':'fa-unlink')">							
-                        </i>
-                        <!-- <i class="fas fa-2x fa-unlink" style="color:#9E9E9E" >							
-						</i> -->
+						<mat-icon> link </mat-icon>
 					</button>
                      
                    
                    <div>
                         <button mat-button [matMenuTriggerFor]="menu">                            
-                            <i class="fas fa-archive" ng-class="(vm.menu == 'file')?'active':''"> </i>
+                            <mat-icon >more_horiz</mat-icon>
                         </button>
                         
                         <mat-menu width="4" #menu="matMenu">
                             <div>
-                                <button ng-click="vm.clickMenu('open',  $event)" ng-disabled="vm.isGuideMode">
+                                <button mat-raised-button  ng-click="vm.clickMenu('open',  $event)" ng-disabled="vm.isGuideMode">
                                     <mat-icon >folder_open</mat-icon>
                                     파일열기
                                 </button>
                             </div>
                             <div>
-                                <button ng-click="vm.clickMenu('save', $event)" 
+                                <button mat-raised-button ng-click="vm.clickMenu('save', $event)" 
                                     ng-disabled='!vm.isDocLoaded || vm.isGuideMode'>
                                     <mat-icon >save</mat-icon>
                                     저장
                                 </button>
                             </div>      
                             <div>
-                                <button ng-click="vm.clickMenu('init',  $event)" ng-disabled="!vm.isDocLoaded || vm.isGuideMode">
+                                <button mat-raised-button ng-click="vm.clickMenu('init',  $event)" ng-disabled="!vm.isDocLoaded || vm.isGuideMode">
                                     <mat-icon >refresh</mat-icon>
                                     초기화
                                 </button>
                             </div>
                     
                             <div>
-                                <button ng-click="vm.clickMenu('exam', $event)" ng-disabled='vm.offLine'>
+                                <button mat-raised-button ng-click="vm.clickMenu('exam', $event)" ng-disabled='vm.offLine'>
                                     <mat-icon >view_list</mat-icon>
                                     시험출제
                                 </button>

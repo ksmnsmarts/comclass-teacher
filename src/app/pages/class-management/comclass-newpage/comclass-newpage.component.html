@@ -1,37 +1,37 @@
 <div layout="column" ng-cloak class="animated fadeIn">
 	
-	<div class="md-primary">
+	<mat-toolbar class="md-primary">
 		<div class="md-toolbar-tools">
-            <h4><i class="far fa-plus-square"></i> &nbsp;문서 열기</h4>
+            <h4><mat-icon >add_box</mat-icon> &nbsp;문서 열기</h4>
 		</div>
-	</div>
+	</mat-toolbar>
 
-	<div>        
+	<mat-card>        
                    
             <div style="display:flex; align-items:center; justify-content:space-evenly; width:700px; height:200px; ">
                 
                 <button class="md-raised" style="width:180px; height:120px; position:relative">                  
-                    <i class="far fa-4x fa-file-image"></i>
+                    <mat-icon class="icon-display">photo</mat-icon>
                     <span style="font-weight:700;">빈문서(세로)</span>
                     <label style="position:absolute; left:0; top:0; width:100%; height:100%;cursor:pointer;" ng-click="vm.clickMenu('vcanvas', $event);">   
                     </label>    
                 </button>                
 
                 <button class="md-raised" style="width:180px; height:120px; position:relative;color:#8c9eff;">                                  
-                    <i class="far fa-4x  fa-image"></i>                    
+                    <mat-icon class="icon-display">panorama</mat-icon>                 
                     <span style="font-weight:700;">빈문서(가로)</span>
                     <label style="position:absolute; left:0; top:0; width:100%; height:100%;cursor:pointer;" ng-click="vm.clickMenu('hcanvas', $event);"> 
                     </label>
                 </button>
                 
                 <button class="md-raised" style="width:180px; height:120px; position:relative;color:orange">
-                    <i class="fas fa-4x  fa-folder-open"></i>
+                    <mat-icon class="icon-display">folder_open</mat-icon>
                     <span style="font-weight:700;">파일열기</span>
                     <label style="position:absolute; left:0; top:0; width:100%; height:100%;cursor:pointer;" ng-click="vm.clickMenu('openFile', $event);">                        
                     </label>
                 </button>
             </div>
         
-    </div>
+    </mat-card>
 		
 </div>

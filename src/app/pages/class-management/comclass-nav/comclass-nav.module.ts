@@ -12,6 +12,8 @@ import { MatIconModule } from '@angular/material/icon';
   ],
   imports: [
     CommonModule,
+    IconModule,
+    MatIconModule
   ]
 })
 export class ComclassNavModule { }

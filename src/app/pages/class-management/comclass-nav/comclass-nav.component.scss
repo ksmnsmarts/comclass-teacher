@@ -42,6 +42,10 @@ ul{
             color:lightgray;
             cursor: pointer;
             text-align: center;
+
+            span {
+                line-height: 1px;
+            }
         }
     }   
 
@@ -152,7 +156,10 @@ ul{
             .toolBtn{
                 background-color: #2d2f5f;
                 border: 0;
+                color: white;
             }
+
+           
 
             i {
                 cursor:pointer;
@@ -171,6 +178,8 @@ ul{
         }
 
 	}
+
+
 	
 	.exit-item { 
 		i {

@@ -24,7 +24,7 @@ export class SignInGuard implements CanActivate, OnInit {
 		const routePath = route.routeConfig.path;
 		if (!this.auth.isAuthenticated()) {
 
-			if (routePath == '' || routePath == 'sign-in' || routePath == 'sign-up' || routePath == 'find-pw') {
+			if (routePath == '' || routePath == 'welcome') {
 				return true;
 			} else {
 				this.dialogService.openDialogNegative('Please, sign in first.');

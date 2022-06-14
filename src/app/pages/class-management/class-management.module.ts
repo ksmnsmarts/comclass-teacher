@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { ClassManagementRoutingModule } from './class-management-routing.module';
 
+import { MatIconModule } from '@angular/material/icon';
 
 
 
@@ -14,7 +15,7 @@ import { ClassManagementRoutingModule } from './class-management-routing.module'
   imports: [
     CommonModule,
     ClassManagementRoutingModule,
-
+    MatIconModule,
   ]
 })
 export class ClassManagementModule { }

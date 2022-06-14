@@ -11,6 +11,8 @@ import { NgMaterialUIModule } from './ng-material-ui/ng-material-ui.module';
 import { IndexComponent } from './pages/index/index.component';
 
 
+import { IconModule } from '@visurel/iconify-angular';
+
 // Env
 import { environment } from 'src/environments/environment';
 import { AuthModule } from './pages/auth/auth.module';
@@ -69,6 +71,7 @@ export function tokenGetter() {
         DialogModule,
         ReactiveFormsModule,
         MatIconModule,
+        IconModule,
         
     ],
     providers: [SignInGuard, AdminGuard],
