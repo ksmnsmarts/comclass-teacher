@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import {io, Socket} from 'socket.io-client';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
@@ -12,7 +12,7 @@ export class SocketService {
   private _socket: Socket;
 
   constructor() {
-    this._socket = io(this.url+'/socketWebRTC', { transports: ['websocket'], path:'/socketWebRTC' });
+    this._socket = io(this.url+'/socketComclass', { transports: ['websocket'], path:'/socketComclass' });
 		// console.log(this._socket);
   }
 

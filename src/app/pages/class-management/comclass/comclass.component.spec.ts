@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ComclassThumbComponent } from './comclass-thumb.component';
+import { ComclassComponent } from './comclass.component';
 
-describe('ComclassThumbComponent', () => {
-  let component: ComclassThumbComponent;
-  let fixture: ComponentFixture<ComclassThumbComponent>;
+describe('ComclassComponent', () => {
+  let component: ComclassComponent;
+  let fixture: ComponentFixture<ComclassComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ComclassThumbComponent ]
+      declarations: [ ComclassComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ComclassThumbComponent);
+    fixture = TestBed.createComponent(ComclassComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
