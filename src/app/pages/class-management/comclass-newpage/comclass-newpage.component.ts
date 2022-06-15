@@ -16,8 +16,12 @@ export class ComclassNewpageComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    
-    pdfOpen() {
-        this.eventBusService.emit(new EventData('pdf open', 'vcanvas'));
+
+    /*------------------------------------
+		Event를 comclass component로 전달
+	--------------------------------------*/
+    pdfOpen(newpageEvent) {  
+        console.log('[ newpage ---> main ] send event:', newpageEvent);      
+        this.eventBusService.emit(new EventData('open the blank pdf', newpageEvent));
     }
 }

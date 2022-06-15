@@ -44,7 +44,6 @@ export class LobbyComponent implements OnInit {
     // 수업 목록 가져오기
     getClass() {
         this.classService.getClass().subscribe((data)=> {
-            console.log(data)
             this.meetingData = data;
 
         })

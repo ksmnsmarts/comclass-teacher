@@ -10,14 +10,14 @@
                    
             <div style="display:flex; align-items:center; justify-content:space-evenly; width:700px; height:200px; ">
                 
-                <button class="md-raised" style="width:180px; height:120px; position:relative" (click)="pdfOpen()">                  
+                <button class="md-raised" style="width:180px; height:120px; position:relative" (click)="pdfOpen('vcanvas')">                  
                     <mat-icon class="icon-display">photo</mat-icon>
                     <span style="font-weight:700;">빈문서(세로)</span>
                     <label style="position:absolute; left:0; top:0; width:100%; height:100%;cursor:pointer;" ng-click="vm.clickMenu('vcanvas', $event);">   
                     </label>    
                 </button>                
 
-                <button class="md-raised" style="width:180px; height:120px; position:relative;color:#8c9eff;">                                  
+                <button class="md-raised" style="width:180px; height:120px; position:relative;color:#8c9eff;" (click)="pdfOpen('hcanvas')">                                  
                     <mat-icon class="icon-display">panorama</mat-icon>                 
                     <span style="font-weight:700;">빈문서(가로)</span>
                     <label style="position:absolute; left:0; top:0; width:100%; height:100%;cursor:pointer;" ng-click="vm.clickMenu('hcanvas', $event);"> 

@@ -49,8 +49,8 @@ export class SignInGuard implements CanActivate, OnInit {
 				this.router.navigate(['comclass/main']);
 				return true;
             }else if (routePath == 'welcome') {
-                    this.router.navigate(['comclass/main']);
-                    return true;
+                this.router.navigate(['comclass/main']);
+                return true;
             }
                 
 			else {

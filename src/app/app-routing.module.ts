@@ -38,9 +38,10 @@ const routes: Routes = [
 				path: ':id',
                 canActivate: [AdminGuard],
 				loadChildren: () => import(`./pages/class-management/class-management.module`).then(m => m.ClassManagementModule),
-			}
+			},
         ]
     },
+    
     // 잘못된 URL을 사용했을때 메인으로 보냄
     {
         path: '**',
