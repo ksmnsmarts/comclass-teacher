@@ -85,7 +85,7 @@ export class CanvasService {
 	 * Main container관련 canvas Size 설정
 	 *
 	 */
-	setCanvasSize(pageNum, zoomScale, canvasContainer, coverCanvas, teacherCanvas, bgCanvas, studentGuideCanvas, teacherGuideCanvas) {
+	setCanvasSize(pageNum, zoomScale, canvasContainer, coverCanvas, teacherCanvas, bgCanvas, studentGuideCanvas, teacherGuideCanvas, tmp) {
         console.log('setCanvasSize')
       const pdfPage = this.pdfStorageService.getPdfPage(pageNum);
       console.log(zoomScale)
@@ -125,6 +125,9 @@ export class CanvasService {
 			bgCanvas.style.width = canvasFullSize.width + 'px';
 			bgCanvas.style.height = canvasFullSize.height + 'px';
 
+      tmp.width = canvasFullSize.width;
+			tmp.height = canvasFullSize.height;
+
 			teacherCanvas.width = canvasFullSize.width;
 			teacherCanvas.height = canvasFullSize.height;
 
@@ -137,6 +140,9 @@ export class CanvasService {
 			// minipaint 참조: canvas scale 조절
 			const ctx = coverCanvas.getContext("2d");
 			ctx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
+
+      const tmpctx = tmp.getContext("2d");
+			tmpctx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
 
 			const teacherCtx = teacherCanvas.getContext("2d");
 			teacherCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);

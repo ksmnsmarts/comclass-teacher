@@ -38,7 +38,7 @@ export class ComclassCanvasComponent implements OnInit {
     @ViewChild('studentGuideCanvas', { static: true }) public studentGuideCanvasRef: ElementRef;
     @ViewChild('teacherGuideCanvas', { static: true }) public teacherGuideCanvasRef: ElementRef;
     @ViewChild('bg', { static: true }) public bgCanvasRef: ElementRef;
-    @ViewChild('temp', { static: true }) public tempRef: ElementRef;
+    @ViewChild('tmp', { static: true }) public tmpCanvasRef: ElementRef;
 
 
     canvasContainer: HTMLDivElement;
@@ -47,7 +47,7 @@ export class ComclassCanvasComponent implements OnInit {
     studentGuideCanvas: HTMLCanvasElement;
     teacherGuideCanvas: HTMLCanvasElement;
     bgCanvas: HTMLCanvasElement;
-    temp: HTMLCanvasElement;
+    tmpCanvas: HTMLCanvasElement;
 
     constructor(
         private viewInfoService: ViewInfoService,
@@ -85,10 +85,10 @@ export class ComclassCanvasComponent implements OnInit {
         this.eventBusService.on('blank pdf', this.unsubscribe$, () => {
             console.log('문서 열어')
             //나중에 수정
-            
 
 
-            
+
+
             this.updateViewInfoStore()
             this.onChangePage()
 
@@ -111,15 +111,15 @@ export class ComclassCanvasComponent implements OnInit {
 
     initCanvasSet() {
 
-        this.temp = this.tempRef.nativeElement;
         this.coverCanvas = this.coverCanvasRef.nativeElement;
         this.teacherGuideCanvas = this.teacherGuideCanvasRef.nativeElement;
 
         this.teacherCanvas = this.teacherCanvasRef.nativeElement;
         this.studentGuideCanvas = this.studentGuideCanvasRef.nativeElement;
-        this.bgCanvas = this.bgCanvasRef.nativeElement;
 
-        // this.tmpCanvas = this.tmpCanvasRef.nativeElement;
+        this.bgCanvas = this.bgCanvasRef.nativeElement;
+        this.tmpCanvas = this.tmpCanvasRef.nativeElement;
+
         this.canvasContainer = this.canvasContainerRef.nativeElement;
 
         /* container size 설정 */
@@ -152,8 +152,9 @@ export class ComclassCanvasComponent implements OnInit {
         // this.drawingService.stopRxDrawing();
 
         // set Canvas Size
-        const ratio = this.canvasService.setCanvasSize(pageNum, zoomScale, this.canvasContainer, this.coverCanvas, this.teacherCanvas, this.bgCanvas, this.studentGuideCanvas, this.teacherGuideCanvas);
-
+        const ratio = this.canvasService.setCanvasSize(pageNum, zoomScale, this.canvasContainer, this.coverCanvas, this.teacherCanvas, this.bgCanvas, this.studentGuideCanvas, this.teacherGuideCanvas, this.tmpCanvas);
+        // set Canvas Size
+        // const ratio = this.setCanvasSize(docNum, pageNum, zoomScale);
         // BG & Board Render
         this.pageRender(docNum, pageNum, zoomScale);
 
@@ -184,7 +185,8 @@ export class ComclassCanvasComponent implements OnInit {
      * @returns
      */
     setCanvasSize(currentDocNum, currentPage, zoomScale) {
-        return this.canvasService.setCanvasSize(currentDocNum, currentPage, zoomScale, this.canvasContainer, this.coverCanvas, this.teacherGuideCanvas, this.teacherCanvas, this.bgCanvas);
+        // return this.canvasService.setCanvasSize(currentDocNum, currentPage, zoomScale, this.canvasContainer, this.coverCanvas, this.teacherGuideCanvas, this.teacherCanvas, this.bgCanvas);
+        return this.canvasService.setCanvasSize(currentPage, zoomScale, this.canvasContainer, this.coverCanvas, this.teacherCanvas, this.bgCanvas,  this.studentGuideCanvas, this.teacherGuideCanvas, this.tmpCanvas);
     }
 
         /**
@@ -207,7 +209,7 @@ export class ComclassCanvasComponent implements OnInit {
             this.renderingService.renderBoard(this.teacherCanvas, zoomScale, drawingEvents);
 
             // PDF Rendering
-            await this.renderingService.renderBackground(this.temp, this.bgCanvas, currentDocNum, currentPage);
+            await this.renderingService.renderBackground(this.tmpCanvas, this.bgCanvas, currentDocNum, currentPage);
         }
 
         /**

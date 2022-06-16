@@ -112,8 +112,9 @@ export class RenderingService {
     // const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
 
     console.log('renderBackground')
-    
+
     const pdfPage = this.pdfStorageService.getPdfPage(pageNum);
+    console.log(pdfPage)
     if (!pdfPage) {
       return;
     }
@@ -167,12 +168,15 @@ export class RenderingService {
    * - pdf -> tmpCanvas -> targetCanvas
    * @param {pdfPage} page  pdfPage
    * @param {element} targetCanvas bgcanvas
+   * @param {tmpCanvas} tmpCanvas bgcanvas
    */
   async rendering(page, targetCanvas, tmpCanvas) {
 
     if (!page) {
       return false;
     }
+
+    console.log(page)
 
     const viewport = page.getViewport({ scale: 1 });
     const ctx = targetCanvas.getContext('2d');
@@ -182,10 +186,13 @@ export class RenderingService {
     try {
       const scale = targetCanvas.width / viewport.width;
       let tmpCanvasScaling;
-
+      console.log(targetCanvas.width)
+      console.log(scale)
       // scale이 작을때만 tmpcanvas size increase... : 여러가지 추가 check. ~~ todo
       if (scale <= 2 * CANVAS_CONFIG.CSS_UNIT) {
+        console.log(2 * CANVAS_CONFIG.CSS_UNIT)
         tmpCanvasScaling = Math.max(2, CANVAS_CONFIG.deviceScale);
+        console.log(tmpCanvasScaling)
       } else {
         tmpCanvasScaling = CANVAS_CONFIG.deviceScale;
       }
@@ -201,6 +208,7 @@ export class RenderingService {
       // console.log('rendering tmpcanvas: ', tmpCanvas);
 
       const zoomScale = tmpCanvas.width / viewport.width;
+      console.log(zoomScale);
       const tmpCtx = tmpCanvas.getContext('2d');
       const renderContext = {
         canvasContext: tmpCtx,
