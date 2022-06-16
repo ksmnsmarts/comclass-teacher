@@ -85,62 +85,68 @@ export class CanvasService {
 	 * Main container관련 canvas Size 설정
 	 *
 	 */
-	setCanvasSize(pdfNum, pageNum, zoomScale, canvasContainer, coverCanvas, rxCoverCanvas, teacherCanvas, bgCanvas) {
-        console.log(`>>> set Canvas Size: pdfNum:${pdfNum}, pageNum:${pageNum}`)
+	setCanvasSize(pageNum, zoomScale, canvasContainer, coverCanvas, teacherCanvas, bgCanvas, studentGuideCanvas, teacherGuideCanvas) {
+            const pdfPage = this.pdfStorageService.getPdfPage(pageNum);
 
-        const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
-		const canvasFullSize = pdfPage.getViewport({scale:zoomScale * CANVAS_CONFIG.CSS_UNIT});
-		canvasFullSize.width = Math.round(canvasFullSize.width);
-		canvasFullSize.height = Math.round(canvasFullSize.height);
-		/*------------------------------------
-			container Size
-			- 실제 canvas 영역을 고려한 width와 height
-			- deviceScale은 고려하지 않음
-		-------------------------------------*/
-		const containerSize = {
-			width: Math.min(CANVAS_CONFIG.maxContainerWidth - 400, canvasFullSize.width), // 좌측 sidebar width만큼 빼야 zoonIn 시 왼쪽이 전부 보임
-			height: Math.min(CANVAS_CONFIG.maxContainerHeight, canvasFullSize.height)
-		};
+			const canvasFullSize = pdfPage.getViewport({scale:zoomScale * CANVAS_CONFIG.CSS_UNIT});
+            console.log(canvasFullSize)
+			canvasFullSize.width = Math.round(canvasFullSize.width);
+			canvasFullSize.height = Math.round(canvasFullSize.height);
+			/*------------------------------------
+				container Size
+				- 실제 canvas 영역을 고려한 width와 height
+				- deviceScale은 고려하지 않음
+			-------------------------------------*/
+			const containerSize = {
+				width: Math.min(CANVAS_CONFIG.maxContainerWidth, canvasFullSize.width),
+				height: Math.min(CANVAS_CONFIG.maxContainerHeight, canvasFullSize.height)
+			};
 
-		// Canvas Container Size 조절
-		canvasContainer.style.width = containerSize.width + 'px';
-		canvasContainer.style.height = containerSize.height + 'px';
+			// Canvas Container Size 조절
+			canvasContainer.style.width = containerSize.width + 'px';
+			canvasContainer.style.height = containerSize.height + 'px';
 
-		// Cover Canvas 조절
-		rxCoverCanvas.width = coverCanvas.width = canvasFullSize.width;
-		rxCoverCanvas.height = coverCanvas.height = canvasFullSize.height;
+			// Cover Canvas 조절
+			coverCanvas.width = canvasFullSize.width;
+			coverCanvas.height = canvasFullSize.height;
 
+			// container와 canvas의 비율 => thumbnail window에 활용
+			const ratio = {
+				w: containerSize.width / canvasFullSize.width,
+				h: containerSize.height / canvasFullSize.height
+			};
 
+			/*---------------------------------------
+				현재 page에 대한 background size 설정
+			----------------------------------------*/
+			bgCanvas.width = canvasFullSize.width * CANVAS_CONFIG.deviceScale;
+			bgCanvas.height = canvasFullSize.height * CANVAS_CONFIG.deviceScale;
+			bgCanvas.style.width = canvasFullSize.width + 'px';
+			bgCanvas.style.height = canvasFullSize.height + 'px';
 
-		// container와 canvas의 비율 => thumbnail window에 활용
-		const ratio = {
-			w: containerSize.width / canvasFullSize.width,
-			h: containerSize.height / canvasFullSize.height
-		};
+			teacherCanvas.width = canvasFullSize.width;
+			teacherCanvas.height = canvasFullSize.height;
 
-		/*---------------------------------------
-			현재 page에 대한 background size 설정
-		----------------------------------------*/
-		bgCanvas.width = canvasFullSize.width * CANVAS_CONFIG.deviceScale;
-		bgCanvas.height = canvasFullSize.height * CANVAS_CONFIG.deviceScale;
-		bgCanvas.style.width = canvasFullSize.width + 'px';
-		bgCanvas.style.height = canvasFullSize.height + 'px';
+			// Guide Canvas
+			teacherGuideCanvas.width = canvasFullSize.width;
+			studentGuideCanvas.width = canvasFullSize.width;
+			teacherGuideCanvas.height = canvasFullSize.height;
+			studentGuideCanvas.height = canvasFullSize.height;
 
-		teacherCanvas.width = canvasFullSize.width;
-		teacherCanvas.height = canvasFullSize.height;
+			// minipaint 참조: canvas scale 조절
+			const ctx = coverCanvas.getContext("2d");
+			ctx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
 
+			const teacherCtx = teacherCanvas.getContext("2d");
+			teacherCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
 
-		// minipaint 참조: canvas scale 조절
-		const ctx = coverCanvas.getContext("2d");
-		ctx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
+			const teacherGuideCtx = teacherGuideCanvas.getContext("2d");
+			teacherGuideCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
 
-    	const rxCtx = rxCoverCanvas.getContext("2d");
-		rxCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
+			const studentGuideCtx = studentGuideCanvas.getContext("2d");
+			studentGuideCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
 
-		const teacherCtx = teacherCanvas.getContext("2d");
-		teacherCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
-
-		return ratio;
+			return ratio;
 	}
 
 

@@ -15,8 +15,8 @@ export const CANVAS_CONFIG = {
 	penWidth: 2,
 	eraserWidth: 30,
 	sidebarWidth: 171,
-	// navbarHeight: 70,
-	navbarHeight: 134,
+	navbarHeight: 70,
+	// navbarHeight: 134,
 	widthSet: {
 		pointer: [20, 25, 30],
 		pen: [4, 7, 13],

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
+import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { FileService } from 'src/app/0.shared/services/file/file.service';
 
 @Component({
@@ -44,15 +45,15 @@ export class ComclassComponent implements OnInit {
         console.log('<--- event from newpage component :', event);
         switch (event) {
             case 'vcanvas':
-                this.fileService.getFile('vcanvas.pdf',(result) => {
+                this.fileService.getFile('vcanvas.pdf', (result) => {
                     this.openFile(result.files, result.format);
                 });
                 break;
-            // case 'hcanvas':
-            //     this.fileService.getFile('hcanvas.pdf', function(result) {
-            //         openFile(result.files, result.format);
-            //     });
-            //     break;
+            case 'hcanvas':
+                this.fileService.getFile('hcanvas.pdf', (result) => {
+                    this.openFile(result.files, result.format);
+                });
+                break;
             // case 'openFile':
             //     this.dialogService.openFile(event).then((result) => {
             //         openFile(result.files, result.format);
@@ -106,6 +107,9 @@ export class ComclassComponent implements OnInit {
 
             console.log('\n> start Thumbnail Rendering...');
             this.docLength = result.docLength; // 전체 문서 길이
+
+
+            this.eventBusService.emit(new EventData('blank pdf', ''));
 
             /*-------------------------------------------
                 Trigger Thumb Component

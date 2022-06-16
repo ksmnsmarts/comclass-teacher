@@ -31,7 +31,8 @@ export class RenderingService {
    */
   async renderThumbBackground(imgElement, pdfNum, pageNum) {
     // console.log('> renderThumbnail Background');
-    const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
+    // const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
+    const pdfPage = this.pdfStorageService.getPdfPage(pageNum);
 
     // console.log(pdfPage)
     // 배경 처리를 위한 임시 canvas
@@ -107,7 +108,8 @@ export class RenderingService {
   async renderBackground(tmpCanvas, bgCanvas, pdfNum, pageNum) {
     console.log(`>>>> renderBackground, pdfNum: ${pdfNum}, pageNum: ${pageNum}`);
 
-    const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
+    // const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
+    const pdfPage = this.pdfStorageService.getPdfPage(pageNum);
     if (!pdfPage) {
       return;
     }
@@ -210,7 +212,7 @@ export class RenderingService {
         ---> pre-render 기능을 사용하므로 최종 image만 그려주면 됨.
       -----------------------------------------------------------*/
       if (!this.pageNumPending) {
-        ctx.drawImage(tmpCanvas, 0, 0, bgImgSize.width, bgImgSize.height);
+        // ctx.drawImage(tmpCanvas, 0, 0, bgImgSize.width, bgImgSize.height);
         // clear tmpCtx
         tmpCtx.clearRect(0, 0, tmpCtx.width, tmpCtx.height);
       }
