@@ -1,6 +1,6 @@
 <div class="main-container">
 	<!-----------------------------------------------------------------
-		navbar 부분 : Component로 처리 
+		navbar 부분 : Component로 처리
 		- click등의 event는 navbar component에서 수행
 		- 여기서는 click에 대한 event 정보를 받아와서 활용.
 		- 필요시 값 전달. (현재는 offline, classname, 학생수.)
@@ -21,7 +21,7 @@
 	</div>
 
 	<!------------------------------------
-		Comclass Package: Teacher 
+		Comclass Package: Teacher
 	------------------------------------ -->
 	<div class="comclass_container">
 
@@ -30,7 +30,7 @@
 			Navbar 하단의 실제 canvas 영역
 			- thumbnail
 			- canvas 영역.
-			
+
 		------------------------------------------------------- -->
 		<div class="comclass-main">
 
@@ -45,10 +45,10 @@
 			    tool="vm.tool" canvas-update-required="vm.canvasUpdateRequired">
 			</comclass-canvas>
 
-			<comclass-newpage ng-if="!vm.flag.isDocLoaded"></comclass-newpage>
+			<comclass-newpage *ngIf="!isDocLoaded"></comclass-newpage>
 
 			<!------------------------------------------
-				Floating Fab buttons 
+				Floating Fab buttons
 				- zoom
 				- blind
 				- replay
@@ -67,7 +67,7 @@
 
 
 		<!-----------------------------------------------------------------------
-			Comclass Exam TEST 
+			Comclass Exam TEST
 		--------------------------------------------------------------------- -->
 		<!-- <comclass-exam ng-if="!vm.offLine" num-students="vm.numStudents" class-name="{{vm.classInfo.className}}" teacher-name="{{vm.classInfo.teacherName}}"
 		    exam-update-required="vm.examUpdateRequired" on-exam-update="vm.examEvent($event);">

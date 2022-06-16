@@ -13,7 +13,7 @@ export class ComclassComponent implements OnInit {
 
     private unsubscribe$ = new Subject<void>();
 
-
+    isDocLoaded = false;
     //////////////////////////////////////
     docLength;
 
@@ -29,6 +29,7 @@ export class ComclassComponent implements OnInit {
 
         this.eventBusService.on('open the blank pdf', this.unsubscribe$, (data) => {
             this.newpageEvent(data)
+            this.isDocLoaded = true;
         })
     }
 
