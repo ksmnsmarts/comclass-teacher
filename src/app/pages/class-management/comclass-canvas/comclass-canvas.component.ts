@@ -112,7 +112,7 @@ export class ComclassCanvasComponent implements OnInit {
         this.canvasContainer = this.canvasContainerRef.nativeElement;
 
         /* container size 설정 */
-        CANVAS_CONFIG.maxContainerHeight = window.innerHeight;
+        CANVAS_CONFIG.maxContainerHeight = window.innerHeight - CANVAS_CONFIG.navbarHeight; // pdf 불러오기 사이즈
         CANVAS_CONFIG.maxContainerWidth = window.innerWidth - CANVAS_CONFIG.sidebarWidth;
 
         CANVAS_CONFIG.deviceScale = this.canvasService.getDeviceScale(this.coverCanvas);

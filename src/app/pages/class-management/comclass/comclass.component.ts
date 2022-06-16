@@ -45,15 +45,15 @@ export class ComclassComponent implements OnInit {
         console.log('<--- event from newpage component :', event);
         switch (event) {
             case 'vcanvas':
-                this.fileService.getFile('vcanvas.pdf',(result) => {
+                this.fileService.getFile('vcanvas.pdf', (result) => {
                     this.openFile(result.files, result.format);
                 });
                 break;
-            // case 'hcanvas':
-            //     this.fileService.getFile('hcanvas.pdf', function(result) {
-            //         openFile(result.files, result.format);
-            //     });
-            //     break;
+            case 'hcanvas':
+                this.fileService.getFile('hcanvas.pdf', (result) => {
+                    this.openFile(result.files, result.format);
+                });
+                break;
             // case 'openFile':
             //     this.dialogService.openFile(event).then((result) => {
             //         openFile(result.files, result.format);
