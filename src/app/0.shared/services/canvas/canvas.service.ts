@@ -5,9 +5,9 @@ import { PdfStorageService } from '../../storage/pdf-storage.service';
 import { CANVAS_CONFIG } from '../../config/config';
 import { EventData } from '../eventBus/event.class';
 import { DrawingService } from '../drawing/drawing.service';
+import { EventBusService } from '../eventBus/event-bus.service';
+import { EditInfoService } from '../../store/edit-info.service';
 
-import { EditInfoService } from 'src/@wb/store/edit-info.service';
-import { EventBusService } from 'src/@wb/services/eventBus/event-bus.service';
 
 
 @Injectable({

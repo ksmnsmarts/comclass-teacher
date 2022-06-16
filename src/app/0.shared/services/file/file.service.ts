@@ -47,24 +47,18 @@ export class FileService {
         // const readFilePromise = $q.defer();
         let readFilePromise;
         const fileReader = new FileReader();
-       
 
-        fileReader.onload = async(e) =>{
-            // await readFilePromise.resolve(e.target.result);
-            // console.log(e.target.result)
-        };
-
-        if (docFormat === 'gstd') {
-            fileReader.readAsText(file);
-        }
-        else { // pdf
-            fileReader.readAsArrayBuffer(file);
-        }
-        await new Promise(res => setTimeout(res, 500));
-        readFilePromise = fileReader.result
-
-        // console.log(readFilePromise)
-        return readFilePromise;
+        return new Promise(function (resolve, reject) {
+            fileReader.onload = function (e) {
+                resolve((<FileReader>e.target).result);
+            };
+            if (docFormat === 'gstd') {
+                fileReader.readAsText(file);
+            }
+            else { // pdf
+                fileReader.readAsArrayBuffer(file);
+            }
+        });
     };
 
 
@@ -147,7 +141,8 @@ export class FileService {
         /*-----------------------------------
             Local File Read (type: pdf, stsg)
         ---------------------------------------*/
-        let file = await this.pdfReadFile(aFile, type);
+        let file:any = await this.pdfReadFile(aFile, type);
+        
         let docArrayBuffer;
         // let drawingEventSet;
         // const pageNumBeforeLoad = pdfVar.totalPdfDoc_file.length; // drawing에 사용

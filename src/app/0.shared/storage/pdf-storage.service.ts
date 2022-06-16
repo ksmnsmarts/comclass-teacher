@@ -28,6 +28,7 @@ export class PdfStorageService {
 
 
     get pdfVarArray(): any {
+        
         return [...this._pdfVarArray];
     }
 
