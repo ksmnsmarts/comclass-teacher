@@ -1,7 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
-import { FileService } from 'src/app/0.shared/services/file/file.service';
+
+import { Subject, takeUntil } from 'rxjs';
+import { ClassInfoService } from 'src/app/0.shared/store/class-info';
+
+interface ClassInfo {
+  _id: String,
+  teacher: String,
+  subject: String,
+  Manager: Object,
+  status: String,
+  currentMembers: Array<String>,
+}
 
 @Component({
     selector: 'app-comclass',
@@ -9,24 +18,35 @@ import { FileService } from 'src/app/0.shared/services/file/file.service';
     styleUrls: ['./comclass.component.scss']
 })
 export class ComclassComponent implements OnInit {
-
+    classInfo: ClassInfo;
     private unsubscribe$ = new Subject<void>();
 
     constructor(
-        private eventBusService: EventBusService,
-        private fileService: FileService,
-    ) { }
+        private classInfoService: ClassInfoService
+    ) {
+
+    }
 
     ngOnInit(): void {
+        this.classInfoService.state$
+            .pipe(takeUntil(this.unsubscribe$)).subscribe((meetingData) => {
+                if (meetingData) {
+                    console.log('[[ meetingInfo ]]', meetingData)
+                    this.classInfo = meetingData;
+                }
+        });
 
-        
+    }
+
+    ngOnDestroy() {
+      // unsubscribe all subscription
+      this.unsubscribe$.next();
+      this.unsubscribe$.complete();
     }
 
 
 
-    
-    
 
 
-    
+
 }

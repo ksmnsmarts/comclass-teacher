@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  API_URL: 'http://localhost:3400',
-  socketUrl: 'http://localhost:3400',
+  API_URL: 'http://localhost:3300',
+  socketUrl: 'http://localhost:3300',
   tokenName: 'comclass'
 };
 

@@ -28,7 +28,7 @@
 
 
     <div fxLayout="row" class="mat-padding" layout-wrap >
-        <div fxFlex="30" fxFlex.gt-md="20" layout-padding *ngFor="let meeting of meetingData">
+        <div fxFlex="30" fxFlex.gt-md="20" layout-padding *ngFor="let meeting of meetingList">
             <mat-card>
                 <mat-card-title class="mat-card-title">
                     <mat-card-title>
@@ -48,7 +48,7 @@
                     </div>
                 </mat-card-content>
                 <mat-card-actions layout="row" layout-align="center center" style="margin-bottom: 20px; display: flex;  justify-content: center;">
-                    <button mat-raised-button style="color: rgb(96, 96, 221);" (click)="openClass(meeting._id)">개설</button>
+                    <button mat-raised-button style="color: rgb(96, 96, 221);" (click)="openClass(meeting)">개설</button>
                     <button mat-raised-button style="color: rgb(235, 79, 79);">삭제</button>
                 </mat-card-actions>
 

@@ -4,7 +4,9 @@ import { Router } from '@angular/router';
 import * as moment from 'moment';
 import { ClassService } from 'src/app/0.shared/services/class/class.service';
 import { AddClassComponent } from './add-class/add-class.component';
-
+import { SocketService } from '../../0.shared/services/socket/socket.service';
+import { ClassInfoService } from '../../0.shared/store/class-info'
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
     selector: 'app-lobby',
@@ -13,13 +15,18 @@ import { AddClassComponent } from './add-class/add-class.component';
 })
 export class LobbyComponent implements OnInit {
 
-    meetingData;
-
+    meetingList;
+    socket;
+    private unsubscribe$ = new Subject<void>();
     constructor(
         public dialog: MatDialog,
         private classService: ClassService,
         private router: Router,
-    ) { }
+        private socketService: SocketService,
+        private classInfoService: ClassInfoService
+    ) {
+        this.socket = socketService.socket;
+    }
 
     ngOnInit(): void {
 
@@ -34,25 +41,26 @@ export class LobbyComponent implements OnInit {
             },
             width: "400px"
         });
-    
+
         dialogRef.afterClosed().subscribe((data) => {
             this.getClass();
         })
     }
-    
+
 
     // 수업 목록 가져오기
     getClass() {
         this.classService.getClass().subscribe((data)=> {
-            this.meetingData = data;
+            this.meetingList = data;
 
         })
     }
 
     // 수업 개설
-    openClass(_id) {
-        this.router.navigate([`comclass/${_id}`]);
+    openClass(meeting) {
+        this.router.navigate([`comclass/${meeting?._id}`]);
+        this.classInfoService.setClassInfo(meeting);
+        this.socket.emit('join:class',meeting);
     }
-
 
 }
