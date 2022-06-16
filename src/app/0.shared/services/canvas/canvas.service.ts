@@ -86,10 +86,10 @@ export class CanvasService {
 	 *
 	 */
 	setCanvasSize(pageNum, zoomScale, canvasContainer, coverCanvas, teacherCanvas, bgCanvas, studentGuideCanvas, teacherGuideCanvas) {
-            const pdfPage = this.pdfStorageService.getPdfPage(pageNum);
-
+      const pdfPage = this.pdfStorageService.getPdfPage(pageNum);
+      console.log(zoomScale)
 			const canvasFullSize = pdfPage.getViewport({scale:zoomScale * CANVAS_CONFIG.CSS_UNIT});
-            console.log(canvasFullSize)
+      console.log(canvasFullSize)
 			canvasFullSize.width = Math.round(canvasFullSize.width);
 			canvasFullSize.height = Math.round(canvasFullSize.height);
 			/*------------------------------------
@@ -249,14 +249,14 @@ export class CanvasService {
 				isTouch = true;
 			}
 
-			// textareaPoints는 textarea를 만들때 사용 
+			// textareaPoints는 textarea를 만들때 사용
 			if (tool.type == 'textarea') {
 				textareaPoints = [event.clientX, event.clientY]; // textarea 그릴때 사용하는 좌표 저장
 			}
 
 			oldPoint = getPoint(isTouch ? event.touches[0] : event, this, scale);
 			points = oldPoint;
-			
+
 			drawingService.start(sourceCtx, points, tool, sourceCanvas);
 
 			// 포인터일 경우 end가 아닌 start와 move 때 socket으로 전송
@@ -281,7 +281,7 @@ export class CanvasService {
 						}));
 				  });
 			}
-			
+
 			startTime = Date.now();
 			event.preventDefault();
 		};
@@ -296,24 +296,24 @@ export class CanvasService {
 				oldPoint = newPoint;
 				points.push(oldPoint[0]); // x
 				points.push(oldPoint[1]); // y
-				drawingService.move(sourceCtx, points, tool, scale, sourceCanvas); // scale: eraser marker 정확히 지우기 위함.	
-				
+				drawingService.move(sourceCtx, points, tool, scale, sourceCanvas); // scale: eraser marker 정확히 지우기 위함.
+
 				event.preventDefault();
 				// console.log(points)
 			}
 		};
 
 		function upEvent(event) {
-			
+
 			if (!isDown) return;
 			isDown = false;
 			isTouch = false;
 			sourceCtx.globalAlpha = 1
 			// 레이저 포인트일경우
 
-			// textareaPoints는 textarea를 만들때 사용 
-			if (tool.type == 'textarea') {			
-				textareaPoints.push(event.clientX, event.clientY) 
+			// textareaPoints는 textarea를 만들때 사용
+			if (tool.type == 'textarea') {
+				textareaPoints.push(event.clientX, event.clientY)
 			}
 
 			drawingService.end(targetCtx, points, tool,'', scale, textareaPoints);
@@ -325,7 +325,7 @@ export class CanvasService {
 				editInfoService.setEditInfo(editInfo);
 			return clear(sourceCanvas, scale);
 			}
-		
+
 			if (tool.type == 'textarea') {
 				const editInfo = Object.assign({}, editInfoService.state);
 				editInfo.tool = 'text';
@@ -344,9 +344,9 @@ export class CanvasService {
 				tool.type = 'pointer';
 				document.getElementById('canvas').style.cursor = 'default'
 				points = [];
-				return clear(sourceCanvas, scale); 
+				return clear(sourceCanvas, scale);
 			}
-			
+
 			/*----------------------------------------------
 				Drawing Event 정보
 				-> gen:newDrawEvent로 publish.

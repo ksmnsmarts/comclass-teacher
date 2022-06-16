@@ -6,6 +6,7 @@ import { DrawingService } from 'src/app/0.shared/services/drawing/drawing.servic
 import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.service';
+import { ZoomService } from 'src/app/0.shared/services/zoom/zoom.service';
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 
@@ -54,6 +55,7 @@ export class ComclassCanvasComponent implements OnInit {
         private renderingService: RenderingService,
         private pdfStorageService: PdfStorageService,
         private eventBusService: EventBusService,
+        private zoomService: ZoomService
 
     ) { }
 
@@ -80,7 +82,14 @@ export class ComclassCanvasComponent implements OnInit {
 
         this.eventBusService.on('blank pdf', this.unsubscribe$, () => {
             console.log('문서 열어')
+            //나중에 수정
+            this.updateViewInfoStore()
+
+
             this.onChangePage()
+
+
+
         })
     }
 
@@ -184,17 +193,17 @@ export class ComclassCanvasComponent implements OnInit {
      * @param zoomScale
      */
          async pageRender(currentDocNum, currentPage, zoomScale) {
-       
+
             // 화면을 급하게 확대하거나 축소 시 깜빡거리는 UI 측면 문제 해결 위한 함수
             this.preRenderBackground(currentPage)
-            
+
             console.log('>>> page Render! [background and board] + addEventHandler');
-    
+
             // board rendering
             // const drawingEvents = this.drawStorageService.getDrawingEvents(currentDocNum, currentPage);
             // console.log(drawingEvents)
             // this.renderingService.renderBoard(this.teacherCanvas, zoomScale, drawingEvents);
-    
+
             // PDF Rendering
             await this.renderingService.renderBackground(this.temp, this.bgCanvas, currentDocNum, currentPage);
         }
@@ -209,15 +218,87 @@ export class ComclassCanvasComponent implements OnInit {
             const targetCanvas = this.bgCanvas
             const ctx = targetCanvas.getContext("2d");
             const imgElement: any = document.getElementById('thumb_' + pageNum);
-    
+
             /**************************************************
             * 처음 화이트보드에 들어오면 thumbnail view 아니라 fileList view이기 때문에
             * document.getElementById('thumb_' + pageNum) (이미지)가 정의되지 않아 오류가 난다.
             * 그래서 doc을 클릭하여 thumbnail view 일 경우에만 실행하도록 설정함.
-            ****************************************************/ 
+            ****************************************************/
             if(this.prevViewInfo === 'thumbnail'){
                 ctx.drawImage(imgElement, 0, 0, targetCanvas.width, targetCanvas.height);
-            }        
+            }
         }
+
+          /**
+   *
+   * ViewInfo Store update
+   * -> document Info 부분 udpate
+   *    - document _id, currentPage, numPages, fileName
+   *
+   * -> currentDocId, current DocNum, currentPage field 초기화
+   *
+   */
+
+  updateViewInfoStore() {
+    let documentInfo = [...this.viewInfoService.state.documentInfo];
+    // console.log(documentInfo)
+    // console.log(this.pdfStorageService.pdfVarArray)
+    // console.log(this.viewInfoService.state.pageInfo.currentDocId)
+    const diff = this.pdfStorageService.pdfVarArray.length - documentInfo.length
+    if (diff > 0) {
+      for (let item of this.pdfStorageService.pdfVarArray) {
+        // 기존에 없던 문서인 경우 추가
+        const isExist = documentInfo.some((doc) => doc._id === item._id)
+        if (!isExist) {
+          documentInfo.push({
+            _id: item._id,
+            currentPage: 1,
+            numPages: item.pdfPages.length,
+            fileName: item.fileName
+          });
+        }
+      };
+
+    } else if (diff < 0) {
+      documentInfo = documentInfo.filter((item) => this.pdfStorageService.pdfVarArray.some((element) => element._id == item._id))
+    }
+    const obj: any = {
+      documentInfo: documentInfo
+    }
+
+
+    // 최초 load인 경우 document ID는 처음 것으로 설정
+    if (!this.viewInfoService.state.pageInfo.currentDocId) {
+      obj.pageInfo = {
+        currentDocId: documentInfo[0]?._id,
+        currentDocNum: 1,
+        currentPage: 1,
+        zoomScale: this.zoomService.setInitZoomScale()
+      }
+    }
+
+
+    // viewInfoService 현재 바라보는 문서가 있을경우 함수 실행
+    if(this.viewInfoService.state.pageInfo.currentDocId){
+      // 문서 삭제 시 현재 바라보는 문서와 같은 곳일 경우 팝업 창과 함께 첫 화이트보드로 돌아온다.
+      // 현재 바라보는 문서 ID와 DB에서 받아온 문서 ID가 일치하는게 없으면 첫 페이지로 돌아오고 문서가 삭제됐다고 알림
+      const res = this.pdfStorageService.pdfVarArray.filter((x)=> x._id == this.viewInfoService.state.pageInfo.currentDocId);
+      console.log(res)
+      if (res.length == 0){
+        obj.pageInfo = {
+          currentDocId: documentInfo[0]._id,
+          currentDocNum: 1,
+          currentPage: 1,
+          zoomScale: this.zoomService.setInitZoomScale()
+        }
+        obj.leftSideView = 'fileList';
+        alert('The pdf file has been deleted');
+      }
+    }
+
+
+    this.viewInfoService.setViewInfo(obj);
+  }
+  ///////////////////////////////////////////////////////////
 
 }

@@ -27,7 +27,7 @@ export class PdfStorageService {
 
 
     get pdfVarArray(): any {
-        
+
         return [...this._pdfVarArray];
     }
 
@@ -86,7 +86,7 @@ export class PdfStorageService {
 
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    
+
     getPdfPage(pageNum) {
         console.log(pageNum)
         console.log(this.pdfVar.totalPdfDoc_file)

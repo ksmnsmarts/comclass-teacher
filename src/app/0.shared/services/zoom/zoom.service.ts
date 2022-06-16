@@ -28,7 +28,7 @@ export class ZoomService {
       width: CANVAS_CONFIG.maxContainerWidth,
       height: CANVAS_CONFIG.maxContainerHeight
     };
-    const pdfPage: any = this.pdfStorageService.getPdfPage(1, 1);
+    const pdfPage: any = this.pdfStorageService.getPdfPage(1);
     // console.log(pdfPage)
     const docSize = pdfPage.getViewport({ scale: 1 * CANVAS_CONFIG.CSS_UNIT }); // 100%에 해당하는 document의 size (Css 기준)
 
@@ -132,7 +132,7 @@ export class ZoomService {
             width: CANVAS_CONFIG.maxContainerWidth - CANVAS_CONFIG.sidebarContainerWidth - 300, // fitToWidth 관련 (100px) / right side bar 때문에 300 줬음
             height: CANVAS_CONFIG.maxContainerHeight,
         };
-        const pdfPage: any = this.pdfStorageService.getPdfPage(currentDoc, currentPage);
+        const pdfPage: any = this.pdfStorageService.getPdfPage(currentDoc);
         const docSize = pdfPage.getViewport({ scale: 1 * CANVAS_CONFIG.CSS_UNIT });
 
     const zoomScale = containerSize.width / docSize.width;
@@ -147,7 +147,7 @@ export class ZoomService {
       height: CANVAS_CONFIG.maxContainerHeight
     };
 
-    const pdfPage: any = this.pdfStorageService.getPdfPage(currentDoc, currentPage);
+    const pdfPage: any = this.pdfStorageService.getPdfPage(currentDoc);
     const docSize = pdfPage.getViewport({scale: 1 * CANVAS_CONFIG.CSS_UNIT}); // 100%에 해당하는 document의 size (Css 기준)
 
     const ratio = {
