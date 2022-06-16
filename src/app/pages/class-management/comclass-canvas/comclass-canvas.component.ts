@@ -7,6 +7,7 @@ import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.se
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.service';
 import { ZoomService } from 'src/app/0.shared/services/zoom/zoom.service';
+import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.service';
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 
@@ -50,13 +51,13 @@ export class ComclassCanvasComponent implements OnInit {
 
     constructor(
         private viewInfoService: ViewInfoService,
-        // private drawingService: DrawingService,
+        private drawingService: DrawingService,
         private canvasService: CanvasService,
         private renderingService: RenderingService,
         private pdfStorageService: PdfStorageService,
         private eventBusService: EventBusService,
-        private zoomService: ZoomService
-
+        private zoomService: ZoomService,
+        private drawStorageService: DrawStorageService
     ) { }
 
     ngOnInit(): void {
@@ -75,7 +76,8 @@ export class ComclassCanvasComponent implements OnInit {
                 // (doc change, page change, zoom change 등)
                 if (pageInfo.currentDocId) {
                     console.log('222222222222222222222222222')
-                    this.onChangePage();
+                    // this.updateViewInfoStore()
+                    // this.onChangePage();
                 }
             });
         ///////////////////////////////////////////////
@@ -83,12 +85,12 @@ export class ComclassCanvasComponent implements OnInit {
         this.eventBusService.on('blank pdf', this.unsubscribe$, () => {
             console.log('문서 열어')
             //나중에 수정
+            
+
+
+            
             this.updateViewInfoStore()
-
-
             this.onChangePage()
-
-
 
         })
     }
@@ -200,9 +202,9 @@ export class ComclassCanvasComponent implements OnInit {
             console.log('>>> page Render! [background and board] + addEventHandler');
 
             // board rendering
-            // const drawingEvents = this.drawStorageService.getDrawingEvents(currentDocNum, currentPage);
+            const drawingEvents = this.drawStorageService.getDrawingEvents(currentDocNum, currentPage);
             // console.log(drawingEvents)
-            // this.renderingService.renderBoard(this.teacherCanvas, zoomScale, drawingEvents);
+            this.renderingService.renderBoard(this.teacherCanvas, zoomScale, drawingEvents);
 
             // PDF Rendering
             await this.renderingService.renderBackground(this.temp, this.bgCanvas, currentDocNum, currentPage);
@@ -240,6 +242,7 @@ export class ComclassCanvasComponent implements OnInit {
    */
 
   updateViewInfoStore() {
+    console.log('-------------updateViewInfoStore-------------')
     let documentInfo = [...this.viewInfoService.state.documentInfo];
     // console.log(documentInfo)
     // console.log(this.pdfStorageService.pdfVarArray)

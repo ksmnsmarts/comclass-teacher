@@ -28,6 +28,7 @@ export class ZoomService {
       width: CANVAS_CONFIG.maxContainerWidth,
       height: CANVAS_CONFIG.maxContainerHeight
     };
+    console.log('setInitZoomScale')
     const pdfPage: any = this.pdfStorageService.getPdfPage(1);
     // console.log(pdfPage)
     const docSize = pdfPage.getViewport({ scale: 1 * CANVAS_CONFIG.CSS_UNIT }); // 100%에 해당하는 document의 size (Css 기준)
@@ -42,22 +43,22 @@ export class ZoomService {
 
     // 1. main container size보다 작은 경우
     if (ratio.w >= 1 && ratio.h >= 1) {
-      // console.log(' - 문서가 container보다 작음.');
+      console.log(' - 문서가 container보다 작음.');
       // fit To page
       zoomScale = Math.min(ratio.w, ratio.h);
     }
 
     // 2. landscape 문서인 경우
     else if (docSize.width > docSize.height) {
-      // console.log(' - 문서: Landscape');
+      console.log(' - 문서: Landscape');
       // fit To Page
       zoomScale = Math.min(ratio.w, ratio.h);
     }
     // 3, portrait 문서인 경우
     else if (docSize.width <= docSize.height) {
-      // console.log(' - 문서: Portrait');
+      console.log(' - 문서: Portrait');
       if (ratio.w < 1) {
-        // console.log(' - 문서 Width가 container보다 넓습니다.');
+        console.log(' - 문서 Width가 container보다 넓습니다.');
         zoomScale = ratio.w;
       }
     }

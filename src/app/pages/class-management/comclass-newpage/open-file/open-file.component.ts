@@ -70,14 +70,14 @@ export class OpenFileComponent implements OnInit {
             /*---------------------------------------
             pdf 업로드 시 spinner 
             -----------------------------------------*/
-            const dialogRef = this.dialog.open(SpinnerDialogComponent, {
-                // width: '300px',
+            // const dialogRef = this.dialog.open(SpinnerDialogComponent, {
+            //     // width: '300px',
 
-                data: {
-                    content: 'Upload'
-                }
-            });
-            this.eventBusService.emit(new EventData('spinner', dialogRef))
+            //     data: {
+            //         content: 'Upload'
+            //     }
+            // });
+            // this.eventBusService.emit(new EventData('spinner', dialogRef))
             ///////////////////////////////////////////////////////////////////
         }
     }
@@ -106,14 +106,14 @@ export class OpenFileComponent implements OnInit {
             /*---------------------------------------
             pdf 업로드 시 spinner 
             -----------------------------------------*/
-            const dialogRef = this.dialog.open(SpinnerDialogComponent, {
-                // width: '300px',
+            // const dialogRef = this.dialog.open(SpinnerDialogComponent, {
+            //     // width: '300px',
 
-                data: {
-                    content: 'Upload'
-                }
-            });
-            this.eventBusService.emit(new EventData('spinner', dialogRef))
+            //     data: {
+            //         content: 'Upload'
+            //     }
+            // });
+            // this.eventBusService.emit(new EventData('spinner', dialogRef))
             ///////////////////////////////////////////////////////////////////
         }
     }

@@ -88,8 +88,6 @@ export class PdfStorageService {
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     getPdfPage(pageNum) {
-        console.log(pageNum)
-        console.log(this.pdfVar.totalPdfDoc_file)
         return this.pdfVar.totalPdfDoc_file[pageNum - 1];
     }
 
