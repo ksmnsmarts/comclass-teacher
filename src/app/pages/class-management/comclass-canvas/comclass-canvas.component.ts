@@ -72,12 +72,16 @@ export class ComclassCanvasComponent implements OnInit {
                 // 초기 load 포함 변경사항에 대해 수행
                 // (doc change, page change, zoom change 등)
                 if (pageInfo.currentDocId) {
+                    console.log('222222222222222222222222222')
                     this.onChangePage();
                 }
             });
-
-
         ///////////////////////////////////////////////
+
+        this.eventBusService.on('blank pdf', this.unsubscribe$, () => {
+            console.log('문서 열어')
+            this.onChangePage()
+        })
     }
 
     ngOnDestroy() {
@@ -137,7 +141,7 @@ export class ComclassCanvasComponent implements OnInit {
         // this.drawingService.stopRxDrawing();
 
         // set Canvas Size
-        const ratio = this.setCanvasSize(docNum, pageNum, zoomScale);
+        const ratio = this.canvasService.setCanvasSize(pageNum, zoomScale, this.canvasContainer, this.coverCanvas, this.teacherCanvas, this.bgCanvas, this.studentGuideCanvas, this.teacherGuideCanvas);
 
         // BG & Board Render
         this.pageRender(docNum, pageNum, zoomScale);

@@ -74,7 +74,7 @@ export class FileService {
      * @returns
      */
     async pdfConvert(file) {
-        const CMAP_URL = '/assets/lib/pdf/cmaps/'; // --> 나중에 서버로 이동할지 check.
+        const CMAP_URL = 'assets/cmaps/'
         const CMAP_PACKED = true;
         const pdfPages = [];
 
@@ -142,7 +142,6 @@ export class FileService {
             Local File Read (type: pdf, stsg)
         ---------------------------------------*/
         let file:any = await this.pdfReadFile(aFile, type);
-        
         let docArrayBuffer;
         // let drawingEventSet;
         // const pageNumBeforeLoad = pdfVar.totalPdfDoc_file.length; // drawing에 사용
