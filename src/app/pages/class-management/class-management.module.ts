@@ -12,6 +12,10 @@ import { ComclassNewpageComponent } from './comclass-newpage/comclass-newpage.co
 import { ComclassStudentComponent } from './comclass-student/comclass-student.component';
 import { ComclassThumbComponent } from './comclass-thumb/comclass-thumb.component';
 import { NgMaterialUIModule } from 'src/app/ng-material-ui/ng-material-ui.module';
+import { OpenFileComponent } from './comclass-newpage/open-file/open-file.component';
+
+
+
 
 
 @NgModule({
@@ -22,7 +26,8 @@ import { NgMaterialUIModule } from 'src/app/ng-material-ui/ng-material-ui.module
     ComclassNavComponent, 
     ComclassNewpageComponent,
     ComclassStudentComponent,
-    ComclassThumbComponent
+    ComclassThumbComponent,
+    OpenFileComponent
     ],
   imports: [
     CommonModule,

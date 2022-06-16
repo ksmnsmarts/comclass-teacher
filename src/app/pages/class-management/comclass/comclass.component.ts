@@ -31,6 +31,11 @@ export class ComclassComponent implements OnInit {
             this.newpageEvent(data)
             this.isDocLoaded = true;
         })
+        this.eventBusService.on('openFile', this.unsubscribe$, (data) => {
+            console.log('event Bus == openfile')
+            this.openFile(data.files, data.type);
+            this.isDocLoaded = true;
+        })
     }
 
 
@@ -55,11 +60,7 @@ export class ComclassComponent implements OnInit {
                     this.openFile(result.files, result.format);
                 });
                 break;
-            // case 'openFile':
-            //     this.dialogService.openFile(event).then((result) => {
-            //         openFile(result.files, result.format);
-            //     }, () => {});
-            //     break;
+
             default:
                 break;
         }
@@ -73,7 +74,7 @@ export class ComclassComponent implements OnInit {
      * @param {string} sourceType pdf/gstd/media
      *
      */
-    async openFile (fileInput, sourceType) {
+    async openFile(fileInput, sourceType) {
         console.log('\n> open File...');
 
         console.log(fileInput);
@@ -109,7 +110,7 @@ export class ComclassComponent implements OnInit {
             console.log('\n> start Thumbnail Rendering...');
             this.docLength = result.docLength; // 전체 문서 길이
 
-
+            console.log('blank pdf start-------------------------')
             this.eventBusService.emit(new EventData('blank pdf', ''));
 
             /*-------------------------------------------

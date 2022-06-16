@@ -24,7 +24,7 @@
                     </label>
                 </button>
                 
-                <button class="md-raised" style="width:180px; height:120px; position:relative;color:orange">
+                <button class="md-raised" style="width:180px; height:120px; position:relative;color:orange" (click)="openFile()">
                     <mat-icon class="icon-display">folder_open</mat-icon>
                     <span style="font-weight:700;">파일열기</span>
                     <label style="position:absolute; left:0; top:0; width:100%; height:100%;cursor:pointer;" ng-click="vm.clickMenu('openFile', $event);">                        

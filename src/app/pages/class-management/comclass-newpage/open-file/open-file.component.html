@@ -1,0 +1,83 @@
+<div aria-label="fileopen">
+
+    <mat-toolbar class="md-primary">
+        <div class="md-toolbar-tools">
+            <h4><i class="far fa-folder-open"></i> &nbsp;파일 불러오기</h4>
+
+        </div>
+    </mat-toolbar>
+
+    <mat-dialog-content>
+        <div class="mat-dialog-content" style="width:500px">
+            <div style="display:flex; align-items:center; justify-content:space-evenly; ">
+
+                <button mat-button class="md-raised" style="width:130px; height:120px; position:relative">
+                    <mat-icon class="far fa-4x fa-file-pdf">picture_as_pdf</mat-icon>
+                    <span style="font-weight:700;">PDF</span>
+
+                    <label style="position:absolute; left:0; top:0; width:100%; height:100%;cursor:pointer;">
+                        <input #pdfInput type="file" (click)="$event.target.value = null" (change)="openPDF($event)"
+                        style="display:none;" accept=".pdf" />
+                    </label>
+                </button>
+
+                <button mat-button class="md-raised" style="width:130px; height:120px; position:relative;color:#8c9eff;">
+                    <i class="far fa-4x  fa-file-alt"></i>
+                    <span style="font-weight:700;">GSTD</span>
+                    <label style="position:absolute; left:0; top:0; width:100%; height:100%;cursor:pointer;">
+                        <input #gstdInput type="file" (click)="$event.target.value = null" (change)="openGSTD($event)"
+                        style="display:none;" accept=".gstd" />
+                    </label>
+                </button>
+
+                <button mat-button class="md-raised" style="width:130px; height:120px; position:relative;color:deeppink">
+                    <i class="far fa-4x  fa-file-video"></i>
+                    <span style="font-weight:700;">Media</span>
+                    <label style="position:absolute; left:0; top:0; width:100%; height:100%;cursor:pointer;">
+                        <input #mediaInput type="file" (click)="$event.target.value = null" (change)="openVIDEO($event)"
+                        style="display:none;" accept="audio/*,video/*" />
+                    </label>
+                </button>
+            </div>
+        </div>
+    </mat-dialog-content>
+
+</div>
+<!-- 
+<div layout="column" ng-cloak class="animated fadeIn">
+	
+	<mat-toolbar class="md-primary">
+		<div class="md-toolbar-tools">
+            <h4><mat-icon >add_box</mat-icon> &nbsp;문서 열기</h4>
+		</div>
+	</mat-toolbar>
+
+	<mat-card>        
+                   
+            <div style="display:flex; align-items:center; justify-content:space-evenly; width:700px; height:200px; ">
+                
+                <button class="md-raised" style="width:180px; height:120px; position:relative">                  
+                    <mat-icon class="icon-display">photo</mat-icon>
+                    <span style="font-weight:700;">빈문서(세로)</span>
+                    <label style="position:absolute; left:0; top:0; width:100%; height:100%;cursor:pointer;" ng-click="vm.clickMenu('vcanvas', $event);">   
+                    </label>    
+                </button>                
+
+                <button class="md-raised" style="width:180px; height:120px; position:relative;color:#8c9eff">                                  
+                    <mat-icon class="icon-display">panorama</mat-icon>                 
+                    <span style="font-weight:700;">빈문서(가로)</span>
+                    <label style="position:absolute; left:0; top:0; width:100%; height:100%;cursor:pointer;" ng-click="vm.clickMenu('hcanvas', $event);"> 
+                    </label>
+                </button>
+                
+                <button class="md-raised" style="width:180px; height:120px; position:relative;color:orange" >
+                    <mat-icon class="icon-display">folder_open</mat-icon>
+                    <span style="font-weight:700;">파일열기</span>
+                    <label style="position:absolute; left:0; top:0; width:100%; height:100%;cursor:pointer;" ng-click="vm.clickMenu('openFile', $event);">                        
+                    </label>
+                </button>
+            </div>
+        
+    </mat-card>
+		
+</div> -->
