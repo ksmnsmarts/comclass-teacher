@@ -38,6 +38,7 @@ export class OpenFileComponent implements OnInit {
     openFile(newpageEvent) {
         console.log('[ newpage ---> main ] send event:', newpageEvent);
         this.eventBusService.emit(new EventData('open the blank pdf', newpageEvent));
+        this.dialogRef.close();
     }
 
     /**
@@ -68,7 +69,7 @@ export class OpenFileComponent implements OnInit {
             this.eventBusService.emit(new EventData('openFile', result))
             ///////////////////////////////////////////////////////////////////
             /*---------------------------------------
-            pdf 업로드 시 spinner 
+            pdf 업로드 시 spinner
             -----------------------------------------*/
             // const dialogRef = this.dialog.open(SpinnerDialogComponent, {
             //     // width: '300px',
@@ -80,6 +81,7 @@ export class OpenFileComponent implements OnInit {
             // this.eventBusService.emit(new EventData('spinner', dialogRef))
             ///////////////////////////////////////////////////////////////////
         }
+        this.dialogRef.close();
     }
 
     openGSTD(event) {
@@ -95,7 +97,7 @@ export class OpenFileComponent implements OnInit {
         if (ext.toLowerCase() != 'gstd') {
             this.dialogService.openDialogNegative(`Please, upload the '.gstd' file.`);
         } else {
-            
+
             const result = {
                 files : event.target.files,
                 type : 'gstd'
@@ -104,7 +106,7 @@ export class OpenFileComponent implements OnInit {
             this.eventBusService.emit(new EventData('openFile', result))
             ///////////////////////////////////////////////////////////////////
             /*---------------------------------------
-            pdf 업로드 시 spinner 
+            pdf 업로드 시 spinner
             -----------------------------------------*/
             // const dialogRef = this.dialog.open(SpinnerDialogComponent, {
             //     // width: '300px',
@@ -116,6 +118,7 @@ export class OpenFileComponent implements OnInit {
             // this.eventBusService.emit(new EventData('spinner', dialogRef))
             ///////////////////////////////////////////////////////////////////
         }
+        this.dialogRef.close();
     }
 
     openVIDEO(event) {
@@ -133,7 +136,7 @@ export class OpenFileComponent implements OnInit {
         )) {
             this.dialogService.openDialogNegative(`Please, upload the '.pdf' file.`);
         } else {
-            
+
             const result = {
                 files : event.target.files,
                 type : 'media'
@@ -142,7 +145,7 @@ export class OpenFileComponent implements OnInit {
             this.eventBusService.emit(new EventData('openFile', result))
             ///////////////////////////////////////////////////////////////////
             /*---------------------------------------
-            pdf 업로드 시 spinner 
+            pdf 업로드 시 spinner
             -----------------------------------------*/
             const dialogRef = this.dialog.open(SpinnerDialogComponent, {
                 // width: '300px',
@@ -154,5 +157,6 @@ export class OpenFileComponent implements OnInit {
             this.eventBusService.emit(new EventData('spinner', dialogRef))
             ///////////////////////////////////////////////////////////////////
         }
+        this.dialogRef.close();
     }
 }

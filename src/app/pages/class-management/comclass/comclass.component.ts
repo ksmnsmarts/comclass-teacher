@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
+import { CANVAS_CONFIG } from 'src/app/0.shared/config/config';
+import { DrawingService } from 'src/app/0.shared/services/drawing/drawing.service';
 import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { FileService } from 'src/app/0.shared/services/file/file.service';
 import { ZoomService } from 'src/app/0.shared/services/zoom/zoom.service';
+import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.service';
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 
@@ -26,20 +29,45 @@ export class ComclassComponent implements OnInit {
     private fileService: FileService,
     private viewInfoService: ViewInfoService,
     private pdfStorageService: PdfStorageService,
-    private zoomService: ZoomService
+    private zoomService: ZoomService,
+    private drawStorageService: DrawStorageService,
+    private drawingService: DrawingService,
   ) {}
 
   ngOnInit(): void {
+
+    // view Info 초기화
+    this.updateViewInfoStore();
+
     this.eventBusService.on('open the blank pdf', this.unsubscribe$, (data) => {
       this.newpageEvent(data);
       this.isDocLoaded = true;
     });
+
     this.eventBusService.on('openFile', this.unsubscribe$, (data) => {
       console.log('event Bus == openfile');
       this.openFile(data.files, data.type);
       this.isDocLoaded = true;
     });
+
+    // 새로운 판서 Event 저장
+    this.eventBusService.on('gen:newDrawEvent', this.unsubscribe$, async (data) => {
+      const pageInfo = this.viewInfoService.state.pageInfo;
+      // local Store 저장
+      const docNum = pageInfo.currentDocNum;
+      const pageNum = pageInfo.currentPage;
+      const zoomScale = pageInfo.zoomScale;
+
+      this.drawStorageService.setDrawEvent(docNum, pageNum, data);
+    })
   }
+
+  ngOnDestroy() {
+    // unsubscribe all subscription
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
+
 
   /**
    * PDF / GSTD / Media File 열기위해 받아오는 부분
@@ -154,4 +182,22 @@ export class ComclassComponent implements OnInit {
     //     });
     // }, 0);
   }
+
+  /**
+   * ViewInfo Store update
+   * - numPages, currentPage, zoomScale
+   * - 초기에 1page 설정
+   */
+
+   updateViewInfoStore() {
+    const obj = {
+      numPages: 1,
+      currentPage: 1,
+      zoomScale: 1,
+    }
+
+    this.viewInfoService.setViewInfo(obj);
+  }
+  ///////////////////////////////////////////////////////////
+
 }
