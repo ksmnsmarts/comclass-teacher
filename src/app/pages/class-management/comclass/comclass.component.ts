@@ -52,6 +52,9 @@ export class ComclassComponent implements OnInit {
             this.openFile(data.files, data.type);
             this.isDocLoaded = true;
         });
+        this.eventBusService.on('isDocLoaded', this.unsubscribe$, (data) => {
+            this.isDocLoaded = true;
+        });
     }
 
     /**
@@ -246,7 +249,7 @@ export class ComclassComponent implements OnInit {
         // await this.updatePdfAndDrawStorage(docResult);
 
         // // 3. view status update
-        // this.updateViewInfoStore();
+        this.updateViewInfoStore();
 
     }
 

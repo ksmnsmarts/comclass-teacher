@@ -66,6 +66,7 @@ export class OpenFileComponent implements OnInit {
             console.log(result)
             // @OUTPUT -> white-board component로 전달
             this.eventBusService.emit(new EventData('openFile', result))
+            this.dialogRef.close();
             ///////////////////////////////////////////////////////////////////
             /*---------------------------------------
             pdf 업로드 시 spinner 

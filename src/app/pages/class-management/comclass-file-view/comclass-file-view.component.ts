@@ -52,7 +52,7 @@ export class ComclassFileViewComponent implements OnInit {
                 this.documentInfo = documentInfo;
                 await new Promise(res => setTimeout(res, 0));
 
-                this.renderFileList(documentInfo);
+                this.renderFileList();
             });
     }
 
@@ -71,7 +71,7 @@ export class ComclassFileViewComponent implements OnInit {
     * @param documentInfo
     * @returns
     */
-    async renderFileList(documentInfo) {
+    async renderFileList() {
         // File List Background 그리기 : 각 문서의 1page만 그림
         for (let i = 0; i < this.thumRef.toArray().length; i++) {
             await this.renderingService.renderThumbBackground(this.thumRef.toArray()[i].nativeElement, i + 1, 1);

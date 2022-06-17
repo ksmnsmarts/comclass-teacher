@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { distinctUntilChanged, pluck, Subject, takeUntil } from 'rxjs';
+import { distinctUntilChanged, pairwise, pluck, Subject, takeUntil } from 'rxjs';
 import { CANVAS_CONFIG } from 'src/app/0.shared/config/config';
 import { CanvasService } from 'src/app/0.shared/services/canvas/canvas.service';
 import { DrawingService } from 'src/app/0.shared/services/drawing/drawing.service';
@@ -75,23 +75,18 @@ export class ComclassCanvasComponent implements OnInit {
                 // 초기 load 포함 변경사항에 대해 수행
                 // (doc change, page change, zoom change 등)
                 if (pageInfo.currentDocId) {
-                    // this.updateViewInfoStore()
+                    console.log(pageInfo.currentDocId)
+                    this.eventBusService.emit(new EventData('isDocLoaded', ''));
                     this.onChangePage();
                 }
             });
         ///////////////////////////////////////////////
 
+
         this.eventBusService.on('blank pdf', this.unsubscribe$, () => {
-            console.log('문서 열어')
-            //나중에 수정
-
-
-
-
-            this.updateViewInfoStore()
             this.onChangePage()
-
         })
+        
     }
 
     ngOnDestroy() {
@@ -197,7 +192,7 @@ export class ComclassCanvasComponent implements OnInit {
          async pageRender(currentDocNum, currentPage, zoomScale) {
 
             // 화면을 급하게 확대하거나 축소 시 깜빡거리는 UI 측면 문제 해결 위한 함수
-            this.preRenderBackground(currentPage)
+            // this.preRenderBackground(currentPage)
 
             console.log('>>> page Render! [background and board] + addEventHandler');
 
