@@ -75,9 +75,8 @@ export class ComclassCanvasComponent implements OnInit {
                 // 초기 load 포함 변경사항에 대해 수행
                 // (doc change, page change, zoom change 등)
                 if (pageInfo.currentDocId) {
-                    console.log('222222222222222222222222222')
                     // this.updateViewInfoStore()
-                    // this.onChangePage();
+                    this.onChangePage();
                 }
             });
         ///////////////////////////////////////////////
@@ -127,7 +126,6 @@ export class ComclassCanvasComponent implements OnInit {
         CANVAS_CONFIG.maxContainerWidth = window.innerWidth - CANVAS_CONFIG.sidebarWidth;
 
         CANVAS_CONFIG.deviceScale = this.canvasService.getDeviceScale(this.coverCanvas);
-        console.log('---------------initCanvasSet done-------------')
     }
 
     /**
@@ -244,7 +242,6 @@ export class ComclassCanvasComponent implements OnInit {
    */
 
   updateViewInfoStore() {
-    console.log('-------------updateViewInfoStore-------------')
     let documentInfo = [...this.viewInfoService.state.documentInfo];
     // console.log(documentInfo)
     // console.log(this.pdfStorageService.pdfVarArray)
