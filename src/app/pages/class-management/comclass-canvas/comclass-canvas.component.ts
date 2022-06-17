@@ -152,7 +152,7 @@ export class ComclassCanvasComponent implements OnInit {
         // this.drawingService.stopRxDrawing();
 
         // set Canvas Size
-        const ratio = this.canvasService.setCanvasSize(pageNum, zoomScale, this.canvasContainer, this.coverCanvas, this.teacherCanvas, this.bgCanvas, this.studentGuideCanvas, this.teacherGuideCanvas, this.tmpCanvas);
+        const ratio = this.canvasService.setCanvasSize(docNum, pageNum, zoomScale, this.canvasContainer, this.coverCanvas, this.teacherCanvas, this.bgCanvas, this.studentGuideCanvas, this.teacherGuideCanvas, this.tmpCanvas);
         // set Canvas Size
         // const ratio = this.setCanvasSize(docNum, pageNum, zoomScale);
         // BG & Board Render
@@ -186,7 +186,7 @@ export class ComclassCanvasComponent implements OnInit {
      */
     setCanvasSize(currentDocNum, currentPage, zoomScale) {
         // return this.canvasService.setCanvasSize(currentDocNum, currentPage, zoomScale, this.canvasContainer, this.coverCanvas, this.teacherGuideCanvas, this.teacherCanvas, this.bgCanvas);
-        return this.canvasService.setCanvasSize(currentPage, zoomScale, this.canvasContainer, this.coverCanvas, this.teacherCanvas, this.bgCanvas,  this.studentGuideCanvas, this.teacherGuideCanvas, this.tmpCanvas);
+        return this.canvasService.setCanvasSize(currentDocNum, currentPage, zoomScale, this.canvasContainer, this.coverCanvas, this.teacherCanvas, this.bgCanvas,  this.studentGuideCanvas, this.teacherGuideCanvas, this.tmpCanvas);
     }
 
         /**

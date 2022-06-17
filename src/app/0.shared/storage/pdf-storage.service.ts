@@ -87,8 +87,8 @@ export class PdfStorageService {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    getPdfPage(pageNum) {
-        return this.pdfVar.totalPdfDoc_file[pageNum - 1];
+    getPdfPage(pdfNum, pageNum) {
+        return this._pdfVarArray[pdfNum - 1]?.pdfPages[pageNum - 1];
     }
 
     getPdfVar() {

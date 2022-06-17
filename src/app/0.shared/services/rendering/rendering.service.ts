@@ -33,7 +33,7 @@ export class RenderingService {
     console.log('renderThumbBackground')
     // console.log('> renderThumbnail Background');
     // const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
-    const pdfPage = this.pdfStorageService.getPdfPage(pageNum);
+    const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
 
     // console.log(pdfPage)
     // 배경 처리를 위한 임시 canvas
@@ -113,7 +113,7 @@ export class RenderingService {
 
     console.log('renderBackground')
 
-    const pdfPage = this.pdfStorageService.getPdfPage(pageNum);
+    const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
     console.log(pdfPage)
     if (!pdfPage) {
       return;
@@ -197,10 +197,10 @@ export class RenderingService {
         tmpCanvasScaling = CANVAS_CONFIG.deviceScale;
       }
 
-      // console.log('bgimgsize: ', bgImgSize);
-      // console.log('device scale: ', CONFIG.deviceScale);
+      console.log('bgimgsize: ', bgImgSize);
+      console.log('device scale: ', CANVAS_CONFIG.deviceScale);
 
-      // console.log('tmp canvas scaling: ', tmpCanvasScaling);
+      console.log('tmp canvas scaling: ', tmpCanvasScaling);
 
       tmpCanvas.width = bgImgSize.width * tmpCanvasScaling / CANVAS_CONFIG.deviceScale;
       tmpCanvas.height = bgImgSize.height * tmpCanvasScaling / CANVAS_CONFIG.deviceScale;

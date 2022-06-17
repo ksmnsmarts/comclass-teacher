@@ -6,10 +6,11 @@ class InitViewInfo {
   leftSideView = 'fileList'; //'fileList', 'thumbnail';
   documentInfo = []; // {_id: '',  currentPage: 1,  numPages: 1}
   pageInfo = {
-    currentDocId : '',
-    currentDocNum: 1,
+    numPages : 1,
+    currentDocNum : 1,
     currentPage : 1,
-    zoomScale : 1
+    zoomScale : 1,
+    thumbUpdateRequired: false
   }
 }
 
