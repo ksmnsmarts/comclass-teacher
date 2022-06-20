@@ -30,12 +30,8 @@ export class RenderingService {
    * @param {element} canvas <canvas>
    */
   async renderThumbBackground(imgElement, pdfNum, pageNum) {
-    console.log('renderThumbBackground')
-    // console.log('> renderThumbnail Background');
-    // const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
     const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
 
-    // console.log(pdfPage)
     // 배경 처리를 위한 임시 canvas
     const tmpCanvas = document.createElement('canvas');
     const tmpCtx = tmpCanvas.getContext("2d");
@@ -81,9 +77,6 @@ export class RenderingService {
 
     // 해당 page의 drawing 정보가 있는 경우
     if (drawingEvents?.drawingEvent && drawingEvents?.drawingEvent.length > 0) {
-      // console.log('drawingEvents-----------', drawingEvents?.drawingEvent)
-      // console.log(thumbCanvas)
-      // console.log(pageNum, docNum)
       const viewport = this.pdfStorageService.getViewportSize(docNum, pageNum);
       const scale = thumbCanvas.width / (viewport.width * CANVAS_CONFIG.CSS_UNIT);
 
@@ -92,7 +85,6 @@ export class RenderingService {
       thumbCtx.clearRect(0, 0, thumbCanvas.width, thumbCanvas.height);
       thumbCtx.save();
       thumbCtx.scale(scale, scale);
-      // console.log(thumbCanvas.width, viewport.width);
       for (const item of drawingEvents?.drawingEvent) {
         // Draw Service의 'end'관련 event 이용.
         this.drawingService.end(thumbCtx, item.points, item.tool, item.txt, scale);
@@ -147,9 +139,7 @@ export class RenderingService {
       drawing Service의 'end'관련 event 이용.
     -----------------------------------------*/
 
-    // console.log('draw --------------------', drawingEvents)
     if (drawingEvents?.drawingEvent && drawingEvents?.drawingEvent.length > 0) {
-      // console.log('renderBoard -------------------222222222')
       for (const item of drawingEvents?.drawingEvent) {
         this.drawingService.end(targetCtx, item.points, item.tool, item.txt, scale);
       }
@@ -171,8 +161,6 @@ export class RenderingService {
       return false;
     }
 
-    console.log(page)
-
     const viewport = page.getViewport({ scale: 1 });
     const ctx = targetCanvas.getContext('2d');
 
@@ -182,29 +170,18 @@ export class RenderingService {
     //   const scale = targetCanvas.width / viewport.width;
       const scale = viewport.width;
       let tmpCanvasScaling;
-      console.log(targetCanvas.width)
-      console.log(scale)
       // scale이 작을때만 tmpcanvas size increase... : 여러가지 추가 check. ~~ todo
       if (scale <= 2 * CANVAS_CONFIG.CSS_UNIT) {
-        console.log(2 * CANVAS_CONFIG.CSS_UNIT)
         tmpCanvasScaling = Math.max(2, CANVAS_CONFIG.deviceScale);
-        console.log(tmpCanvasScaling)
       } else {
         tmpCanvasScaling = CANVAS_CONFIG.deviceScale;
       }
 
-      console.log('bgimgsize: ', bgImgSize);
-      console.log('device scale: ', CANVAS_CONFIG.deviceScale);
-
-      console.log('tmp canvas scaling: ', tmpCanvasScaling);
-
       tmpCanvas.width = bgImgSize.width * tmpCanvasScaling / CANVAS_CONFIG.deviceScale;
       tmpCanvas.height = bgImgSize.height * tmpCanvasScaling / CANVAS_CONFIG.deviceScale;
 
-      // console.log('rendering tmpcanvas: ', tmpCanvas);
 
       const zoomScale = tmpCanvas.width / viewport.width;
-      console.log(zoomScale);
       const tmpCtx = tmpCanvas.getContext('2d');
       const renderContext = {
         canvasContext: tmpCtx,
@@ -219,7 +196,6 @@ export class RenderingService {
         --> 대기중인 image가 없는 경우에만 처리.
         ---> pre-render 기능을 사용하므로 최종 image만 그려주면 됨.
       -----------------------------------------------------------*/
-
       if (!this.pageNumPending) {
         ctx.drawImage(tmpCanvas, 0, 0, bgImgSize.width, bgImgSize.height);
         // clear tmpCtx

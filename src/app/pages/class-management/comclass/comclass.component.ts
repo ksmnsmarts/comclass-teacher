@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { pluck, Subject, takeUntil } from 'rxjs';
 import { CANVAS_CONFIG } from 'src/app/0.shared/config/config';
 import { DrawingService } from 'src/app/0.shared/services/drawing/drawing.service';
-import { pluck, Subject, takeUntil } from 'rxjs';
 import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { FileService } from 'src/app/0.shared/services/file/file.service';
@@ -21,10 +21,10 @@ export class ComclassComponent implements OnInit {
     isDocLoaded = false;
     // Left Side Bar
     leftSideView;
-    //////////////////////////////////////
+
     docLength;
 
-    //////////////////////////////////////
+
 
     constructor(
         private eventBusService: EventBusService,
@@ -41,7 +41,6 @@ export class ComclassComponent implements OnInit {
         this.viewInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), pluck('leftSideView'))
             .subscribe((leftSideView) => {
-                console.log(leftSideView)
                 this.leftSideView = leftSideView;
 
                 console.log('[info] current Left Side View: ', leftSideView);
@@ -160,7 +159,6 @@ export class ComclassComponent implements OnInit {
             this.viewInfoService.setViewInfo(obj);
         }
 
-        console.log('blank pdf start-------------------------');
         this.eventBusService.emit(new EventData('blank pdf', ''));
 
         /*-------------------------------------------
