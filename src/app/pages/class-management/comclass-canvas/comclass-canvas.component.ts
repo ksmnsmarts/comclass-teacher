@@ -123,7 +123,6 @@ export class ComclassCanvasComponent implements OnInit {
                     color: editInfo.toolsConfig[currentTool].color,
                     width: editInfo.toolsConfig[currentTool].width,
                 };
-                console.log(this.currentToolInfo);
 
                 const zoomScale = this.viewInfoService.state.zoomScale;
 

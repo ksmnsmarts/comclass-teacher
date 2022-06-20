@@ -168,7 +168,6 @@ export class DrawingService {
       // https://github.com/demihe/HTML5-Canvas-Paint-Application/blob/bfdee5248a46c6955b52e2e23db8fc51dc785110/drawing.js#L206
       // 선 그리기
       case 'line':
-        console.log('shape moving~~~~~~')
         context.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
         console.log(points)
         context.moveTo(points[0], points[1]);
@@ -218,7 +217,6 @@ export class DrawingService {
       // 사각형 그리기
       case 'rectangle':
         if (len > 3) {
-          console.log('shape moving~~~~~~')
           context.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
           console.log(points)
           context.strokeRect(points[0], points[1], (points[2 * (len - 1)] - points[0]), (points[2 * (len - 1) + 1] - points[1]));
@@ -308,7 +306,6 @@ export class DrawingService {
 
       case 'textarea':
         if (len > 3) {
-          console.log('shape moving~~~~~~')
           context.clearRect(0, 0, sourceCanvas.width, sourceCanvas.height);
           context.setLineDash([5, 10]);
           context.strokeRect(points[0], points[1], (points[2 * (len - 1)] - points[0]), (points[2 * (len - 1) + 1] - points[1]));
@@ -794,7 +791,6 @@ export class DrawingService {
 
 
   async rxDrawingFunc() {
-    console.log('rxDrawingFunc~~~~~~~~~~')
     if (this.dataArray.length === 0) return;
     
     const data = await this.dataArray[0].data;
