@@ -109,6 +109,7 @@ export class ComclassSlideViewComponent implements OnInit {
             2. thumbnail의 window size 계산 수행
         ---------------------------------------------*/
         this.eventBusService.on('change:containerSize', this.unsubscribe$, async (data) => {
+
             this.scrollRatio = this.thumbArray[this.currentPageNum - 1].width / data.coverWidth;
             this.thumbWindowSize = {
                 width: this.thumbArray[this.currentPageNum - 1].width * data.ratio.w + 'px',

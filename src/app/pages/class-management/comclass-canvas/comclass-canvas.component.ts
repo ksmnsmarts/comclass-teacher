@@ -338,14 +338,14 @@ export class ComclassCanvasComponent implements OnInit {
         // if (!this.viewInfoService.state.isDocLoaded) return;
 
         // Resize시 container size 조절.
-        const ratio = this.canvasService.setContainerSize(this.canvasContainer, this.coverCanvas);
+        const ratio = this.canvasService.setContainerSize(this.coverCanvas, this.canvasContainer);
 
         if (this.viewInfoService.state.leftSideView != 'thumbnail') return;
 
         // thumbnail window 크기 변경을 위한 처리.
         this.eventBusService.emit(new EventData("change:containerSize", {
             ratio,
-            coverWidth: this.canvasService.canvasFullSize.width,
+            coverWidth: this.coverCanvas.width,
         }));
 
     }
