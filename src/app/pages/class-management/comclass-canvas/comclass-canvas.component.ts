@@ -111,14 +111,6 @@ export class ComclassCanvasComponent implements OnInit {
             });
         ///////////////////////////////////////////////
 
-        this.eventBusService.on('blank pdf', this.unsubscribe$, () => {
-            console.log('문서 열어');
-            //나중에 수정
-
-            this.updateViewInfoStore();
-            this.onChangePage();
-        });
-
         // Tool update(nav Menu)에 따른 event handler 변경
         this.editInfoService.state$
             .pipe(takeUntil(this.unsubscribe$))

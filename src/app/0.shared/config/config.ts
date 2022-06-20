@@ -21,7 +21,7 @@ export const CANVAS_CONFIG = {
 		pointer: [20, 25, 30],
 		pen: [4, 7, 13],
 		highlighter: [30, 45, 60],
-		eraser: [20, 25, 30],
+		eraser: [30, 45, 60],
 		line: [4, 7, 13],
 		circle: [4, 7, 13],
 		rectangle: [4, 7, 13],

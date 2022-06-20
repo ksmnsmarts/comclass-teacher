@@ -1,6 +1,6 @@
 
 <!-- drag scroll : zoom / pan의 경우에 사용 (PC) -->
-<div #canvasContainer id="canvasContainer" drag-scroll="vm.mode=='move'?true:false">
+<div #canvasContainer id="canvasContainer" [dragScroll]="dragOn">
 	<!-- temp 판서 -->
   <div class="tmp">
       <canvas #tmp id="tmp"></canvas>
