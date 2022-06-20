@@ -52,8 +52,8 @@ export class ZoomService {
 
     // 2. landscape 문서인 경우
     else if (docSize.width > docSize.height) {
-      // console.log(' - 문서: Landscape');
-      // fit To Page
+    //   console.log(' - 문서: Landscape');
+    //   fit To Page
       zoomScale = Math.min(ratio.w, ratio.h);
     }
     // 3, portrait 문서인 경우

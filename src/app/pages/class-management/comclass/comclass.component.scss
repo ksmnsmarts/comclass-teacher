@@ -96,6 +96,15 @@ $sidebar-width: 175px;
 		// }
 
 	}
+
+    comclass-newpage {
+        box-shadow : rgba(0,0,0,0.5) 0 0 0 9999px;
+        z-index : 100;
+    }
+
+    comclass-file-view {
+        z-index : 1;
+    }
     
 
 }

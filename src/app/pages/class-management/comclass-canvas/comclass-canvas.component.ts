@@ -1,12 +1,5 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  OnInit,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
-import { distinctUntilChanged, pluck, Subject, takeUntil } from 'rxjs';
+import { Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { distinctUntilChanged, pairwise, pluck, Subject, takeUntil } from 'rxjs';
 import { CANVAS_CONFIG } from 'src/app/0.shared/config/config';
 import { CanvasService } from 'src/app/0.shared/services/canvas/canvas.service';
 import { DrawingService } from 'src/app/0.shared/services/drawing/drawing.service';
@@ -225,11 +218,8 @@ export class ComclassCanvasComponent implements OnInit {
     CANVAS_CONFIG.maxContainerWidth =
       window.innerWidth - CANVAS_CONFIG.sidebarWidth;
 
-    CANVAS_CONFIG.deviceScale = this.canvasService.getDeviceScale(
-      this.coverCanvas
-    );
-    console.log('---------------initCanvasSet done-------------');
-  }
+        CANVAS_CONFIG.deviceScale = this.canvasService.getDeviceScale(this.coverCanvas);
+    }
 
   /**
    * Scroll 발생 시

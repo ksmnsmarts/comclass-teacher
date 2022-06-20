@@ -19,7 +19,7 @@ export class RenderingService {
   ) { }
 
   isPageRendering = false;
-  pageNumPending: boolean = null;
+  pageNumPending;
 
 
   /**
@@ -109,18 +109,13 @@ export class RenderingService {
   async renderBackground(tmpCanvas, bgCanvas, pdfNum, pageNum) {
     console.log(`>>>> renderBackground, pdfNum: ${pdfNum}, pageNum: ${pageNum}`);
 
-    // const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
-
-    console.log('renderBackground')
-
     const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
-    console.log(pdfPage)
     if (!pdfPage) {
       return;
     }
 
     if (this.isPageRendering) {
-      // console.log(' ---> pending!!! ');
+      console.log(' ---> pending!!! ');
       this.pageNumPending = pageNum;
     } else {
       this.isPageRendering = true;
@@ -184,7 +179,8 @@ export class RenderingService {
     const bgImgSize = { width: targetCanvas.width, height: targetCanvas.height };
 
     try {
-      const scale = targetCanvas.width / viewport.width;
+    //   const scale = targetCanvas.width / viewport.width;
+      const scale = viewport.width;
       let tmpCanvasScaling;
       console.log(targetCanvas.width)
       console.log(scale)
@@ -223,6 +219,7 @@ export class RenderingService {
         --> 대기중인 image가 없는 경우에만 처리.
         ---> pre-render 기능을 사용하므로 최종 image만 그려주면 됨.
       -----------------------------------------------------------*/
+
       if (!this.pageNumPending) {
         ctx.drawImage(tmpCanvas, 0, 0, bgImgSize.width, bgImgSize.height);
         // clear tmpCtx

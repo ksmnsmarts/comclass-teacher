@@ -1,84 +1,90 @@
 <div class="main-container">
-	<!-----------------------------------------------------------------
+    <!-----------------------------------------------------------------
 		navbar 부분 : Component로 처리
 		- click등의 event는 navbar component에서 수행
 		- 여기서는 click에 대한 event 정보를 받아와서 활용.
 		- 필요시 값 전달. (현재는 offline, classname, 학생수.)
 		- string과 boolean,number,object를 구분.
 	---------------------------------------------------------------- -->
-	<div class="navbar_container">
-		<comclass-nav off-line="vm.offLine" num-students="vm.numStudents"
-			is-doc-loaded="vm.flag.isDocLoaded" is-guide-mode="vm.flag.isGuideMode" is-recording="vm.flag.isRecording" is-sync-mode="vm.flag.isSyncMode">
-		</comclass-nav>
-	</div>
+    <div class="navbar_container">
+        <comclass-nav off-line="vm.offLine" num-students="vm.numStudents" is-doc-loaded="vm.flag.isDocLoaded"
+            is-guide-mode="vm.flag.isGuideMode" is-recording="vm.flag.isRecording" is-sync-mode="vm.flag.isSyncMode">
+        </comclass-nav>
+    </div>
 
-	<!------------------------------------
+    <!------------------------------------
 		Thumbnail 부분
 	------------------------------------ -->
-	<div class="sidebar_container animated fadeIn">
-		<comclass-thumb current-page="vm.currentPage" is-guide-mode="vm.flag.isGuideMode" thumb-update-required="vm.thumbUpdateRequired">
-		</comclass-thumb>
-	</div>
+    <div class="sidebar_container animated fadeIn">
+        <!-- fileList Mode -->
+        <comclass-file-view  [hidden]="leftSideView !='fileList'" (newLocalDocumentFile)="onDocumentOpened($event)" ></comclass-file-view>
 
-	<!------------------------------------
+        <!-- thumbnail Mode  -->
+        <comclass-slide-view [hidden]="leftSideView !='thumbnail'"></comclass-slide-view>
+    </div>
+
+    <!------------------------------------
 		Comclass Package: Teacher
 	------------------------------------ -->
-	<div class="comclass_container">
+    <div class="comclass_container">
 
-		<!--------------------------------------------------------
+        <!--------------------------------------------------------
 
 			Navbar 하단의 실제 canvas 영역
 			- thumbnail
 			- canvas 영역.
 
 		------------------------------------------------------- -->
-		<div class="comclass-main">
+        <div class="comclass-main">
 
-			<!------------------------[ video ]------------------------- -->
-			<!-- <comclass-video ng-if="vm.flag.isPlayerOpen" class="comclass-video" local-video-file="vm.localVideoFile" on-stop-play="vm.videoEvent($event)">
+            <!------------------------[ video ]------------------------- -->
+            <!-- <comclass-video ng-if="vm.flag.isPlayerOpen" class="comclass-video" local-video-file="vm.localVideoFile" on-stop-play="vm.videoEvent($event)">
 			</comclass-video> -->
-			<!-- ------------------------------------------------------------- -->
+            <!-- ------------------------------------------------------------- -->
 
 
-			<comclass-canvas off-line="vm.offLine" is-doc-loaded="vm.flag.isDocLoaded" doc-Length="vm.docLength" is-guide-mode="vm.flag.isGuideMode"
-			    guide-student-id="vm.guideStudent.id" is-replay-shown="vm.flag.isReplayShown" zoom-scale="vm.zoomScale"
-			    tool="vm.tool" canvas-update-required="vm.canvasUpdateRequired">
-			</comclass-canvas>
+            <comclass-canvas off-line="vm.offLine" is-doc-loaded="vm.flag.isDocLoaded" doc-Length="vm.docLength"
+                is-guide-mode="vm.flag.isGuideMode" guide-student-id="vm.guideStudent.id"
+                is-replay-shown="vm.flag.isReplayShown" zoom-scale="vm.zoomScale" tool="vm.tool"
+                canvas-update-required="vm.canvasUpdateRequired">
+            </comclass-canvas>
 
-			<comclass-newpage *ngIf="!isDocLoaded"></comclass-newpage>
+            <comclass-newpage *ngIf="!isDocLoaded"></comclass-newpage>
 
-			<!------------------------------------------
+            <!------------------------------------------
 				Floating Fab buttons
 				- zoom
 				- blind
 				- replay
 			------------------------------------------ -->
-			<!-- <comclass-fabs is-guide-mode="vm.flag.isGuideMode" is-replay-shown="vm.flag.isReplayShown">
+            <!-- <comclass-fabs is-guide-mode="vm.flag.isGuideMode" is-replay-shown="vm.flag.isReplayShown">
 			</comclass-fabs> -->
-		</div>
 
-		<!-----------------------------------------------------------------------
+            
+        </div>
+
+        <!-----------------------------------------------------------------------
 			Blind Canvas : md-sidenav 이용.
 				blind-screen-size: blind 영역
 					=> navbar 기본('step1'), 50%('step2'), 전체('full')으로 설정.
 		--------------------------------------------------------------------- -->
-		<!-- <comclass-blind blind-update-required="vm.blindUpdateRequired" on-blind-update="vm.blindEvent($event);">
+        <!-- <comclass-blind blind-update-required="vm.blindUpdateRequired" on-blind-update="vm.blindEvent($event);">
 		</comclass-blind> -->
 
 
-		<!-----------------------------------------------------------------------
+        <!-----------------------------------------------------------------------
 			Comclass Exam TEST
 		--------------------------------------------------------------------- -->
-		<!-- <comclass-exam ng-if="!vm.offLine" num-students="vm.numStudents" class-name="{{vm.classInfo.className}}" teacher-name="{{vm.classInfo.teacherName}}"
+        <!-- <comclass-exam ng-if="!vm.offLine" num-students="vm.numStudents" class-name="{{vm.classInfo.className}}" teacher-name="{{vm.classInfo.teacherName}}"
 		    exam-update-required="vm.examUpdateRequired" on-exam-update="vm.examEvent($event);">
 		</comclass-exam> -->
 
-		<!-----------------------------------------------------------------------
+        <!-----------------------------------------------------------------------
 			Student List
 		--------------------------------------------------------------------- -->
-		<!-- <comclass-student ng-if="!vm.offLine" student-list="vm.studentList" num-students="vm.numStudents" student-list-update-required="vm.studentListUpdateRequired">
+        <!-- <comclass-student ng-if="!vm.offLine" student-list="vm.studentList" num-students="vm.numStudents" student-list-update-required="vm.studentListUpdateRequired">
 		</comclass-student> -->
 
-	</div>
+    </div>
 
 </div>
