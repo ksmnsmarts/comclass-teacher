@@ -18,12 +18,18 @@ export class CanvasService {
 	listenerSet = [];
 	zoomScale = 1;
 
+    _canvasFullSize;
+
 	constructor(
 		private pdfStorageService: PdfStorageService,
 		private drawingService: DrawingService,
 		private eventBusService: EventBusService,
 		private editInfoService: EditInfoService,
 	) { }
+
+    get canvasFullSize(): any {
+        return this._canvasFullSize;
+    }
 
 	// board-canvas clearBoard()
 	clearBoardA$ = new Subject<string>();

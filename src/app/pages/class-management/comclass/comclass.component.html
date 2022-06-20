@@ -16,8 +16,10 @@
 		Thumbnail 부분
 	------------------------------------ -->
     <div class="sidebar_container animated fadeIn">
+        <!-- fileList Mode -->
         <comclass-file-view  [hidden]="leftSideView !='fileList'" (newLocalDocumentFile)="onDocumentOpened($event)" ></comclass-file-view>
 
+        <!-- thumbnail Mode  -->
         <comclass-slide-view [hidden]="leftSideView !='thumbnail'"></comclass-slide-view>
     </div>
 

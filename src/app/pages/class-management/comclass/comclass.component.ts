@@ -38,6 +38,7 @@ export class ComclassComponent implements OnInit {
         this.viewInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), pluck('leftSideView'))
             .subscribe((leftSideView) => {
+                console.log(leftSideView)
                 this.leftSideView = leftSideView;
 
                 console.log('[info] current Left Side View: ', leftSideView);

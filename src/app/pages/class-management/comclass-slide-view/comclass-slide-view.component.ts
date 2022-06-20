@@ -90,11 +90,13 @@ export class ComclassSlideViewComponent implements OnInit {
    * 판서 Event 관련
    */
     eventBusListeners() {
+        
         /*--------------------------------------
             Scroll event에 따라서 thumbnail window 위치/크기 변경
             --> broadcast from comclass component
         --------------------------------------*/
         this.eventBusService.on('change:containerScroll', this.unsubscribe$, async (data) => {
+            console.log('thumnail window')
             this.thumbWindow = this.thumbWindowRef.last.nativeElement;
             this.thumbWindow.style.left = data.left * this.scrollRatio + 'px';
             this.thumbWindow.style.top = data.top * this.scrollRatio + 'px';
