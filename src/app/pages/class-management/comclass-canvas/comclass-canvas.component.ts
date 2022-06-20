@@ -105,31 +105,6 @@ export class ComclassCanvasComponent implements OnInit {
             });
         ///////////////////////////////////////////////
 
-        this.eventBusService.on('blank pdf', this.unsubscribe$, () => {
-            console.log('문서 열어');
-            //나중에 수정
-
-            this.onChangePage();
-        });
-
-
-        ////////////////////////////////////////////////
-        // 현재 sideBar view 정보 받아오기
-        this.viewInfoService.state$
-            .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged(), pairwise())
-            .subscribe(([prevViewInfo, viewInfo]) => {
-
-                console.log(prevViewInfo.leftSideView)
-
-                // 현재 sideBar doc. view 정보 받아서 저장.
-                this.prevViewInfo = prevViewInfo.leftSideView
-
-
-            });
-        ///////////////////////////////////////////////
-
-
-
         // Tool update(nav Menu)에 따른 event handler 변경
         this.editInfoService.state$
             .pipe(takeUntil(this.unsubscribe$))

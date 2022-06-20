@@ -59,7 +59,7 @@ export class ComclassNavComponent implements OnInit {
 
   currentDocId;
   currentDocNum;
-  currentPageNum;
+  currentPage;
 
   socket;
   colorSet;
@@ -81,11 +81,14 @@ export class ComclassNavComponent implements OnInit {
     this.viewInfoService.state$
       .pipe(
         takeUntil(this.unsubscribe$),
-        pluck('currentPage'),
+        pluck('pageInfo'),
         distinctUntilChanged()
       )
-      .subscribe((currentPage) => {
-        this.currentPageNum = currentPage;
+      .subscribe((pageInfo) => {
+        console.log(pageInfo);
+        this.currentDocNum = pageInfo.currentDocNum;
+        this.currentPage = pageInfo.currentPage;
+        this.currentDocId = pageInfo.currentDocId;
       });
 
     this.editInfoService.state$
@@ -123,14 +126,14 @@ export class ComclassNavComponent implements OnInit {
         const data = {
           docId: this.currentDocId,
           currentDocNum: this.currentDocNum,
-          currentPage: this.currentPageNum,
+          currentPage: this.currentPage,
         };
         // 다른 사람들에게 드로우 이벤트 제거
         this.socket.emit('clearDrawingEvents', data);
         // 자기자신한테 있는 드로우 이벤트 제거
         this.drawStorageService.clearDrawingEvents(
           this.currentDocNum,
-          this.currentPageNum
+          this.currentPage
         );
         this.eventBusService.emit(
           new EventData('rmoveDrawEventPageRendering', '')
@@ -161,12 +164,7 @@ export class ComclassNavComponent implements OnInit {
   changeColor(color) {
     const editInfo = Object.assign({}, this.editInfoService.state);
     editInfo.mode = 'draw';
-    if (
-      editInfo.mode != 'draw' ||
-      editInfo.tool == 'erasar' ||
-      editInfo.tool == 'pointer'
-    )
-      return;
+    if ( editInfo.mode != 'draw' || editInfo.tool == 'erasar' ) return;
     editInfo.toolsConfig.pen.color = color;
     editInfo.toolsConfig.highlighter.color = color;
     editInfo.toolsConfig.line.color = color;

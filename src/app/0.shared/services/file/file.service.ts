@@ -181,7 +181,7 @@ export class FileService {
         console.log('Total Pages:', results.pdfPages.length);
         return {
             success: true,
-            docLength: results.pdfPages.length
+            docLength: results.pdfPages.length,
         };
     }
 

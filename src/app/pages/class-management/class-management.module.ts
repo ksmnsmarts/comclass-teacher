@@ -36,7 +36,6 @@ import { DragScrollDirective } from 'src/app/0.shared/directives/drag-scroll.dir
     OpenFileComponent,
     ComclassFileViewComponent,
     ComclassSlideViewComponent,
-
     DragScrollDirective
     ],
   imports: [
