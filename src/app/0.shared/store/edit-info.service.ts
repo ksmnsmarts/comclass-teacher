@@ -21,7 +21,7 @@ class InitEditInfo {
     roundedRectangle: { width: 4, color: 'black' },
     textarea: { width: 20, color: 'black' },
     text: { width: 20, color: 'black' },
-    
+
   };
 
   toolDisabled = true; // move인 경우
@@ -42,7 +42,6 @@ export class EditInfoService extends Store<any> {
   }
 
   setEditInfo(editInfo: any): void {
-
     // Tool Disable 설정
     if (editInfo.mode == 'draw') {
       editInfo.toolDisabled = false;
@@ -54,5 +53,10 @@ export class EditInfoService extends Store<any> {
     this.setState({
       ...this.state, ...editInfo
     });
+    console.log(editInfo)
+  }
+
+  getInfo(){
+    this.state
   }
 }

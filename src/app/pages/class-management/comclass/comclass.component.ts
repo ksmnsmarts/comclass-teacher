@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { pluck, Subject, takeUntil } from 'rxjs';
+import { CANVAS_CONFIG } from 'src/app/0.shared/config/config';
+import { DrawingService } from 'src/app/0.shared/services/drawing/drawing.service';
 import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { FileService } from 'src/app/0.shared/services/file/file.service';
 import { ZoomService } from 'src/app/0.shared/services/zoom/zoom.service';
+import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.service';
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 

@@ -56,7 +56,7 @@ export function tokenGetter() {
         DialogModule,
         ReactiveFormsModule,
         MatIconModule,
-        IconModule,        
+        IconModule,
     ],
     providers: [SignInGuard, AdminGuard],
     bootstrap: [AppComponent]

@@ -14,7 +14,6 @@ export class PdfStorageService {
 
 
     private pdfVar= {
-        totalPdfDoc_file: [], // 전체 pdf 문서의 page별 정보
         fileBuffer: [], // pdf의 실제 array buffer : 저장 및 공유용도.
         loadedDate: [], // file buffer별 로딩 시간 저장
         pagePerFileBuffer: [], // file buffer별 page 수 => 사용하지는 않음.

@@ -9,177 +9,279 @@ import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.
 import { ZoomService } from 'src/app/0.shared/services/zoom/zoom.service';
 import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.service';
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
+import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 
 @Component({
-    selector: 'comclass-canvas',
-    templateUrl: './comclass-canvas.component.html',
-    styleUrls: ['./comclass-canvas.component.scss']
+  selector: 'comclass-canvas',
+  templateUrl: './comclass-canvas.component.html',
+  styleUrls: ['./comclass-canvas.component.scss'],
 })
 export class ComclassCanvasComponent implements OnInit {
+  private unsubscribe$ = new Subject<void>();
+  private currentDocNum: Number;
+  private currentPage: Number;
 
-    private unsubscribe$ = new Subject<void>();
-    private currentDocNum: Number;
-    private currentPage: Number;
+  editDisabled = true;
+  dragOn = true;
 
-    currentToolInfo = {
-        type: '',
-        color: '',
-        width: '',
-    };
+  currentToolInfo = {
+    type: '',
+    color: '',
+    width: '',
+  };
 
-    // preRendering을 위한 변수
-    prevViewInfo; //'fileList', 'thumbnail';
+  // preRendering을 위한 변수
+  prevViewInfo; //'fileList', 'thumbnail';
 
-    // static: https://stackoverflow.com/questions/56359504/how-should-i-use-the-new-static-option-for-viewchild-in-angular-8
-    @ViewChild('canvasContainer', { static: true }) public canvasContainerRef: ElementRef;
-    @ViewChild('coverCanvas', { static: true }) public coverCanvasRef: ElementRef;
-    @ViewChild('teacherCanvas', { static: true }) public teacherCanvasRef: ElementRef;
-    @ViewChild('studentGuideCanvas', { static: true }) public studentGuideCanvasRef: ElementRef;
-    @ViewChild('teacherGuideCanvas', { static: true }) public teacherGuideCanvasRef: ElementRef;
-    @ViewChild('bg', { static: true }) public bgCanvasRef: ElementRef;
-    @ViewChild('tmp', { static: true }) public tmpCanvasRef: ElementRef;
+  // static: https://stackoverflow.com/questions/56359504/how-should-i-use-the-new-static-option-for-viewchild-in-angular-8
+  @ViewChild('canvasContainer', { static: true })
+  public canvasContainerRef: ElementRef;
+  @ViewChild('coverCanvas', { static: true }) public coverCanvasRef: ElementRef;
+  @ViewChild('teacherCanvas', { static: true })
+  public teacherCanvasRef: ElementRef;
+  @ViewChild('studentGuideCanvas', { static: true })
+  public studentGuideCanvasRef: ElementRef;
+  @ViewChild('teacherGuideCanvas', { static: true })
+  public teacherGuideCanvasRef: ElementRef;
+  @ViewChild('bg', { static: true }) public bgCanvasRef: ElementRef;
+  @ViewChild('tmp', { static: true }) public tmpCanvasRef: ElementRef;
 
+  canvasContainer: HTMLDivElement;
+  coverCanvas: HTMLCanvasElement;
+  teacherCanvas: HTMLCanvasElement;
+  studentGuideCanvas: HTMLCanvasElement;
+  teacherGuideCanvas: HTMLCanvasElement;
+  bgCanvas: HTMLCanvasElement;
+  tmpCanvas: HTMLCanvasElement;
 
-    canvasContainer: HTMLDivElement;
-    coverCanvas: HTMLCanvasElement;
-    teacherCanvas: HTMLCanvasElement;
-    studentGuideCanvas: HTMLCanvasElement;
-    teacherGuideCanvas: HTMLCanvasElement;
-    bgCanvas: HTMLCanvasElement;
-    tmpCanvas: HTMLCanvasElement;
+  rendererEvent1: any;
 
+  constructor(
+    private viewInfoService: ViewInfoService,
+    private drawingService: DrawingService,
+    private canvasService: CanvasService,
+    private renderingService: RenderingService,
+    private pdfStorageService: PdfStorageService,
+    private eventBusService: EventBusService,
+    private zoomService: ZoomService,
+    private drawStorageService: DrawStorageService,
+    private renderer: Renderer2,
+    private editInfoService: EditInfoService,
+  ) {}
 
-    rendererEvent1: any;
+  // Resize Event Listener
+  @HostListener('window:resize') resize() {
+    const newWidth = window.innerWidth - CANVAS_CONFIG.sidebarWidth;
+    const newHeight = window.innerHeight - CANVAS_CONFIG.navbarHeight;
+    // sidenav 열릴때 resize event 발생... 방지용도.
+    if (
+      CANVAS_CONFIG.maxContainerWidth === newWidth &&
+      CANVAS_CONFIG.maxContainerHeight === newHeight
+    ) {
+      return;
+    }
+    CANVAS_CONFIG.maxContainerWidth = newWidth;
+    CANVAS_CONFIG.maxContainerHeight = newHeight;
+    this.onResize();
+  }
 
+  ngOnInit(): void {
+    this.initCanvasSet();
 
-
-    constructor(
-        private viewInfoService: ViewInfoService,
-        private drawingService: DrawingService,
-        private canvasService: CanvasService,
-        private renderingService: RenderingService,
-        private pdfStorageService: PdfStorageService,
-        private eventBusService: EventBusService,
-        private zoomService: ZoomService,
-        private drawStorageService: DrawStorageService,
-        private renderer: Renderer2,
-    ) { }
-
-
-    // Resize Event Listener
-    @HostListener('window:resize') resize() {
-        const newWidth = window.innerWidth - CANVAS_CONFIG.sidebarWidth;
-        const newHeight = window.innerHeight;
-        // sidenav 열릴때 resize event 발생... 방지용도.
-        if (CANVAS_CONFIG.maxContainerWidth === newWidth && CANVAS_CONFIG.maxContainerHeight === newHeight) {
-            return;
+    ////////////////////////////////////////////////
+    // Document가 Update 된 경우
+    this.viewInfoService.state$
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        pluck('pageInfo'),
+        distinctUntilChanged()
+      )
+      .subscribe((pageInfo) => {
+        console.log(pageInfo);
+        this.currentDocNum = pageInfo.currentDocNum;
+        this.currentPage = pageInfo.currentPage;
+        // 초기 load 포함 변경사항에 대해 수행
+        // (doc change, page change, zoom change 등)
+        if (pageInfo.currentDocId) {
+          console.log('222222222222222222222222222');
+          this.updateViewInfoStore()
+          this.onChangePage();
         }
-        CANVAS_CONFIG.maxContainerWidth = newWidth;
-        CANVAS_CONFIG.maxContainerHeight = newHeight;
-        this.onResize();
-    }
+      });
+    ///////////////////////////////////////////////
+
+    this.eventBusService.on('blank pdf', this.unsubscribe$, () => {
+      console.log('문서 열어');
+      //나중에 수정
+
+      this.updateViewInfoStore();
+      this.onChangePage();
+    });
+
+    // Tool update(nav Menu)에 따른 event handler 변경
+    this.editInfoService.state$
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((editInfo) => {
+        console.log('[Editor Setting]: ', editInfo);
+
+        this.editDisabled = editInfo.toolDisabled || editInfo.editDisabled;
+
+        // drag Enable
+        this.dragOn = false;
+        if (editInfo.mode == 'move') this.dragOn = true;
+
+        const currentTool = editInfo.tool;
+        this.currentToolInfo = {
+          type: editInfo.tool, // pen, eraser
+          color: editInfo.toolsConfig[currentTool].color,
+          width: editInfo.toolsConfig[currentTool].width,
+        };
+        console.log(this.currentToolInfo);
+
+        const zoomScale = this.viewInfoService.state.zoomScale;
+
+        // text모드에서 갑작스럽게 다른 모드로 전환할경우
+        // textarea 삭제
+        if (editInfo.tool != 'text') {
+          var textInput = <HTMLInputElement>document.getElementById('textarea');
+          if (textInput) {
+            textInput.parentNode.removeChild(textInput);
+          }
+        }
+
+        // canvas Event Handler 설정
+        this.canvasService.addEventHandler(
+          this.coverCanvas,
+          this.teacherCanvas,
+          this.currentToolInfo,
+          zoomScale
+        );
+      });
+
+    // continer scroll Listener : thumbnail의 window 처리 용도
+    this.rendererEvent1 = this.renderer.listen(
+      this.canvasContainer,
+      'scroll',
+      (event) => {
+        this.onScroll();
+      }
+    );
+
+    this.eventBusListeners();
+  }
+
+  ngOnDestroy() {
+    // this.canvasService.releaseEventHandler();
+
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+
+    // render listener 해제
+    // this.rendererEvent1();
+
+    // pdf memory release
+    this.pdfStorageService.memoryRelease();
+  }
+
+  eventBusListeners() {
+    // board-nav로 부터 현재 페이지 드로잉 이벤트 삭제
+    // 다시 페이지 렌더링
+    this.eventBusService.on('rmoveDrawEventPageRendering',this.unsubscribe$,(data)=>{
+      const viewInfo = this.viewInfoService.state;
+      const docNum = viewInfo.pageInfo.currentDocNum;
+      const pageNum = viewInfo.pageInfo.currentPage;
+      const zoomScale = viewInfo.pageInfo.zoomScale;
+      if (this.currentDocNum == docNum && this.currentPage == pageNum) {
+        this.pageRender(docNum, pageNum, zoomScale)
+      }
+    })
+  }
 
 
 
-    ngOnInit(): void {
+  initCanvasSet() {
+    this.coverCanvas = this.coverCanvasRef.nativeElement;
+    this.teacherGuideCanvas = this.teacherGuideCanvasRef.nativeElement;
 
-        this.initCanvasSet();
+    this.teacherCanvas = this.teacherCanvasRef.nativeElement;
+    this.studentGuideCanvas = this.studentGuideCanvasRef.nativeElement;
 
-        ////////////////////////////////////////////////
-        // Document가 Update 된 경우
-        this.viewInfoService.state$
-            .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'), distinctUntilChanged())
-            .subscribe((pageInfo) => {
-                console.log(pageInfo)
-                this.currentDocNum = pageInfo.currentDocNum;
-                this.currentPage = pageInfo.currentPage;
-                // 초기 load 포함 변경사항에 대해 수행
-                // (doc change, page change, zoom change 등)
-                if (pageInfo.currentDocId) {
-                    this.eventBusService.emit(new EventData('isDocLoaded', ''));
-                    this.onChangePage();
-                }
-            });
-        ///////////////////////////////////////////////
+    this.bgCanvas = this.bgCanvasRef.nativeElement;
+    this.tmpCanvas = this.tmpCanvasRef.nativeElement;
 
+    this.canvasContainer = this.canvasContainerRef.nativeElement;
 
-        this.eventBusService.on('blank pdf', this.unsubscribe$, () => {
-            this.onChangePage()
-        })
+    /* container size 설정 */
+    CANVAS_CONFIG.maxContainerHeight =
+      window.innerHeight - CANVAS_CONFIG.navbarHeight; // pdf 불러오기 사이즈
+    CANVAS_CONFIG.maxContainerWidth =
+      window.innerWidth - CANVAS_CONFIG.sidebarWidth;
 
+    CANVAS_CONFIG.deviceScale = this.canvasService.getDeviceScale(
+      this.coverCanvas
+    );
+    console.log('---------------initCanvasSet done-------------');
+  }
 
-        ///////////////////////////////////////////////////
-        // continer scroll
-        // thumbnail의 window 처리 용도
-        this.rendererEvent1 = this.renderer.listen(this.canvasContainer, 'scroll', event => {
-            this.onScroll();
-        });
-        //////////////////////////////////////////////////
-
-    }
-
-    ngOnDestroy() {
-        // this.canvasService.releaseEventHandler();
-
-        this.unsubscribe$.next();
-        this.unsubscribe$.complete();
-
-        // render listener 해제
-        this.rendererEvent1();
-
-        // pdf memory release
-        this.pdfStorageService.memoryRelease();
-
-    }
-
-    initCanvasSet() {
-
-        this.coverCanvas = this.coverCanvasRef.nativeElement;
-        this.teacherGuideCanvas = this.teacherGuideCanvasRef.nativeElement;
-
-        this.teacherCanvas = this.teacherCanvasRef.nativeElement;
-        this.studentGuideCanvas = this.studentGuideCanvasRef.nativeElement;
-
-        this.bgCanvas = this.bgCanvasRef.nativeElement;
-        this.tmpCanvas = this.tmpCanvasRef.nativeElement;
-
-        this.canvasContainer = this.canvasContainerRef.nativeElement;
-
-        /* container size 설정 */
-        CANVAS_CONFIG.maxContainerHeight = window.innerHeight - CANVAS_CONFIG.navbarHeight; // pdf 불러오기 사이즈
-        CANVAS_CONFIG.maxContainerWidth = window.innerWidth - CANVAS_CONFIG.sidebarWidth;
-
-        CANVAS_CONFIG.deviceScale = this.canvasService.getDeviceScale(this.coverCanvas);
-    }
-
-    /**
+  /**
+   * Scroll 발생 시
+   */
+  onScroll() {
+    this.eventBusService.emit(
+      new EventData('change:containerScroll', {
+        left: this.canvasContainer.scrollLeft,
+        top: this.canvasContainer.scrollTop,
+      })
+    );
+  }
+  /**
    * change Page : 아래 사항에 대해 공통으로 사용
    * - 최초 Load된 경우
    * - 페이지 변경하는 경우
    * - 문서 변경하는 경우
    * - scale 변경하는 경우
    */
-    onChangePage() {
+  onChangePage() {
+    const pageInfo = this.viewInfoService.state.pageInfo;
 
-        const pageInfo = this.viewInfoService.state.pageInfo;
+    //document Number -> 1부터 시작.
+    const docNum = pageInfo.currentDocNum;
+    const pageNum = pageInfo.currentPage;
+    const zoomScale = pageInfo.zoomScale;
 
-        //document Number -> 1부터 시작.
-        const docNum = pageInfo.currentDocNum;
-        const pageNum = pageInfo.currentPage;
-        const zoomScale = pageInfo.zoomScale;
+    console.log(
+      `>> changePage to doc: ${docNum}, page: ${pageNum}, scale: ${zoomScale} `
+    );
 
-        console.log(`>> changePage to doc: ${docNum}, page: ${pageNum}, scale: ${zoomScale} `);
+    // // 기존의 rx drawing event 삭제: 다른 page에 그려지는 현상 방지
+    // this.drawingService.stopRxDrawing();
 
-        // // 기존의 rx drawing event 삭제: 다른 page에 그려지는 현상 방지
-        // this.drawingService.stopRxDrawing();
+    // set Canvas Size
+    const ratio = this.canvasService.setCanvasSize(
+      docNum,
+      pageNum,
+      zoomScale,
+      this.canvasContainer,
+      this.coverCanvas,
+      this.teacherCanvas,
+      this.bgCanvas,
+      this.studentGuideCanvas,
+      this.teacherGuideCanvas,
+      this.tmpCanvas
+    );
+    // set Canvas Size
+    // const ratio = this.setCanvasSize(docNum, pageNum, zoomScale);
+    // BG & Board Render
+    this.pageRender(docNum, pageNum, zoomScale);
 
-        // set Canvas Size
-        const ratio = this.canvasService.setCanvasSize(docNum, pageNum, zoomScale, this.canvasContainer, this.coverCanvas, this.teacherCanvas, this.bgCanvas, this.studentGuideCanvas, this.teacherGuideCanvas, this.tmpCanvas);
-        // set Canvas Size
-        // const ratio = this.setCanvasSize(docNum, pageNum, zoomScale);
-        // BG & Board Render
-        this.pageRender(docNum, pageNum, zoomScale);
+    // Canvas Event Set
+    this.canvasService.addEventHandler(
+      this.coverCanvas,
+      this.teacherCanvas,
+      this.currentToolInfo,
+      zoomScale
+    );
 
 
         // Canvas Event Set
@@ -345,17 +447,5 @@ export class ComclassCanvasComponent implements OnInit {
     }
 
 
-    /**
-   * Scroll 발생 시
-   */
-    onScroll() {
-        if (this.viewInfoService.state.leftSideView != 'thumbnail') return;
-        // if (!this.viewInfoService.state.isDocLoaded) return;
-
-        this.eventBusService.emit(new EventData('change:containerScroll', {
-            left: this.canvasContainer.scrollLeft,
-            top: this.canvasContainer.scrollTop
-        }))
-    }
-
+   
 }

@@ -334,3 +334,12 @@ i {
 ::ng-deep .mat-menu-content{
     padding: 0 !important;
 }
+
+// icon
+mat-icon.active {
+  color:yellow;
+}
+
+ic-icon.active {
+  color:yellow;
+}
