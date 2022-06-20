@@ -190,7 +190,7 @@ export class CanvasService {
      * @param {number} zoomScale 현재의 zoom scale
      */
     addEventHandler(sourceCanvas, targetCanvas, tool, zoomScale) {
-        console.log(">>>> Add Event handler:", tool, zoomScale);
+        // console.log(">>>> Add Event handler:", tool, zoomScale);
         const drawingService = this.drawingService;
         const eventBusService = this.eventBusService;
         const editInfoService = this.editInfoService;

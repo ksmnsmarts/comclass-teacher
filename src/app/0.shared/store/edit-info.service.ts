@@ -7,56 +7,55 @@ import { Store } from './store';
 // }
 
 class InitEditInfo {
-  mode = 'move'; // draw, sync(여기? 또는 별도?)
-  tool = 'pen'; // eraser, ...
+    mode = 'draw'; // draw, sync(여기? 또는 별도?)
+    tool = 'pen'; // eraser, ...
 
-  toolsConfig = {
-    pointer: { width: 20, color: 'black' },
-    pen: { width: 4, color: 'black' },
-    highlighter: { width: 20, color: 'ff0' },
-    eraser: { width: 60, color: '#ffffff' },
-    line: { width: 4, color: 'black' },
-    circle: { width: 4, color: 'black' },
-    rectangle: { width: 4, color: 'black' },
-    roundedRectangle: { width: 4, color: 'black' },
-    textarea: { width: 20, color: 'black' },
-    text: { width: 20, color: 'black' },
+    toolsConfig = {
+        pointer: { width: 20, color: 'black' },
+        pen: { width: 4, color: 'black' },
+        highlighter: { width: 20, color: 'ff0' },
+        eraser: { width: 60, color: '#ffffff' },
+        line: { width: 4, color: 'black' },
+        circle: { width: 4, color: 'black' },
+        rectangle: { width: 4, color: 'black' },
+        roundedRectangle: { width: 4, color: 'black' },
+        textarea: { width: 20, color: 'black' },
+        text: { width: 20, color: 'black' },
 
-  };
+    };
 
-  toolDisabled = true; // move인 경우
-  editDisabled = false; // Edit 자체 동작을 모두 방지(권한 관련)
+    toolDisabled = false; // move인 경우
+    editDisabled = false; // Edit 자체 동작을 모두 방지(권한 관련)
 
-  // syncMode, ....
+    // syncMode, ....
 }
 
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 
 export class EditInfoService extends Store<any> {
 
-  constructor() {
-    super(new InitEditInfo());
-  }
-
-  setEditInfo(editInfo: any): void {
-    // Tool Disable 설정
-    if (editInfo.mode == 'draw') {
-      editInfo.toolDisabled = false;
-    }
-    if (editInfo.mode == 'move') {
-      editInfo.toolDisabled = true;
+    constructor() {
+        super(new InitEditInfo());
     }
 
-    this.setState({
-      ...this.state, ...editInfo
-    });
-    console.log(editInfo)
-  }
+    setEditInfo(editInfo: any): void {
 
-  getInfo(){
-    this.state
-  }
+        console.log(editInfo)
+
+        // Tool Disable 설정
+        if (editInfo.mode == 'draw') {
+            editInfo.toolDisabled = false;
+        }
+        if (editInfo.mode == 'move') {
+            editInfo.toolDisabled = true;
+        }
+
+        this.setState({
+            ...this.state, ...editInfo
+        });
+        console.log(editInfo)
+    }
 }

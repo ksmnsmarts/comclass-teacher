@@ -23,7 +23,7 @@ export class ComclassCanvasComponent implements OnInit {
     private currentPage: Number;
 
     editDisabled = true;
-    dragOn = false;
+    dragOn = true;
 
     currentToolInfo = {
         type: '',
@@ -105,6 +105,8 @@ export class ComclassCanvasComponent implements OnInit {
             });
         ///////////////////////////////////////////////
 
+
+        
         // Tool update(nav Menu)에 따른 event handler 변경
         this.editInfoService.state$
             .pipe(takeUntil(this.unsubscribe$))
@@ -164,9 +166,6 @@ export class ComclassCanvasComponent implements OnInit {
 
         // render listener 해제
         this.rendererEvent1();
-
-        // pdf memory release
-        this.pdfStorageService.memoryRelease();
     }
 
     eventBusListeners() {

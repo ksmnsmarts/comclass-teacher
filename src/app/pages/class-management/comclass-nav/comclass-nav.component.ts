@@ -34,6 +34,9 @@ export class ComclassNavComponent implements OnInit {
     select: any;
     currentColor = 'black';
     currentTool: string = 'pen';
+    currentDocNum: any;
+    currentPage: any;
+    currentDocId: string;
 
     widthSet = CANVAS_CONFIG.widthSet;
     currentWidth = {
@@ -50,19 +53,16 @@ export class ComclassNavComponent implements OnInit {
     offLine = true;
     className;
     numStudents;
-    mode;
 
     isDocLoaded;
     isRecording;
     isGuideMode;
     onNavUpdate;
 
-    currentDocId;
-    currentDocNum;
-    currentPage;
-
     socket;
     colorSet;
+
+    mode: any = 'move';
 
     constructor(
         private editInfoService: EditInfoService,
@@ -77,80 +77,37 @@ export class ComclassNavComponent implements OnInit {
     private unsubscribe$ = new Subject<void>();
 
     ngOnInit(): void {
-        // 현재 Page 변경
-        this.viewInfoService.state$
-            .pipe(
-                takeUntil(this.unsubscribe$),
-                pluck('pageInfo'),
-                distinctUntilChanged()
-            )
-            .subscribe((pageInfo) => {
-                this.currentDocNum = pageInfo.currentDocNum;
-                this.currentPage = pageInfo.currentPage;
-                this.currentDocId = pageInfo.currentDocId;
-            });
+         // 현재 Page 변경
+         this.viewInfoService.state$
+         .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'), distinctUntilChanged())
+         .subscribe((pageInfo) => {
+             this.currentDocNum = pageInfo.currentDocNum;
+             this.currentPage = pageInfo.currentPage;
+             this.currentDocId = pageInfo.currentDocId;
+
+        });
+
+
 
         this.editInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged())
             .subscribe((editInfo) => {
+                // console.log(editInfo);
                 this.mode = editInfo.mode;
                 this.currentTool = editInfo.tool;
                 this.currentColor = editInfo.toolsConfig.pen.color;
                 this.currentWidth = {
                     pen: editInfo.toolsConfig.pen.width,
                     eraser: editInfo.toolsConfig.eraser.width,
-                };
+                }
             });
     }
 
-    clickMenu(exit) { }
-
-    /**
-     * Pen, Eraser 선택
-     *
-     * @param tool : 'pen', 'eraser'
-     *
-     */
-    async changeTool(tool) {
-        // console.log(tool)
-        const editInfo = Object.assign({}, this.editInfoService.state);
-
-        if (
-            editInfo.tool == 'eraser' &&
-            editInfo.mode == 'draw' &&
-            tool == 'eraser'
-        ) {
-            if (confirm('Do you want to delete all drawings on the current page?')) {
-                const data = {
-                    docId: this.currentDocId,
-                    currentDocNum: this.currentDocNum,
-                    currentPage: this.currentPage,
-                };
-                // 다른 사람들에게 드로우 이벤트 제거
-                this.socket.emit('clearDrawingEvents', data);
-                // 자기자신한테 있는 드로우 이벤트 제거
-                this.drawStorageService.clearDrawingEvents(
-                    this.currentDocNum,
-                    this.currentPage
-                );
-                this.eventBusService.emit(
-                    new EventData('rmoveDrawEventPageRendering', '')
-                );
-                this.eventBusService.emit(
-                    new EventData('rmoveDrawEventThumRendering', '')
-                );
-            } else {
-                return;
-            }
-        }
-        editInfo.mode = 'draw';
-        editInfo.tool = tool;
-        this.editInfoService.setEditInfo(editInfo);
-
-        // 지우개 2번 Click은 여기서 check 하는 것이 좋을 듯?
-    }
 
     changeSyncState(event) { }
+
+    clickMenu(exit) {}
+
 
     /**
      * 색상 변경
@@ -162,24 +119,24 @@ export class ComclassNavComponent implements OnInit {
     changeColor(color) {
         const editInfo = Object.assign({}, this.editInfoService.state);
         editInfo.mode = 'draw';
-        if (editInfo.mode != 'draw' || editInfo.tool == 'erasar') return;
+        if (editInfo.mode != 'draw' || (editInfo.tool == 'erasar' || editInfo.tool == 'pointer')) return;
         editInfo.toolsConfig.pen.color = color;
         editInfo.toolsConfig.highlighter.color = color;
         editInfo.toolsConfig.line.color = color;
         editInfo.toolsConfig.circle.color = color;
         editInfo.toolsConfig.rectangle.color = color;
         editInfo.toolsConfig.roundedRectangle.color = color;
-        editInfo.toolsConfig.text.color = color;
         this.editInfoService.setEditInfo(editInfo);
     }
 
+
     /**
-     * Width 변경
-     *
-     * -현재 Pen 또는 eraser인 경우에만 반응
-     *
-     * @param width
-     */
+       * Width 변경
+       *
+       * -현재 Pen 또는 eraser인 경우에만 반응
+       *
+       * @param width
+       */
     changeWidth(width) {
         const editInfo = Object.assign({}, this.editInfoService.state);
 
@@ -197,6 +154,43 @@ export class ComclassNavComponent implements OnInit {
     }
 
     /**
+     * Pen, Eraser 선택
+     *
+     * @param tool : 'pen', 'eraser'
+     *
+     */
+    async changeTool(tool) {
+        // console.log(tool)
+        const editInfo = Object.assign({}, this.editInfoService.state);
+        
+        if (editInfo.tool == 'eraser' && editInfo.mode == 'draw' && tool == 'eraser') {
+            if (confirm('Do you want to delete all drawings on the current page?')) {
+                const data = {
+                    docId: this.currentDocId,
+                    currentDocNum: this.currentDocNum,
+                    currentPage: this.currentPage,
+                };
+                // 다른 사람들에게 드로우 이벤트 제거
+                this.socket.emit('clearDrawingEvents', data);
+                // 자기자신한테 있는 드로우 이벤트 제거
+                this.drawStorageService.clearDrawingEvents(this.currentDocNum, this.currentPage);
+                this.eventBusService.emit(new EventData('rmoveDrawEventPageRendering', ''));
+                this.eventBusService.emit(new EventData('rmoveDrawEventThumRendering', ''));
+            } else {
+                return;
+            }
+        }
+        editInfo.mode = 'draw';
+        editInfo.tool = tool;
+        this.editInfoService.setEditInfo(editInfo);
+
+        // 지우개 2번 Click은 여기서 check 하는 것이 좋을 듯?
+    }
+
+
+
+
+    /**
      * Move 선택
      *
      * @param mode : 현재는 'move'만 있음 (향후 sync?)
@@ -204,7 +198,7 @@ export class ComclassNavComponent implements OnInit {
      */
     changeMode(mode) {
         const editInfo = Object.assign({}, this.editInfoService.state);
-        editInfo.mode = mode;
+        editInfo.mode = 'move';
         this.editInfoService.setEditInfo(editInfo);
     }
 }
