@@ -61,7 +61,7 @@ export class DrawStorageService {
       this.drawVarArray[docNum-1].drawingEventSet[itemIndex].drawingEvent.push(drawingEvent);
     };
 
-    console.log(this.drawVarArray[docNum-1])
+    // console.log(this.drawVarArray[docNum-1])
   }
 
   /**
@@ -75,7 +75,6 @@ export class DrawStorageService {
    */
 
    setDrawEventSet(docNum, serverDrawingEvent) {
-    console.log(docNum, serverDrawingEvent);
 
     if (!this.drawVarArray[docNum - 1]) {
       this.drawVarArray[docNum - 1] = { drawingEventSet: [] };
@@ -83,7 +82,6 @@ export class DrawStorageService {
     if (this.drawVarArray[docNum - 1] && !this.drawVarArray[docNum - 1].drawingEventSet) {
       this.drawVarArray[docNum - 1]['drawingEventSet'] = [];
     }
-    console.log(this.drawVarArray[docNum-1])
     if (serverDrawingEvent.length > 0 ){
       for (let i = 0; i < serverDrawingEvent.length; i++) {
 
@@ -105,7 +103,6 @@ export class DrawStorageService {
    } else {
       this.drawVarArray[docNum - 1]['drawingEventSet'] = [];
    }
-   console.log(this.drawVarArray[docNum-1])
   }
 
 
@@ -115,8 +112,6 @@ export class DrawStorageService {
    * @param {number} pageNum 페이지 번호
    */
   clearDrawingEvents(pdfnum, pageNum) {
-    console.log(pdfnum, pageNum)
-    console.log(this.drawVarArray[pdfnum-1])
     const res = this.drawVarArray[pdfnum-1].drawingEventSet.filter((x) =>x.pageNum !== pageNum)
     this.drawVarArray[pdfnum-1].drawingEventSet = res
   }

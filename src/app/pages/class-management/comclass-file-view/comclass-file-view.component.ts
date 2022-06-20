@@ -114,7 +114,6 @@ export class ComclassFileViewComponent implements OnInit {
  * @param docId document ID
  */
     clickPdf(docId) {
-        console.log(docId)
         console.log('>> click PDF : change to Thumbnail Mode');
         this.viewInfoService.changeToThumbnailView(docId);
     }

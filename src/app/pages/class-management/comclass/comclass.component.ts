@@ -93,7 +93,7 @@ export class ComclassComponent implements OnInit {
       this.isDocLoaded = true;
     });
     this.eventBusService.on('openFile', this.unsubscribe$, (data) => {
-      console.log('event Bus == openfile');
+      // console.log('event Bus == openfile');
       this.openFile(data.files, data.type);
       this.isDocLoaded = true;
     });
@@ -110,7 +110,7 @@ export class ComclassComponent implements OnInit {
    *
    */
   newpageEvent(event) {
-    console.log('<--- event from newpage component :', event);
+    // console.log('<--- event from newpage component :', event);
     switch (event) {
       case 'vcanvas':
         this.fileService.getFile('vcanvas.pdf', (result) => {
@@ -136,9 +136,7 @@ export class ComclassComponent implements OnInit {
    *
    */
   async openFile(fileInput, sourceType) {
-    console.log('\n> open File...');
 
-    console.log(fileInput);
     const aFILE = fileInput[0];
     if (!aFILE) {
       alert('파일을 선택해주세요!');
@@ -389,9 +387,6 @@ export class ComclassComponent implements OnInit {
 
   updateViewInfoStore() {
     let documentInfo = [...this.viewInfoService.state.documentInfo];
-    console.log(documentInfo);
-    console.log(this.pdfStorageService.pdfVarArray);
-    console.log(this.viewInfoService.state.pageInfo.currentDocId);
     const diff =
       this.pdfStorageService.pdfVarArray.length - documentInfo.length;
     if (diff > 0) {

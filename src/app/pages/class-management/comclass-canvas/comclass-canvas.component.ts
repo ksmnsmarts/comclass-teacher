@@ -94,7 +94,6 @@ export class ComclassCanvasComponent implements OnInit {
         this.viewInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'), distinctUntilChanged())
             .subscribe((pageInfo) => {
-                console.log(pageInfo);
                 this.currentDocNum = pageInfo.currentDocNum;
                 this.currentPage = pageInfo.currentPage;
                 // 초기 load 포함 변경사항에 대해 수행

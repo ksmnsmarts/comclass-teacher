@@ -23,17 +23,16 @@ export class ComclassNewpageComponent implements OnInit {
     /*------------------------------------
 		Event를 comclass component로 전달
 	--------------------------------------*/
-    pdfOpen(newpageEvent) {  
-        console.log('[ newpage ---> main ] send event:', newpageEvent);      
+    pdfOpen(newpageEvent) {
         this.eventBusService.emit(new EventData('open the blank pdf', newpageEvent));
     }
 
     openFile(){
         const dialogRef = this.dialog.open(OpenFileComponent);
-      
+
           dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
           });
-      
+
     }
 }

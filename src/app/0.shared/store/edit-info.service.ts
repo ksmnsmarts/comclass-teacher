@@ -53,7 +53,6 @@ export class EditInfoService extends Store<any> {
     this.setState({
       ...this.state, ...editInfo
     });
-    console.log(editInfo)
   }
 
   getInfo(){

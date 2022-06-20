@@ -177,8 +177,8 @@ export class FileService {
 
 
 
-        console.log(`---> document(${type}) file Loaded : `, pdfVar);
-        console.log('Total Pages:', results.pdfPages.length);
+        // console.log(`---> document(${type}) file Loaded : `, pdfVar);
+        // console.log('Total Pages:', results.pdfPages.length);
         return {
             success: true,
             docLength: results.pdfPages.length,

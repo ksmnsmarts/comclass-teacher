@@ -85,7 +85,7 @@ export class ComclassNavComponent implements OnInit {
         distinctUntilChanged()
       )
       .subscribe((pageInfo) => {
-        console.log(pageInfo);
+        // console.log(pageInfo);
         this.currentDocNum = pageInfo.currentDocNum;
         this.currentPage = pageInfo.currentPage;
         this.currentDocId = pageInfo.currentDocId;
@@ -94,7 +94,7 @@ export class ComclassNavComponent implements OnInit {
     this.editInfoService.state$
       .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged())
       .subscribe((editInfo) => {
-        console.log(editInfo);
+        // console.log(editInfo);
         this.mode = editInfo.mode;
         this.currentTool = editInfo.tool;
         this.currentColor = editInfo.toolsConfig.pen.color;

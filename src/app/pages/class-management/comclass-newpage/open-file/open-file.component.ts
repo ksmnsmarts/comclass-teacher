@@ -64,7 +64,7 @@ export class OpenFileComponent implements OnInit {
                 files : event.target.files,
                 type : 'pdf'
             }
-            console.log(result)
+            // console.log(result)
             // @OUTPUT -> white-board component로 전달
             this.eventBusService.emit(new EventData('openFile', result))
             this.dialogRef.close();
