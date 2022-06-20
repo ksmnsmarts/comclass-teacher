@@ -448,79 +448,7 @@ export class ComclassComponent implements OnInit {
       }
     }
 
-<<<<<<< HEAD
     this.viewInfoService.setViewInfo(obj);
   }
   ///////////////////////////////////////////////////////////
-=======
-
-    /**
-     *
-     * ViewInfo Store update
-     * -> document Info 부분 udpate
-     *    - document _id, currentPage, numPages, fileName
-     *
-     * -> currentDocId, current DocNum, currentPage field 초기화
-     *
-     */
-
-    updateViewInfoStore() {
-        let documentInfo = [...this.viewInfoService.state.documentInfo];
-        const diff = this.pdfStorageService.pdfVarArray.length - documentInfo.length
-        if (diff > 0) {
-            for (let item of this.pdfStorageService.pdfVarArray) {
-                // 기존에 없던 문서인 경우 추가
-                const isExist = documentInfo.some((doc) => doc._id === item._id)
-                if (!isExist) {
-                    documentInfo.push({
-                        _id: item._id,
-                        currentPage: 1,
-                        numPages: item.pdfPages.length,
-                        fileName: item.fileName
-                    });
-                }
-            };
-
-        } else if (diff < 0) {
-            documentInfo = documentInfo.filter((item) => this.pdfStorageService.pdfVarArray.some((element) => element._id == item._id))
-        }
-        const obj: any = {
-            documentInfo: documentInfo
-        }
-
-
-        // 최초 load인 경우 document ID는 처음 것으로 설정
-        if (!this.viewInfoService.state.pageInfo.currentDocId) {
-            obj.pageInfo = {
-                currentDocId: documentInfo[0]._id,
-                currentDocNum: 1,
-                currentPage: 1,
-                zoomScale: this.zoomService.setInitZoomScale()
-            }
-        }
-
-
-        // viewInfoService 현재 바라보는 문서가 있을경우 함수 실행
-        if (this.viewInfoService.state.pageInfo.currentDocId) {
-            // 문서 삭제 시 현재 바라보는 문서와 같은 곳일 경우 팝업 창과 함께 첫 화이트보드로 돌아온다.
-            // 현재 바라보는 문서 ID와 DB에서 받아온 문서 ID가 일치하는게 없으면 첫 페이지로 돌아오고 문서가 삭제됐다고 알림
-            const res = this.pdfStorageService.pdfVarArray.filter((x) => x._id == this.viewInfoService.state.pageInfo.currentDocId);
-            console.log(res)
-            if (res.length == 0) {
-                obj.pageInfo = {
-                    currentDocId: documentInfo[0]._id,
-                    currentDocNum: 1,
-                    currentPage: 1,
-                    zoomScale: this.zoomService.setInitZoomScale()
-                }
-                obj.leftSideView = 'fileList';
-                alert('The pdf file has been deleted');
-            }
-        }
-
-
-        this.viewInfoService.setViewInfo(obj);
-    }
-    ///////////////////////////////////////////////////////////
->>>>>>> kimsangmin
 }
