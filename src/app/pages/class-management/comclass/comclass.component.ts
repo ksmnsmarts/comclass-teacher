@@ -18,10 +18,10 @@ export class ComclassComponent implements OnInit {
     isDocLoaded = false;
     // Left Side Bar
     leftSideView;
-    //////////////////////////////////////
+
     docLength;
 
-    //////////////////////////////////////
+
 
     constructor(
         private eventBusService: EventBusService,
@@ -38,7 +38,6 @@ export class ComclassComponent implements OnInit {
         this.viewInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), pluck('leftSideView'))
             .subscribe((leftSideView) => {
-                console.log(leftSideView)
                 this.leftSideView = leftSideView;
 
                 console.log('[info] current Left Side View: ', leftSideView);
@@ -157,7 +156,6 @@ export class ComclassComponent implements OnInit {
             this.viewInfoService.setViewInfo(obj);
         }
 
-        console.log('blank pdf start-------------------------');
         this.eventBusService.emit(new EventData('blank pdf', ''));
 
         /*-------------------------------------------

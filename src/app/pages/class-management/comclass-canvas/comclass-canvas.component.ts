@@ -97,7 +97,6 @@ export class ComclassCanvasComponent implements OnInit {
                 // 초기 load 포함 변경사항에 대해 수행
                 // (doc change, page change, zoom change 등)
                 if (pageInfo.currentDocId) {
-                    console.log(pageInfo.currentDocId)
                     this.eventBusService.emit(new EventData('isDocLoaded', ''));
                     this.onChangePage();
                 }
@@ -229,9 +228,7 @@ export class ComclassCanvasComponent implements OnInit {
 
         // board rendering
         const drawingEvents = this.drawStorageService.getDrawingEvents(currentDocNum, currentPage);
-        // console.log(drawingEvents)
         this.renderingService.renderBoard(this.teacherCanvas, zoomScale, drawingEvents);
-
         // PDF Rendering
         await this.renderingService.renderBackground(this.tmpCanvas, this.bgCanvas, currentDocNum, currentPage);
     }
@@ -269,9 +266,6 @@ export class ComclassCanvasComponent implements OnInit {
 
     updateViewInfoStore() {
         let documentInfo = [...this.viewInfoService.state.documentInfo];
-        // console.log(documentInfo)
-        // console.log(this.pdfStorageService.pdfVarArray)
-        // console.log(this.viewInfoService.state.pageInfo.currentDocId)
         const diff = this.pdfStorageService.pdfVarArray.length - documentInfo.length
         if (diff > 0) {
             for (let item of this.pdfStorageService.pdfVarArray) {

@@ -125,7 +125,6 @@ export class FileService {
              - drawing 없음
          -----------------------*/
         if (type === 'pdf') {
-            console.log(file);
             pdfVar.fileBuffer = file;
             // drawingEventSet = {};
         } else if (type === 'gstd') {
@@ -150,9 +149,7 @@ export class FileService {
         pdfVar.pdfDestroy = results.pdfDoc;
         pdfVar.loadedDate = new Date().getTime();
         pdfVar.type = type;
-        console.log(pdfVar);
         pdfVarArray.push(pdfVar)
-        console.log(pdfVarArray)
         //  PDF Docouments storage에 저장
         this.pdfStorageService.setPdfVarArray(pdfVarArray);
 
