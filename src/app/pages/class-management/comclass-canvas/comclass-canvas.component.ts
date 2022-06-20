@@ -461,6 +461,8 @@ export class ComclassCanvasComponent implements OnInit {
       this.canvasContainer
     );
 
+    if (this.viewInfoService.state.leftSideView != 'thumbnail') return;
+
     // thumbnail window 크기 변경을 위한 처리.
     this.eventBusService.emit(
       new EventData('change:containerSize', {
