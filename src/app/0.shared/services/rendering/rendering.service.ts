@@ -222,7 +222,6 @@ export class RenderingService {
 
       console.log(this.pageNumPending)
       if (!this.pageNumPending) {
-        console.log('마지막 랜더링 과정')
         ctx.drawImage(tmpCanvas, 0, 0, bgImgSize.width, bgImgSize.height);
         // clear tmpCtx
         tmpCtx.clearRect(0, 0, tmpCtx.width, tmpCtx.height);
