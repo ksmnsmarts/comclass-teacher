@@ -14,12 +14,14 @@ import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { distinctUntilChanged, pluck, Subject, takeUntil } from 'rxjs';
 
+
 @Component({
   selector: 'comclass-nav',
   templateUrl: './comclass-nav.component.html',
   styleUrls: ['./comclass-nav.component.scss'],
 })
 export class ComclassNavComponent implements OnInit {
+  isSyncMode: any;
   colorList = [
     { color: 'black' },
     { color: 'white' },
@@ -29,6 +31,7 @@ export class ComclassNavComponent implements OnInit {
     { color: 'yellow' },
   ];
 
+  select:any;
   currentColor = 'black';
   currentTool: string = 'pen';
 
@@ -48,7 +51,7 @@ export class ComclassNavComponent implements OnInit {
   className;
   numStudents;
   mode;
-  isSyncMode;
+
   isDocLoaded;
   isRecording;
   isGuideMode;
@@ -88,7 +91,7 @@ export class ComclassNavComponent implements OnInit {
     this.editInfoService.state$
       .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged())
       .subscribe((editInfo) => {
-        // console.log(editInfo);
+        console.log(editInfo);
         this.mode = editInfo.mode;
         this.currentTool = editInfo.tool;
         this.currentColor = editInfo.toolsConfig.pen.color;

@@ -13,6 +13,7 @@ import { ComclassStudentComponent } from './comclass-student/comclass-student.co
 import { ComclassThumbComponent } from './comclass-thumb/comclass-thumb.component';
 import { NgMaterialUIModule } from 'src/app/ng-material-ui/ng-material-ui.module';
 import { OpenFileComponent } from './comclass-newpage/open-file/open-file.component';
+import { IconModule } from '@visurel/iconify-angular';
 
 
 
@@ -23,7 +24,7 @@ import { OpenFileComponent } from './comclass-newpage/open-file/open-file.compon
     ComclassComponent,
     ComclassCanvasComponent,
     ComclassFabsComponent,
-    ComclassNavComponent, 
+    ComclassNavComponent,
     ComclassNewpageComponent,
     ComclassStudentComponent,
     ComclassThumbComponent,
@@ -34,6 +35,7 @@ import { OpenFileComponent } from './comclass-newpage/open-file/open-file.compon
     ClassManagementRoutingModule,
     NgMaterialUIModule,
     MatIconModule,
+    IconModule
   ],
   exports: []
 })

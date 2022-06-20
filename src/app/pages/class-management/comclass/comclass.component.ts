@@ -58,6 +58,7 @@ export class ComclassComponent implements OnInit {
       const pageNum = pageInfo.currentPage;
       const zoomScale = pageInfo.zoomScale;
 
+      console.log('setDrawEvent')
       this.drawStorageService.setDrawEvent(docNum, pageNum, data);
     })
   }
@@ -168,8 +169,8 @@ export class ComclassComponent implements OnInit {
       this.viewInfoService.setViewInfo(obj);
     }
 
-    console.log('blank pdf start-------------------------');
-    this.eventBusService.emit(new EventData('blank pdf', ''));
+    // console.log('blank pdf start-------------------------');
+    // this.eventBusService.emit(new EventData('blank pdf', ''));
 
     /*-------------------------------------------
                 Trigger Thumb Component

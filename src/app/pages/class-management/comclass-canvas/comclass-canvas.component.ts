@@ -112,8 +112,8 @@ export class ComclassCanvasComponent implements OnInit {
         // (doc change, page change, zoom change 등)
         if (pageInfo.currentDocId) {
           console.log('222222222222222222222222222');
-          // this.updateViewInfoStore()
-          // this.onChangePage();
+          this.updateViewInfoStore()
+          this.onChangePage();
         }
       });
     ///////////////////////////////////////////////
