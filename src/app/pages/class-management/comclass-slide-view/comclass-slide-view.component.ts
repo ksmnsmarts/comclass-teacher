@@ -78,7 +78,7 @@ export class ComclassSlideViewComponent implements OnInit {
         // unsubscribe all subscription
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
-    }
+      }
 
 
 
@@ -171,7 +171,6 @@ export class ComclassSlideViewComponent implements OnInit {
 
 
     }
-
 
 }
 

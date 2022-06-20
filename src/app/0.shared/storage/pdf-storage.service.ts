@@ -44,9 +44,9 @@ export class PdfStorageService {
      * @param {number} pageNum 페이지 번호
      * @return 해당 page의 pdf document
     */
-    // getPdfPage(pdfNum, pageNum) {
-    //     return this._pdfVarArray[pdfNum - 1]?.pdfPages[pageNum - 1];
-    // }
+    getPdfPage(pdfNum, pageNum) {
+        return this._pdfVarArray[pdfNum - 1]?.pdfPages[pageNum - 1];
+    }
 
 
     /**
@@ -54,8 +54,8 @@ export class PdfStorageService {
      * @param {number} pageNum 페이지 번호
     */
     getViewportSize(docNum, pageNum) {
-        // console.log(`> get ViewPort size: docNum : ${docNum}, pageNum : ${pageNum}`);
-        return this._pdfVarArray[docNum - 1].pdfPages[pageNum - 1].getViewport({ scale: 1 });
+        console.log(`> get ViewPort size: docNum : ${docNum}, pageNum : ${pageNum}`);
+        return this._pdfVarArray[docNum - 1]?.pdfPages[pageNum - 1].getViewport({ scale: 1 });
     }
 
     /**
@@ -86,9 +86,7 @@ export class PdfStorageService {
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    getPdfPage(pdfNum, pageNum) {
-        return this._pdfVarArray[pdfNum - 1]?.pdfPages[pageNum - 1];
-    }
+    
 
     getPdfVar() {
         return this.pdfVar;

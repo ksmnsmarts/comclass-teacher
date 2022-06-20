@@ -375,9 +375,6 @@ export class ComclassComponent implements OnInit {
 
     updateViewInfoStore() {
         let documentInfo = [...this.viewInfoService.state.documentInfo];
-        console.log(documentInfo)
-        console.log(this.pdfStorageService.pdfVarArray)
-        console.log(this.viewInfoService.state.pageInfo.currentDocId)
         const diff = this.pdfStorageService.pdfVarArray.length - documentInfo.length
         if (diff > 0) {
             for (let item of this.pdfStorageService.pdfVarArray) {

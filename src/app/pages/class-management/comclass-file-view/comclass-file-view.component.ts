@@ -57,9 +57,10 @@ export class ComclassFileViewComponent implements OnInit {
     }
 
     ngOnDestory(): void {
+        // unsubscribe all subscription
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
-    }
+      }
 
 
 

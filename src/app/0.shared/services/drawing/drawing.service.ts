@@ -333,7 +333,6 @@ export class DrawingService {
     context.strokeStyle = tool.color;
     context.fillStyle = tool.color;
 
-    console.log('up----------------------')
     // cover canvas 초기화 후 다시 그림.
     // context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     let i;
@@ -707,7 +706,6 @@ export class DrawingService {
 
   // Thumbnail에 그리기
   drawThumb(data, thumbCanvas, thumbScale) {
-    console.log('drawThumb--------------------------')
     console.log(data)
     const thumbCtx = thumbCanvas.getContext('2d');
     // prepare scale
@@ -747,7 +745,6 @@ export class DrawingService {
    */
    async rxPointer(data, sourceCanvas, targetCanvas, scale, docNum, pageNum) {
       console.log(data)
-      console.log('rxPointer-------------------------')
       const context = sourceCanvas.getContext("2d"); 
       context.globalCompositeOperation = 'source-over';
       // context.lineCap = "round";
@@ -779,7 +776,6 @@ export class DrawingService {
    *
    */
   async rxDrawing(data, sourceCanvas, targetCanvas, scale, docNum, pageNum) {
-    console.log('rxDrawing---------------------------------------------')
     const tmpData = {
       data,
       sourceCanvas,
@@ -904,7 +900,6 @@ export class DrawingService {
    * @param thumbScale
    */
   rxDrawingThumb(data, thumbCanvas, thumbScale) {
-    console.log('drawThumbRX--------------------------')
     const thumbCtx = thumbCanvas.getContext('2d');
     // prepare scale
     thumbCtx.save();

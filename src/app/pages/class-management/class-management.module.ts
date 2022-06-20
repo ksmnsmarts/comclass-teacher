@@ -17,6 +17,7 @@ import { OpenFileComponent } from './comclass-newpage/open-file/open-file.compon
 import { ComclassFileViewComponent } from './comclass-file-view/comclass-file-view.component';
 import { ComclassSlideViewComponent } from './comclass-slide-view/comclass-slide-view.component';
 import { IconModule } from '@visurel/iconify-angular';
+import { DragScrollDirective } from 'src/app/0.shared/directives/drag-scroll.directive';
 
 
 
@@ -34,7 +35,9 @@ import { IconModule } from '@visurel/iconify-angular';
     ComclassThumbComponent,
     OpenFileComponent,
     ComclassFileViewComponent,
-    ComclassSlideViewComponent
+    ComclassSlideViewComponent,
+
+    DragScrollDirective
     ],
   imports: [
     CommonModule,

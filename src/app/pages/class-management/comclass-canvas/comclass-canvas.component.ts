@@ -23,7 +23,7 @@ export class ComclassCanvasComponent implements OnInit {
     private currentPage: Number;
 
     editDisabled = true;
-    dragOn = true;
+    dragOn = false;
 
     currentToolInfo = {
         type: '',
@@ -92,11 +92,7 @@ export class ComclassCanvasComponent implements OnInit {
         ////////////////////////////////////////////////
         // Document가 Update 된 경우
         this.viewInfoService.state$
-            .pipe(
-                takeUntil(this.unsubscribe$),
-                pluck('pageInfo'),
-                distinctUntilChanged()
-            )
+            .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'), distinctUntilChanged())
             .subscribe((pageInfo) => {
                 console.log(pageInfo);
                 this.currentDocNum = pageInfo.currentDocNum;
@@ -104,8 +100,6 @@ export class ComclassCanvasComponent implements OnInit {
                 // 초기 load 포함 변경사항에 대해 수행
                 // (doc change, page change, zoom change 등)
                 if (pageInfo.currentDocId) {
-                    console.log('222222222222222222222222222');
-                    this.updateViewInfoStore()
                     this.onChangePage();
                 }
             });
@@ -115,9 +109,26 @@ export class ComclassCanvasComponent implements OnInit {
             console.log('문서 열어');
             //나중에 수정
 
-            this.updateViewInfoStore();
             this.onChangePage();
         });
+
+
+        ////////////////////////////////////////////////
+        // 현재 sideBar view 정보 받아오기
+        this.viewInfoService.state$
+            .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged(), pairwise())
+            .subscribe(([prevViewInfo, viewInfo]) => {
+
+                console.log(prevViewInfo.leftSideView)
+
+                // 현재 sideBar doc. view 정보 받아서 저장.
+                this.prevViewInfo = prevViewInfo.leftSideView
+
+
+            });
+        ///////////////////////////////////////////////
+
+
 
         // Tool update(nav Menu)에 따른 event handler 변경
         this.editInfoService.state$
@@ -178,7 +189,7 @@ export class ComclassCanvasComponent implements OnInit {
         this.unsubscribe$.complete();
 
         // render listener 해제
-        // this.rendererEvent1();
+        this.rendererEvent1();
 
         // pdf memory release
         this.pdfStorageService.memoryRelease();
@@ -221,7 +232,6 @@ export class ComclassCanvasComponent implements OnInit {
         CANVAS_CONFIG.deviceScale = this.canvasService.getDeviceScale(
             this.coverCanvas
         );
-        console.log('---------------initCanvasSet done-------------');
     }
 
     /**
@@ -330,10 +340,12 @@ export class ComclassCanvasComponent implements OnInit {
 
         console.log('>>> page Render! [background and board] + addEventHandler');
 
+       
         // board rendering
         const drawingEvents = this.drawStorageService.getDrawingEvents(currentDocNum, currentPage);
         this.renderingService.renderBoard(this.teacherCanvas, zoomScale, drawingEvents);
-        // PDF Rendering
+
+         // PDF Rendering
         await this.renderingService.renderBackground(this.tmpCanvas, this.bgCanvas, currentDocNum, currentPage);
     }
 
