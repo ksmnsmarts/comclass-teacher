@@ -1,10 +1,15 @@
 <!-- <button mat-raised-button>Basic</button> -->
 
-<button mat-raised-button style="width: 100%;" (click)="pdfInput.click()">
+<!-- <button mat-raised-button style="width: 100%;" (click)="pdfInput.click()">
     <mat-icon>file_open</mat-icon> Open File
     <input #pdfInput type="file" (click)="$event.target.value = null" (change)="handleUploadFileChanged($event)"
         style="display:none;" accept=".pdf" />
+</button> -->
+
+<button mat-raised-button style="width: 100%;" (click)="openFile()">
+    <mat-icon>file_open</mat-icon> Open File
 </button>
+
 
 <!-- File list -->
 

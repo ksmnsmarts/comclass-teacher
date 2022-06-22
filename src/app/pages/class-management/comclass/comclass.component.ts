@@ -46,7 +46,7 @@ export class ComclassComponent implements OnInit {
     ngOnInit(): void {
 
         this.route.params.subscribe(params => {
-            this.meetingId = params;
+            this.meetingId = params.id;
         });
 
 
@@ -168,12 +168,30 @@ export class ComclassComponent implements OnInit {
     async openFile(fileInput, sourceType) {
         console.log('\n> open File...');
 
-        console.log(fileInput);
         const aFILE = fileInput[0];
         if (!aFILE) {
             alert('파일을 선택해주세요!');
             return;
         }
+        console.log(this.meetingId)
+
+        ////////////////////////////////////////////////////////////////////////
+        // 파일 업로드
+        const formData: any = new FormData();
+        formData.append("DocFile", aFILE);
+
+        this.classService.uploadDocument(formData, this.meetingId).subscribe((result: any) => {
+            console.log('[API] <---- upload completed:', result);
+
+            // document upload 확인 후 socket room안의 모든 User에게 전송 (나 포함)
+            // this.socket.emit('check:documents', this.meetingId);
+
+
+        }, (err) => {
+            console.log(err);
+        });
+        ////////////////////////////////////////////////////////////////////////
+
 
         // check valid fomat
         // https://stackoverflow.com/questions/190852/how-can-i-get-file-extensions-with-javascript
@@ -256,6 +274,22 @@ export class ComclassComponent implements OnInit {
      */
     async onDocumentOpened(newDocumentFile) {
         // this.pdfStorageService.memoryRelease();
+
+        ////////////////////////////////////////////////////////////////////////
+        // 파일 업로드
+        // const formData: any = new FormData();
+        // formData.append("DocFile", newDocumentFile);
+
+        // this.classService.uploadDocument(formData, this.meetingId).subscribe((result: any) => {
+        //     console.log('[API] <---- upload completed:', result);
+
+        //     // document upload 확인 후 socket room안의 모든 User에게 전송 (나 포함)
+        //     // this.socket.emit('check:documents', this.meetingId);
+        // }, (err) => {
+        //     console.log(err);
+        // });
+        ////////////////////////////////////////////////////////////////////////
+
 
         const numPages = await this.fileService.openDoc(newDocumentFile, 'pdf');
 

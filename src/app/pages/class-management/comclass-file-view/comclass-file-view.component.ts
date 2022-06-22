@@ -1,11 +1,13 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 import { distinctUntilChanged, pluck, Subject, takeUntil } from 'rxjs';
 import { DialogService } from 'src/app/0.shared/dialog/dialog.service';
 import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.service';
 import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
+import { OpenFileComponent } from '../comclass-newpage/open-file/open-file.component';
 
 @Component({
     selector: 'comclass-file-view',
@@ -27,7 +29,7 @@ export class ComclassFileViewComponent implements OnInit {
 
 
     documentInfo = [];
-
+    meetingId;
 
 
     constructor(
@@ -35,6 +37,7 @@ export class ComclassFileViewComponent implements OnInit {
         private viewInfoService: ViewInfoService,
         private pdfStorageService: PdfStorageService,
         private socketService: SocketService,
+        private route: ActivatedRoute,
 
         private dialogService: DialogService,
         public dialog: MatDialog,
@@ -45,6 +48,12 @@ export class ComclassFileViewComponent implements OnInit {
 
 
     ngOnInit(): void {
+
+        this.route.params.subscribe(params => {
+            this.meetingId = params.id;
+        });
+
+
         // Document가 Update 된 경우 : File List rendering
         this.viewInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), pluck('documentInfo'), distinctUntilChanged())
@@ -122,5 +131,17 @@ export class ComclassFileViewComponent implements OnInit {
         console.log(docId)
         console.log('>> click PDF : change to Thumbnail Mode');
         this.viewInfoService.changeToThumbnailView(docId);
+    }
+
+
+    openFile(){
+        const dialogRef = this.dialog.open(OpenFileComponent, {
+            data : this.meetingId.id,
+        }) 
+      
+        dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed');
+        });
+      
     }
 }

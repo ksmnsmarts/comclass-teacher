@@ -22,10 +22,6 @@ export interface DialogData {
 })
 export class OpenFileComponent implements OnInit {
 
-    meetingId;
-
-
-
     constructor(
         public dialogRef: MatDialogRef<OpenFileComponent>,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -37,20 +33,12 @@ export class OpenFileComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        console.log(this.data)
-
-        this.meetingId = this.data;
     }
 
     onNoClick(): void {
         this.dialogRef.close();
     }
 
-    openFile(newpageEvent) {
-        console.log('[ newpage ---> main ] send event:', newpageEvent);
-        this.eventBusService.emit(new EventData('open the blank pdf', newpageEvent));
-        this.dialogRef.close();
-    }
 
     /**
        * 새로운 File Load (Local)
@@ -61,29 +49,12 @@ export class OpenFileComponent implements OnInit {
     openPDF(event) {
         const files: File[] = event.target.files;
 
+        console.log(event.target.files)
+
         if (event.target.files.length === 0) {
             console.log('file 안들어옴');
             return;
-        }
-
-        console.log(this.meetingId)
-        ////////////////////////////////////////////////////////////////////////
-        // 파일 업로드
-        const formData: any = new FormData();
-        formData.append("DocFile", event.target.files[0]);
-
-        this.classService.uploadDocument(formData, this.meetingId).subscribe((result: any) => {
-            console.log('[API] <---- upload completed:', result);
-
-            // document upload 확인 후 socket room안의 모든 User에게 전송 (나 포함)
-            // this.socket.emit('check:documents', this.meetingId);
-
-
-        }, (err) => {
-            console.log(err);
-        });
-        ////////////////////////////////////////////////////////////////////////
-        
+        }       
 
         // 파일 유효성 검사
         const ext = (files[0].name).substring((files[0].name).lastIndexOf('.') + 1);
