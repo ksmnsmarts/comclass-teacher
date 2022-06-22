@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { pluck, Subject, takeUntil } from 'rxjs';
 import { CANVAS_CONFIG } from 'src/app/0.shared/config/config';
 import { DrawingService } from 'src/app/0.shared/services/drawing/drawing.service';
@@ -9,6 +10,7 @@ import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
 import { ZoomService } from 'src/app/0.shared/services/zoom/zoom.service';
 import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.service';
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
+import { ClassInfoService } from 'src/app/0.shared/store/class-info';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 
 @Component({
@@ -22,8 +24,9 @@ export class ComclassComponent implements OnInit {
   isDocLoaded = false;
   // Left Side Bar
   leftSideView;
-  socket
+  socket;
   docLength;
+  classId;
 
   constructor(
     private eventBusService: EventBusService,
@@ -33,11 +36,32 @@ export class ComclassComponent implements OnInit {
     private zoomService: ZoomService,
     private drawStorageService: DrawStorageService,
     private socketService: SocketService,
+    private classInfoService: ClassInfoService,
+    private route: ActivatedRoute,
   ) {
     this.socket = this.socketService.socket;
   }
 
   ngOnInit(): void {
+    ///////////////////////////////////////////////////////////////////
+    // Meeting Info 수신 후 해당 회의 내의
+    // 문서, 판서 data store update
+
+    this.classInfoService.state$
+      .pipe(takeUntil(this.unsubscribe$), pluck('_id'))
+      .subscribe((meeting) => {
+        if (meeting) {
+          this.updateDocuments();
+        }
+      });
+    /////////////////////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////
+    // param을 가져와 룸 번호 클래스 생성
+    this.classId = this.route.snapshot.params['id'];
+    this.socket.emit('join:class', this.classId);
+    ////////////////////////////////////////////////
+
     ////////////////////////////////////////////////
     // 새로운 판서 Event 수신
     this.socket.on('draw:teacher', (data: any) => {
@@ -56,27 +80,73 @@ export class ComclassComponent implements OnInit {
 
     ////////////////////////////////////////////////
 
+    /////////////////////////////////////////////
+    // 새로운 문서 upload 알림 수신
+
+    this.socket.on('check:documents', () => {
+      console.log('<--- [SOCKET] check:document');
+      this.updateDocuments();
+    });
+    ///////////////////////////////////////////
+
+    ////////////////////////////////////////////////
+    // 새로운 판서 Event 수신
+    this.socket.on('draw:teacher', (data: any) => {
+      // console.log('<---[SOCKET] rx drawEvent :', data);
+      // console.log(data.drawingEvent, data.docNum, data.pageNum)
+
+      if (data.drawingEvent.tool.type != 'pointer') {
+        this.drawStorageService.setDrawEvent(
+          data.docNum,
+          data.pageNum,
+          data.drawingEvent
+        );
+      }
+      this.eventBusService.emit(new EventData('receive:drawEvent', data));
+    });
+
+    ////////////////////////////////////////////////
+
+    ////////////////////////////////////////////////
+    // 새로운 판서 Event 수신
+    this.socket.on('clearDrawingEvents', (data: any) => {
+      this.drawStorageService.clearDrawingEvents(
+        data.currentDocNum,
+        data.currentPage
+      );
+      this.eventBusService.emit(new EventData('receive:clearDrawEvent', data));
+    });
+
+    ////////////////////////////////////////////////
+
     /////////////////////////////////////////////////////////
     // 새로운 판서 Event local 저장 + 서버 전송
-    this.eventBusService.on('gen:newDrawEvent', this.unsubscribe$, async (data) => {
-      const pageInfo = this.viewInfoService.state.pageInfo;
-      // local Store 저장
-      if (data.tool.type != 'pointer') {
-        this.drawStorageService.setDrawEvent(pageInfo.currentDocNum, pageInfo.currentPage, data);
+    this.eventBusService.on(
+      'gen:newDrawEvent',
+      this.unsubscribe$,
+      async (data) => {
+        const pageInfo = this.viewInfoService.state.pageInfo;
+        // local Store 저장
+        if (data.tool.type != 'pointer') {
+          this.drawStorageService.setDrawEvent(
+            pageInfo.currentDocNum,
+            pageInfo.currentPage,
+            data
+          );
+        }
+
+        const newDataEvent = {
+          drawingEvent: data,
+          docId: pageInfo.currentDocId,
+          docNum: pageInfo.currentDocNum,
+          pageNum: pageInfo.currentPage,
+        };
+
+        // console.log(newDataEvent);
+
+        this.socket.emit('draw:teacher', newDataEvent);
       }
-
-      const newDataEvent = {
-        drawingEvent: data,
-        docId: pageInfo.currentDocId,
-        docNum: pageInfo.currentDocNum,
-        pageNum: pageInfo.currentPage
-      }
-
-      // console.log(newDataEvent);
-
-      this.socket.emit('draw:teacher', newDataEvent);
-
-    });
+    );
     //////////////////////////////////////////////////////////////////
 
     // sidebar의 view mode : HTML 내에서 사용
@@ -100,6 +170,16 @@ export class ComclassComponent implements OnInit {
     this.eventBusService.on('isDocLoaded', this.unsubscribe$, (data) => {
       this.isDocLoaded = true;
     });
+  }
+
+  ngOnDestroy() {
+    // unsubscribe all subscription
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+
+    // socket off
+    this.socket.off('draw:teacher');
+    this.socket.off('check:documents');
   }
 
   /**
@@ -136,7 +216,6 @@ export class ComclassComponent implements OnInit {
    *
    */
   async openFile(fileInput, sourceType) {
-
     const aFILE = fileInput[0];
     if (!aFILE) {
       alert('파일을 선택해주세요!');
@@ -200,7 +279,7 @@ export class ComclassComponent implements OnInit {
     }
 
     this.drawStorageService.setDrawEventSet(1, 0);
-
+    this.socket.emit('check:documents', this.classId);
     // this.eventBusService.emit(new EventData('blank pdf', ''));
 
     /*-------------------------------------------
@@ -416,7 +495,7 @@ export class ComclassComponent implements OnInit {
     // 최초 load인 경우 document ID는 처음 것으로 설정
     if (!this.viewInfoService.state.pageInfo.currentDocId) {
       obj.pageInfo = {
-        currentDocId: documentInfo[0]._id,
+        currentDocId: documentInfo[0]?._id,
         currentDocNum: 1,
         currentPage: 1,
         zoomScale: this.zoomService.setInitZoomScale(),
