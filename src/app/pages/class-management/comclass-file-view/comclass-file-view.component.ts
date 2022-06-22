@@ -29,7 +29,7 @@ export class ComclassFileViewComponent implements OnInit {
 
 
     documentInfo = [];
-    meetingId;
+    classId;
 
 
     constructor(
@@ -50,7 +50,7 @@ export class ComclassFileViewComponent implements OnInit {
     ngOnInit(): void {
 
         this.route.params.subscribe(params => {
-            this.meetingId = params.id;
+            this.classId = params.id;
         });
 
 
@@ -135,7 +135,7 @@ export class ComclassFileViewComponent implements OnInit {
 
     openFile(){
         const dialogRef = this.dialog.open(OpenFileComponent, {
-            data : this.meetingId.id,
+            data : this.classId.id,
         }) 
       
         dialogRef.afterClosed().subscribe(result => {

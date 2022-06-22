@@ -22,9 +22,9 @@ export class ClassService {
     }
 
     // 파일 업로드
-    uploadDocument(formData, meetingId) {
-        console.log(formData, meetingId)
-        return this.http.post(`/api/v1/admin/classInfo/upload/${meetingId}`, formData);
+    uploadDocument(formData, classId) {
+        console.log(formData, classId)
+        return this.http.post(`/api/v1/admin/classInfo/upload/${classId}`, formData);
     }
 
 }

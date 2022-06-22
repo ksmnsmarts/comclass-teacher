@@ -13,7 +13,7 @@ import { OpenFileComponent } from './open-file/open-file.component';
 export class ComclassNewpageComponent implements OnInit {
 
 
-    meetingId;
+    classId;
 
     constructor(
         private eventBusService: EventBusService,
@@ -23,9 +23,9 @@ export class ComclassNewpageComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.params.subscribe(params => {
-            this.meetingId = params;
+            this.classId = params;
 
-            console.log(this.meetingId)
+            console.log(this.classId)
         });
     }
 
@@ -39,7 +39,7 @@ export class ComclassNewpageComponent implements OnInit {
 
     openFile(){
         const dialogRef = this.dialog.open(OpenFileComponent, {
-            data : this.meetingId.id,
+            data : this.classId.id,
         })
 
         dialogRef.afterClosed().subscribe(result => {
