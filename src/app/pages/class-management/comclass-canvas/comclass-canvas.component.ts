@@ -313,7 +313,7 @@ export class ComclassCanvasComponent implements OnInit {
 
         console.log('>>> page Render! [background and board] + addEventHandler');
 
-       
+
         // board rendering
         const drawingEvents = this.drawStorageService.getDrawingEvents(currentDocNum, currentPage);
         this.renderingService.renderBoard(this.teacherCanvas, zoomScale, drawingEvents);

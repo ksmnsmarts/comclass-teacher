@@ -58,9 +58,9 @@ export class LobbyComponent implements OnInit {
 
     // 수업 개설
     openClass(meeting) {
+        console.log(meeting)
         this.router.navigate([`comclass/${meeting?._id}`]);
         this.classInfoService.setClassInfo(meeting);
-        this.socket.emit('join:class',meeting);
     }
 
 }

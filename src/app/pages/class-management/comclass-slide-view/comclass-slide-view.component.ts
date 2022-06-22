@@ -1,10 +1,4 @@
-import {
-    Component,
-    ElementRef,
-    OnInit,
-    QueryList,
-    ViewChildren,
-} from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChildren, } from '@angular/core';
 import { distinctUntilChanged, pairwise, Subject, takeUntil } from 'rxjs';
 import { CanvasService } from 'src/app/0.shared/services/canvas/canvas.service';
 import { DrawingService } from 'src/app/0.shared/services/drawing/drawing.service';
@@ -19,7 +13,7 @@ import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 })
 export class ComclassSlideViewComponent implements OnInit {
     @ViewChildren('thumb') thumRef: QueryList<ElementRef>; // 부모 thumb-item 안에 자식 element
-    @ViewChildren('thumbCanvas') thumbCanvasRef: QueryList<ElementRef>
+    @ViewChildren('thumbCanvas') thumbCanvasRef: QueryList<ElementRef>;
     @ViewChildren('thumbWindow') thumbWindowRef: QueryList<ElementRef>;
 
     private unsubscribe$ = new Subject<void>();
@@ -42,8 +36,7 @@ export class ComclassSlideViewComponent implements OnInit {
         private renderingService: RenderingService,
         private viewInfoService: ViewInfoService,
         private eventBusService: EventBusService,
-        private drawingService: DrawingService,
-
+        private drawingService: DrawingService
     ) { }
 
     ngOnInit(): void {
@@ -53,8 +46,6 @@ export class ComclassSlideViewComponent implements OnInit {
             .subscribe(([prevViewInfo, viewInfo]) => {
                 // // 문서가 로드되지 않은 경우
                 // if (!viewInfo.isDocLoaded) return;
-
-                console.log(prevViewInfo, viewInfo)
 
                 // 현재 Current Page Info 저장
                 this.currentDocId = viewInfo.pageInfo.currentDocId;
@@ -67,9 +58,11 @@ export class ComclassSlideViewComponent implements OnInit {
                 }
 
                 // Thumbnail Mode로 전환된 경우 Thumbnail Rendering
-                if (prevViewInfo.leftSideView != 'thumbnail' && viewInfo.leftSideView == 'thumbnail') {
-
-                    console.log(prevViewInfo.leftSideView)
+                if (
+                    prevViewInfo.leftSideView != 'thumbnail' &&
+                    viewInfo.leftSideView == 'thumbnail'
+                ) {
+                    console.log(prevViewInfo.leftSideView);
 
                     this.renderThumbnails();
                 }
@@ -112,10 +105,40 @@ export class ComclassSlideViewComponent implements OnInit {
             }
         );
 
+        /**
+         * 자신이 보고있는 판서 드로잉 삭제
+         */
+        this.eventBusService.on(
+            'rmoveDrawEventThumRendering',
+            this.unsubscribe$,
+            (data) => {
+                if (this.viewInfoService.state.leftSideView == 'fileList') return;
+                const thumbCanvas =
+                    this.thumbCanvasRef.toArray()[this.currentPageNum - 1].nativeElement;
+                const thumbScale = this.thumbArray[this.currentPageNum - 1].scale;
+                this.drawingService.clearThumb(data, thumbCanvas, thumbScale);
+            }
+        );
+        // 다른 사림이 보고있는 판서 드로잉 삭제
+        this.eventBusService.on(
+            'receive:clearDrawEvent',
+            this.unsubscribe$,
+            async (data) => {
+                if (this.viewInfoService.state.leftSideView == 'fileList') return;
+                if (this.currentDocId == data.docId) {
+                    const thumbCanvas =
+                        this.thumbCanvasRef.toArray()[data.currentPage - 1].nativeElement;
+                    const thumbScale = this.thumbArray[data.currentPage - 1].scale;
+                    this.drawingService.clearThumb(data, thumbCanvas, thumbScale);
+                }
+            }
+        );
+        //
+
         /*--------------------------------------
-                Scroll event에 따라서 thumbnail window 위치/크기 변경
-                --> broadcast from comclass component
-            --------------------------------------*/
+                    Scroll event에 따라서 thumbnail window 위치/크기 변경
+                    --> broadcast from comclass component
+                --------------------------------------*/
         this.eventBusService.on(
             'change:containerScroll',
             this.unsubscribe$,
@@ -127,11 +150,11 @@ export class ComclassSlideViewComponent implements OnInit {
         );
 
         /*-------------------------------------------
-                zoom, page 전환등을 하는 경우
-    
-                1. scroll에 필요한 ratio 계산(thumbnail과 canvas의 크기비율)은 여기서 수행
-                2. thumbnail의 window size 계산 수행
-            ---------------------------------------------*/
+                    zoom, page 전환등을 하는 경우
+
+                    1. scroll에 필요한 ratio 계산(thumbnail과 canvas의 크기비율)은 여기서 수행
+                    2. thumbnail의 window size 계산 수행
+                ---------------------------------------------*/
         this.eventBusService.on(
             'change:containerSize',
             this.unsubscribe$,
@@ -180,15 +203,16 @@ export class ComclassSlideViewComponent implements OnInit {
      */
     async renderThumbnails() {
         // const numPages = this.viewInfoService.state.numPages;
-        const numPages = this.viewInfoService.state.documentInfo[this.currentDocNum - 1].numPages;
+        const numPages =
+            this.viewInfoService.state.documentInfo[this.currentDocNum - 1].numPages;
 
         this.thumbArray = [];
 
         for (let pageNum = 1; pageNum <= numPages; pageNum++) {
             /*-----------------------------------------------------------
-                    1. get size of thumbnail canvas --> thumbnail element 생성.
-                    - width, height, scale return.
-                  --------------------------------------------------------------*/
+                          1. get size of thumbnail canvas --> thumbnail element 생성.
+                          - width, height, scale return.
+                        --------------------------------------------------------------*/
             const thumbSize = this.canvasService.getThumbnailSize(
                 this.currentDocNum,
                 pageNum
@@ -200,9 +224,17 @@ export class ComclassSlideViewComponent implements OnInit {
 
         // Render Background & Board
         for (let i = 0; i < numPages; i++) {
-            await this.renderingService.renderThumbBackground(this.thumRef.toArray()[i].nativeElement, this.currentDocNum, i + 1);
-            this.renderingService.renderThumbBoard(this.thumbCanvasRef.toArray()[i].nativeElement, this.currentDocNum, i + 1);
-        };
+            await this.renderingService.renderThumbBackground(
+                this.thumRef.toArray()[i].nativeElement,
+                this.currentDocNum,
+                i + 1
+            );
+            this.renderingService.renderThumbBoard(
+                this.thumbCanvasRef.toArray()[i].nativeElement,
+                this.currentDocNum,
+                i + 1
+            );
+        }
     }
 
     /**
