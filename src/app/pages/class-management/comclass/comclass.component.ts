@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { pluck, Subject, takeUntil } from 'rxjs';
 import { CANVAS_CONFIG } from 'src/app/0.shared/config/config';
+import { ClassService } from 'src/app/0.shared/services/class/class.service';
 import { DrawingService } from 'src/app/0.shared/services/drawing/drawing.service';
 import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
@@ -25,6 +27,8 @@ export class ComclassComponent implements OnInit {
     socket
     docLength;
 
+    meetingId:any;
+
     constructor(
         private eventBusService: EventBusService,
         private fileService: FileService,
@@ -33,13 +37,17 @@ export class ComclassComponent implements OnInit {
         private zoomService: ZoomService,
         private drawStorageService: DrawStorageService,
         private socketService: SocketService,
+        private classService: ClassService,
+        private route: ActivatedRoute
     ) {
         this.socket = this.socketService.socket;
     }
 
     ngOnInit(): void {
 
-        console.log(this.viewInfoService.state)
+        this.route.params.subscribe(params => {
+            this.meetingId = params;
+        });
 
 
         ////////////////////////////////////////////////

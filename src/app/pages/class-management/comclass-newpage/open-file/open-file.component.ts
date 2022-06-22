@@ -1,9 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
 
 import filePdfBox from '@iconify/icons-mdi/file-pdf-box';
 import { SpinnerDialogComponent } from 'src/app/0.shared/dialog/dialog.component';
 import { DialogService } from 'src/app/0.shared/dialog/dialog.service';
+import { ClassService } from 'src/app/0.shared/services/class/class.service';
 import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 
@@ -20,15 +22,24 @@ export interface DialogData {
 })
 export class OpenFileComponent implements OnInit {
 
+    meetingId;
+
+
+
     constructor(
         public dialogRef: MatDialogRef<OpenFileComponent>,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
         private eventBusService: EventBusService,
         private dialogService: DialogService,
         public dialog: MatDialog,
+        private route: ActivatedRoute,
+        private classService: ClassService,
     ) { }
 
     ngOnInit(): void {
+        console.log(this.data)
+
+        this.meetingId = this.data;
     }
 
     onNoClick(): void {
@@ -54,6 +65,25 @@ export class OpenFileComponent implements OnInit {
             console.log('file 안들어옴');
             return;
         }
+
+        console.log(this.meetingId)
+        ////////////////////////////////////////////////////////////////////////
+        // 파일 업로드
+        const formData: any = new FormData();
+        formData.append("DocFile", event.target.files[0]);
+
+        this.classService.uploadDocument(formData, this.meetingId).subscribe((result: any) => {
+            console.log('[API] <---- upload completed:', result);
+
+            // document upload 확인 후 socket room안의 모든 User에게 전송 (나 포함)
+            // this.socket.emit('check:documents', this.meetingId);
+
+
+        }, (err) => {
+            console.log(err);
+        });
+        ////////////////////////////////////////////////////////////////////////
+        
 
         // 파일 유효성 검사
         const ext = (files[0].name).substring((files[0].name).lastIndexOf('.') + 1);

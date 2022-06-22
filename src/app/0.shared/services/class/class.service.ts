@@ -21,4 +21,10 @@ export class ClassService {
         return this.http.post('/api/v1/admin/classInfo/addClass', data);
     }
 
+    // 파일 업로드
+    uploadDocument(formData, meetingId) {
+        console.log(formData, meetingId)
+        return this.http.post(`/api/v1/admin/classInfo/upload/${meetingId}`, formData);
+    }
+
 }

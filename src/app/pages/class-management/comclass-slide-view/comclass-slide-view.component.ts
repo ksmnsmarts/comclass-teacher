@@ -54,8 +54,7 @@ export class ComclassSlideViewComponent implements OnInit {
                 // // 문서가 로드되지 않은 경우
                 // if (!viewInfo.isDocLoaded) return;
 
-
-
+                console.log(prevViewInfo, viewInfo)
 
                 // 현재 Current Page Info 저장
                 this.currentDocId = viewInfo.pageInfo.currentDocId;
