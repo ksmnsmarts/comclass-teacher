@@ -39,6 +39,9 @@ export class ComclassComponent implements OnInit {
 
     ngOnInit(): void {
 
+        console.log(this.viewInfoService.state)
+
+
         ////////////////////////////////////////////////
         // 새로운 판서 Event 수신
         this.socket.on('draw:teacher', (data: any) => {
@@ -89,6 +92,7 @@ export class ComclassComponent implements OnInit {
                 console.log('[info] current Left Side View: ', leftSideView);
         });
 
+        // 문서가 있을 경우 문서열기 modal 가리기
         this.viewInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), pluck('documentInfo'))
             .subscribe((documentInfo) => {
