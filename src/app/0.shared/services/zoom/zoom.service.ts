@@ -31,7 +31,7 @@ export class ZoomService {
     const pdfPage: any = this.pdfStorageService.getPdfPage(1, 1);
 
 
-    // console.log(pdfPage)
+    console.log(pdfPage)
     const docSize = pdfPage.getViewport({ scale: 1 * CANVAS_CONFIG.CSS_UNIT }); // 100%에 해당하는 document의 size (Css 기준)
 
     const ratio = {
