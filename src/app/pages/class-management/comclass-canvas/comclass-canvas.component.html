@@ -19,14 +19,14 @@
 	</div>
 
 	<!------------------------[ 선생님 판서 Guidance. ] ------------------------- -->
-	<div class="guidance" ng-show="vm.isGuideMode">
+	<div class="guidance">
 		<canvas #studentGuideCanvas id="studentGuideCanvas"></canvas>
 		<canvas #teacherGuideCanvas id="teacherGuideCanvas"></canvas>
 	</div>
 
 	<!------------------------[ 선생님 판서 cover canvas ] ------------------------- -->
-	<div class="cover" ng-show="vm.mode!='move' && vm.isDocLoaded && !vm.isReplayShown" [hidden] = "editDisabled">
-		<canvas #coverCanvas id="coverCanvas"></canvas>
+	<div class="cover">
+		<canvas #coverCanvas id="coverCanvas" [hidden] = "editDisabled"></canvas>
 	</div>
 
 </div>

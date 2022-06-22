@@ -158,6 +158,13 @@ export class ComclassComponent implements OnInit {
         console.log('[info] current Left Side View: ', leftSideView);
       });
 
+    this.viewInfoService.state$
+      .pipe(takeUntil(this.unsubscribe$), pluck('documentInfo'))
+      .subscribe((documentInfo) => {
+        if (documentInfo.length > 0) {
+          this.isDocLoaded = true;
+        }
+      });
     this.eventBusService.on('open the blank pdf', this.unsubscribe$, (data) => {
       this.newpageEvent(data);
       this.isDocLoaded = true;

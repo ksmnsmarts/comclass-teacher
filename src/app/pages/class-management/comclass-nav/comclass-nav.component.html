@@ -1,133 +1,130 @@
 <nav class="navbar comclass-nav animated fadeInDown">
-  <div class="container-fluid">
-    <!-- <div class="navbar-header">
+    <div class="container-fluid">
+        <!-- <div class="navbar-header">
             <a class="navbar-brand"><img src="../assets/img/comclass/navbar/logo-comclass_.png"></a>
         </div> -->
 
-    <ul class="nav navbar-nav main-nav">
-      <!----------------------------
+        <ul class="nav navbar-nav main-nav">
+            <!----------------------------
                 수업 제목 + 학생 수
             ----------------------------- -->
-      <li>
-        <div class="class-info">
-          <div class="class-name"> 과학 </div>
-          <div class="student-info" [hidden]="offLine" (click)="clickMenu('studentList')">
-            <i class="material-icons">
-              face
-            </i>
-            <span>&nbsp; 4</span>
-          </div>
+            <li>
+                <div class="class-info">
+                    <div class="class-name"> 과학 </div>
+                    <div class="student-info" [hidden]="offLine" (click)="clickMenu('studentList')">
+                        <i class="material-icons">
+                            face
+                        </i>
+                        <span>&nbsp; 4</span>
+                    </div>
 
-          <!-- <div class="student-numbers"{{vm.numStudents}}</div> -->
-        </div>
-      </li>
+                    <!-- <div class="student-numbers"{{vm.numStudents}}</div> -->
+                </div>
+            </li>
 
-      <li class="drawing-config">
-        <div class="color-set animated">
-          <div *ngFor="let item of colorList; let i = index" (click)="changeColor(item.color)">
-            <i [ngClass]="(currentColor == item.color) ? 'fa fa-check-circle':'fa fa-circle'"
-              [style.color]="item.color"></i>
-          </div>
-        </div>
+            <li class="drawing-config">
+                <div class="color-set animated">
+                    <div *ngFor="let item of colorList; let i = index" (click)="changeColor(item.color)">
+                        <i [ngClass]="(currentColor == item.color) ? 'fa fa-check-circle':'fa fa-circle'"
+                            [style.color]="item.color"></i>
+                    </div>
+                </div>
 
 
-        <div class="width-set">
-          <!----------------------------
+                <div class="width-set">
+                    <!----------------------------
                          Width 선택 부분 (현재 3종)
                     ----------------------------- -->
-          <div *ngFor="let item of widthSet[currentTool]; let i = index" (click)="changeWidth(item);">
-            <i class="far" [ngClass]="(currentWidth[currentTool]==item)?'fa fa-check-circle':'fa fa-circle'">
-            </i>
-          </div>
-        </div>
-      </li>
+                    <div *ngFor="let item of widthSet[currentTool]; let i = index" (click)="changeWidth(item);">
+                        <i class="far"
+                            [ngClass]="(currentWidth[currentTool]==item)?'fa fa-check-circle':'fa fa-circle'">
+                        </i>
+                    </div>
+                </div>
+            </li>
 
 
-      <li class="tool-items">
+            <li class="tool-items">
 
-        <div class="tool-set">
-          <!-- Pen -->
-          <button class="toolBtn" (click)="changeTool('pen');" aria-label="change tool">
-            <i class="material-icons" [ngClass]="(currentTool == 'pen')?(mode == 'move')?'':'active':''">
-              edit
-            </i>
+                <div class="tool-set">
+                    <!-- Pen -->
+                    <button class="toolBtn" (click)="changeTool('pen');" aria-label="change tool">
+                        <i class="material-icons" [ngClass]="(currentTool == 'pen') && (mode == 'draw')?'active':''">
+                            edit
+                        </i>
+                    </button>
+                    <!-- Eraser -->
+                    <button class="toolBtn" (click)="changeTool('eraser');" mat-icon-button>
+                        <ic-icon [icon]="eraserIcon" [width]="30" [height]="30" [align]="'center'"
+                            [ngClass]="(currentTool == 'eraser') && (mode == 'draw')?'active':''"></ic-icon>
+                    </button>
 
-          </button>
-          <!-- Eraser -->
-          <!-- <button class="toolBtn" (click)="changeTool('eraser');" aria-label="change tool">
-            <mat-icon> view_quilt </mat-icon>
-          </button> -->
-          <button class="toolBtn" (click)="changeTool('eraser');" mat-icon-button>
-            <!-- <mat-icon [ngClass]="(currentTool == 'eraser') && (mode == 'draw')?'active':''">crop_square
-                            </mat-icon> -->
-            <ic-icon [icon]="eraserIcon" [width]="30" [height]="30" [align]="'center'"
-              [ngClass]="(currentTool == 'eraser') && (mode == 'draw')?'active':''"></ic-icon>
-          </button>
+                    <!-- Pan -->
+                    <button class="toolBtn" (click)="changeMode('move');" aria-label="move">
+                        <mat-icon [ngClass]="(mode == 'move')?'active':''"> open_with </mat-icon>
+                    </button>
 
-          <!-- Pan -->
-          <button class="toolBtn" (click)="changeMode('move');" aria-label="move">
-            <mat-icon [ngClass]="(mode == 'move')?'active':''"> open_with </mat-icon>
-          </button>
-
-          <!-- sync button -->
-          <button class="toolBtn" ng-if="!offLine" (click)="changeSyncState($event);" aria-label="link">
-            <mat-icon> link </mat-icon>
-          </button>
+                    <!-- sync button -->
+                    <button class="toolBtn" ng-if="!offLine" (click)="changeSyncState($event);" aria-label="link">
+                        <mat-icon> link </mat-icon>
+                    </button>
 
 
-          <div>
-            <button mat-button [matMenuTriggerFor]="menu">
-              <mat-icon>more_horiz</mat-icon>
-            </button>
+                    <div>
+                        <button mat-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_horiz</mat-icon>
+                        </button>
 
-            <mat-menu width="4" #menu="matMenu">
-              <div class="menuBtn">
-                <button mat-raised-button (click)="clickMenu('open')" ng-disabled="isGuideMode">
-                  <mat-icon>folder_open</mat-icon>
-                  파일열기
-                </button>
-              </div>
-              <div class="menuBtn">
-                <button mat-raised-button (click)="clickMenu('save')" ng-disabled='!isDocLoaded || isGuideMode'>
-                  <mat-icon>save</mat-icon>
-                  저장
-                </button>
-              </div>
-              <div class="menuBtn">
-                <button mat-raised-button (click)="clickMenu('init')" ng-disabled="!isDocLoaded || isGuideMode">
-                  <mat-icon>refresh</mat-icon>
-                  초기화
-                </button>
-              </div>
+                        <mat-menu width="4" #menu="matMenu">
+                            <div class="menuBtn">
+                                <button mat-raised-button (click)="clickMenu('open')" ng-disabled="isGuideMode">
+                                    <mat-icon>folder_open</mat-icon>
+                                    파일열기
+                                </button>
+                            </div>
+                            <div class="menuBtn">
+                                <button mat-raised-button (click)="clickMenu('save')"
+                                    ng-disabled='!isDocLoaded || isGuideMode'>
+                                    <mat-icon>save</mat-icon>
+                                    저장
+                                </button>
+                            </div>
+                            <div class="menuBtn">
+                                <button mat-raised-button (click)="clickMenu('init')"
+                                    ng-disabled="!isDocLoaded || isGuideMode">
+                                    <mat-icon>refresh</mat-icon>
+                                    초기화
+                                </button>
+                            </div>
 
-              <div class="menuBtn">
-                <button mat-raised-button (click)="clickMenu('exam')" ng-disabled='offLine'>
-                  <mat-icon>view_list</mat-icon>
-                  시험출제
-                </button>
-              </div>
-            </mat-menu>
-          </div>
+                            <div class="menuBtn">
+                                <button mat-raised-button (click)="clickMenu('exam')" ng-disabled='offLine'>
+                                    <mat-icon>view_list</mat-icon>
+                                    시험출제
+                                </button>
+                            </div>
+                        </mat-menu>
+                    </div>
 
 
 
 
-          <!-- More Menu -->
+                    <!-- More Menu -->
 
 
-        </div>
-      </li>
-    </ul>
-    <ul class="nav navbar-nav navbar-right">
-      <li class="exit-item">
-        <!-- <div class="nav_menu comclass-exit" ng-click="vm.select.Menu == 'exit'? vm.select.Menu = null : vm.select.Menu = 'exit'">                     -->
-        <div class="nav_menu comclass-exit" (click)="clickMenu('exit')">
+                </div>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="exit-item">
+                <!-- <div class="nav_menu comclass-exit" ng-click="vm.select.Menu == 'exit'? vm.select.Menu = null : vm.select.Menu = 'exit'">                     -->
+                <div class="nav_menu comclass-exit" (click)="clickMenu('exit')">
 
-          <i class="material-icons" ng-class="(vm.select.Menu == 'exit')?'active':''">
-            exit_to_app
-          </i>
-        </div>
-      </li>
-    </ul>
-  </div>
+                    <i class="material-icons" ng-class="(vm.select.Menu == 'exit')?'active':''">
+                        exit_to_app
+                    </i>
+                </div>
+            </li>
+        </ul>
+    </div>
 </nav>
