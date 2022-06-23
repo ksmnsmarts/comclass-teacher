@@ -1,68 +1,73 @@
-import { Component, OnInit } from '@angular/core';
-import { CANVAS_CONFIG } from 'src/app/0.shared/config/config';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+
+import { Subject } from 'rxjs';
+import { pluck, takeUntil, distinctUntilChanged } from 'rxjs/operators'
+
+import { CANVAS_CONFIG, DRAWING_TYPE } from '../../../../app/0.shared/config/config';
+
+import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
+import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
+import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.service';
+import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
+import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
+import { ApiService } from 'src/app/0.shared/services/apiService/api.service';
+import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
 
 // icon icon 별로 불러오기
 import eraserIcon from '@iconify/icons-mdi/eraser';
 import markerIcon from '@iconify/icons-mdi/marker';
 import shapeOutlineIcon from '@iconify/icons-mdi/shape-outline';
-import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
-import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
-import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.service';
-import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
-import { ApiService } from 'src/app/0.shared/services/apiService/api.service';
-import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
-import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
-import { distinctUntilChanged, pluck, Subject, takeUntil } from 'rxjs';
+
 
 
 @Component({
-    selector: 'comclass-nav',
+    selector: 'app-comclass-nav',
     templateUrl: './comclass-nav.component.html',
-    styleUrls: ['./comclass-nav.component.scss'],
+    styleUrls: ['./comclass-nav.component.scss']
 })
 export class ComclassNavComponent implements OnInit {
-    isSyncMode: any;
+    isSyncMode: boolean;
     colorList = [
         { color: 'black' },
         { color: 'white' },
         { color: 'red' },
         { color: 'blue' },
         { color: 'green' },
-        { color: 'yellow' },
-    ];
-
-    select: any;
+        { color: 'yellow' }
+    ]
     currentColor = 'black';
     currentTool: string = 'pen';
+    menuName: any;
     currentDocNum: any;
     currentPage: any;
     currentDocId: string;
+    private socket;
+    
 
-    widthSet = CANVAS_CONFIG.widthSet;
-    currentWidth = {
-        pen: this.widthSet.pen[0],
-        eraser: this.widthSet.eraser[2],
-    };
-
-    // iconify TEST //////////////////////
+     // iconify TEST //////////////////////
     eraserIcon = eraserIcon;
     shapeOutlineIcon = shapeOutlineIcon;
     markerIcon = markerIcon;
-    //////////////////////////////////////
+  //////////////////////////////////////
 
-    offLine = true;
-    className;
-    numStudents;
-
-    isDocLoaded;
-    isRecording;
-    isGuideMode;
-    onNavUpdate;
-
-    socket;
-    colorSet;
-
+    // Width: 3단계 설정
+    widthSet = CANVAS_CONFIG.widthSet;
+    currentWidth = {
+        pointer: this.widthSet.pointer[0],
+        pen: this.widthSet.pen[0],
+        highlighter: this.widthSet.highlighter[0],
+        eraser: this.widthSet.eraser[2],
+        line: this.widthSet.line[0],
+        circle: this.widthSet.circle[0],
+        rectangle: this.widthSet.rectangle[0],
+        roundedRectangle: this.widthSet.roundedRectangle[0],
+        textarea: this.widthSet.textarea[0],
+        text: this.widthSet.text[0],
+    };
     mode: any = 'move';
+    myRole: any; // 나의 역할(권한)
+
+    private unsubscribe$ = new Subject<void>();
 
     constructor(
         private editInfoService: EditInfoService,
@@ -70,24 +75,22 @@ export class ComclassNavComponent implements OnInit {
         private drawStorageService: DrawStorageService,
         private viewInfoService: ViewInfoService,
         private apiService: ApiService,
-        private socketService: SocketService
+        private socketService: SocketService,
     ) {
         this.socket = this.socketService.socket;
     }
-    private unsubscribe$ = new Subject<void>();
+
 
     ngOnInit(): void {
-         // 현재 Page 변경
-         this.viewInfoService.state$
-         .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'), distinctUntilChanged())
-         .subscribe((pageInfo) => {
-             this.currentDocNum = pageInfo.currentDocNum;
-             this.currentPage = pageInfo.currentPage;
-             this.currentDocId = pageInfo.currentDocId;
+        // 현재 Page 변경
+        this.viewInfoService.state$
+            .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'), distinctUntilChanged())
+            .subscribe((pageInfo) => {
+                this.currentDocNum = pageInfo.currentDocNum;
+                this.currentPage = pageInfo.currentPage;
+                this.currentDocId = pageInfo.currentDocId;
 
-        });
-
-
+            });
 
         this.editInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged())
@@ -97,16 +100,31 @@ export class ComclassNavComponent implements OnInit {
                 this.currentTool = editInfo.tool;
                 this.currentColor = editInfo.toolsConfig.pen.color;
                 this.currentWidth = {
+                    pointer: editInfo.toolsConfig.pointer.width,
                     pen: editInfo.toolsConfig.pen.width,
+                    highlighter: editInfo.toolsConfig.highlighter.width,
                     eraser: editInfo.toolsConfig.eraser.width,
+                    line: editInfo.toolsConfig.line.width,
+                    circle: editInfo.toolsConfig.circle.width,
+                    rectangle: editInfo.toolsConfig.rectangle.width,
+                    roundedRectangle: editInfo.toolsConfig.roundedRectangle.width,
+                    text: editInfo.toolsConfig.text.width,
+                    textarea: editInfo.toolsConfig.textarea.width,
                 }
             });
+
+        /*-------------------------------------------
+                role에 따라 권한 설정
+            ---------------------------------------------*/
+        this.eventBusService.on('myRole', this.unsubscribe$, (myRole) => {
+            this.myRole = myRole.role
+
+            if (this.myRole == 'Participant') {
+                this.changeMode('move')
+            }
+
+        })
     }
-
-
-    changeSyncState(event) { }
-
-    clickMenu(exit) {}
 
 
     /**
@@ -126,32 +144,34 @@ export class ComclassNavComponent implements OnInit {
         editInfo.toolsConfig.circle.color = color;
         editInfo.toolsConfig.rectangle.color = color;
         editInfo.toolsConfig.roundedRectangle.color = color;
+        editInfo.toolsConfig.text.color = color;
         this.editInfoService.setEditInfo(editInfo);
     }
 
-
     /**
-       * Width 변경
-       *
-       * -현재 Pen 또는 eraser인 경우에만 반응
-       *
-       * @param width
-       */
+     * Width 변경
+     *
+     * -현재 Pen 또는 eraser인 경우에만 반응
+     *
+     * @param width
+     */
     changeWidth(width) {
+
         const editInfo = Object.assign({}, this.editInfoService.state);
 
         if (editInfo.mode != 'draw') return;
 
         // textarea 모드거나 text모드 상태에서 width를 수정하면 같이 바뀥다.
-        if (editInfo.tool == 'text' || editInfo.tool == 'textarea') {
+        if(editInfo.tool == 'text' || editInfo.tool == 'textarea'){
             editInfo.toolsConfig['text'].width = width;
             editInfo.toolsConfig['textarea'].width = width;
-        } else {
+          } else {
             const tool = editInfo.tool; // tool: 'pen', 'eraser', 'shape'
             editInfo.toolsConfig[tool].width = width;
         }
         this.editInfoService.setEditInfo(editInfo);
     }
+
 
     /**
      * Pen, Eraser 선택
@@ -163,15 +183,16 @@ export class ComclassNavComponent implements OnInit {
         // console.log(tool)
         const editInfo = Object.assign({}, this.editInfoService.state);
         
+
         if (editInfo.tool == 'eraser' && editInfo.mode == 'draw' && tool == 'eraser') {
-            if (confirm('Do you want to delete all drawings on the current page?')) {
+            if(confirm("Do you want to delete all drawings on the current page?")){
                 const data = {
                     docId: this.currentDocId,
                     currentDocNum: this.currentDocNum,
-                    currentPage: this.currentPage,
-                };
+                    currentPage: this.currentPage
+                }
                 // 다른 사람들에게 드로우 이벤트 제거
-                this.socket.emit('clearDrawingEvents', data);
+                this.socket.emit('clearDrawingEvents', data)
                 // 자기자신한테 있는 드로우 이벤트 제거
                 this.drawStorageService.clearDrawingEvents(this.currentDocNum, this.currentPage);
                 this.eventBusService.emit(new EventData('rmoveDrawEventPageRendering', ''));
@@ -185,10 +206,8 @@ export class ComclassNavComponent implements OnInit {
         this.editInfoService.setEditInfo(editInfo);
 
         // 지우개 2번 Click은 여기서 check 하는 것이 좋을 듯?
+
     }
-
-
-
 
     /**
      * Move 선택
@@ -201,4 +220,5 @@ export class ComclassNavComponent implements OnInit {
         editInfo.mode = 'move';
         this.editInfoService.setEditInfo(editInfo);
     }
+
 }

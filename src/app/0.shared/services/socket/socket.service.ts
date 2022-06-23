@@ -5,7 +5,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class SocketService {
-  // private url = 'http://localhost:8081'; // whiteBoard 통합전 서버주소
+  // private url = 'http://localhost:8081'; // comclass 통합전 서버주소
   // private url = 'http://localhost:3000/socketWebRTC';
   private url = environment.socketUrl;
   private _socket: Socket;

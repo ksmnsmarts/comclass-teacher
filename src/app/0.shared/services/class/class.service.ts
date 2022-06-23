@@ -28,6 +28,7 @@ export class ClassService {
 
     // 문서 정보 불러오기
     getDocumentsInfo(data) {
+        console.log(data)
         console.log('[API] -----> get: Document Info');
         return this.http.get(`/api/v1/admin/classInfo/documentInfo`, {params: data})
     }

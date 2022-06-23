@@ -1,33 +1,25 @@
+<div #canvasContainer id="canvas" class="canvas-container" [dragScroll]="dragOn">
+    <!-- 안쓸수도.. -->
+    <div class="tmp"> 
+        <canvas #tmp></canvas>
+    </div>
 
-<!-- drag scroll : zoom / pan의 경우에 사용 (PC) -->
-<div #canvasContainer id="canvasContainer" [dragScroll]="dragOn">
-	<!-- temp 판서 -->
-  <div class="tmp">
-      <canvas #tmp id="tmp"></canvas>
-  </div>
-
-
-    <!------------------------[ Background Image (pdf) ] ------------------------- -->
-	<div class="canvasBackground">
-		<canvas #bg id="bg"></canvas>
-	</div>
-	<!-- ------------------------------------------------------------- -->
-
-	<!------------------------[ 선생님 판서 canvas : 1개로 사용 ] ------------------------- -->
-	<div class="canvasTeacher">
-		<canvas #teacherCanvas id="teacherCanvas"></canvas>
-	</div>
-
-	<!------------------------[ 선생님 판서 Guidance. ] ------------------------- -->
-	<div class="guidance">
-		<canvas #studentGuideCanvas id="studentGuideCanvas"></canvas>
-		<canvas #teacherGuideCanvas id="teacherGuideCanvas"></canvas>
-	</div>
-
-	<!------------------------[ 선생님 판서 cover canvas ] ------------------------- -->
-	<div class="cover">
-		<canvas #coverCanvas id="coverCanvas" [hidden] = "editDisabled"></canvas>
-	</div>
-
+    <!-- pdf -->
+    <div class="canvasBackground">
+        <canvas #bg></canvas>
+    </div>
+    <!-- 상대방 판서 받아오기 -->
+    <div class="canvasTeacher">
+        <canvas #teacherCanvas></canvas>
+    </div>
+    
+    <!-- 안씀.. -->
+    <div class="coverRx">
+        <canvas #rxCanvasCover></canvas>
+    </div>
+  
+    <!-- 본인판서 -->
+    <div class="cover" [hidden] = "editDisabled">
+        <canvas #canvasCover></canvas>
+    </div>
 </div>
-

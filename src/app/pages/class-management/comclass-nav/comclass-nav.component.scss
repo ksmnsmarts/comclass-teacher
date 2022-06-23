@@ -1,23 +1,17 @@
-ul {
-    list-style: none;
-    padding-left: 0px;
-}
-
 .comclass-nav {
-
     margin-bottom: 0px !important;
     background-color: #2d2f5f;
     border-radius: 0px !important;
     height: 70px;
     min-width: 1024px; //ipad portrait
 
-
-    .container-fluid {
-        padding: 0 15px;
+    .main-nav {
+        width: 88%;
     }
 
-    .main-nav {
-        width: 95%;
+    // icon size
+    .mat-icon {
+      font-size:40px;
     }
 
     .class-info {
@@ -42,11 +36,6 @@ ul {
             align-items: center;
             color: lightgray;
             cursor: pointer;
-            text-align: center;
-
-            span {
-                line-height: 1px;
-            }
         }
     }
 
@@ -62,8 +51,8 @@ ul {
         height: 69px;
         display: flex;
         width: 40%;
-        max-width: 600px;
-        min-width: 400px;
+        // max-width: 600px;
+        // min-width: 400px;
 
 
         .color-set,
@@ -93,7 +82,7 @@ ul {
                 }
             }
 
-            div:first-child {
+            div:first-child, div:nth-child(4) {
                 i:before {
                     background-color: lightgray;
                     padding: 1px;
@@ -138,8 +127,8 @@ ul {
     .tool-items {
 
         width: 40%;
-        max-width: 500px;
-        min-width: 350px;
+        // max-width: 500px;
+        // min-width: 350px;
 
         .tool-set {
             display: flex;
@@ -157,45 +146,42 @@ ul {
             // }
 
             button {
-                display: flex;
+                // display: flex;
                 height: 70px;
                 min-width: 70px;
                 padding: 0;
                 margin: 0;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .toolBtn {
-                background-color: #2d2f5f;
+                background-color:transparent;
                 border: 0;
                 color: white;
-                line-height: 1;
+                :hover{
+                    color: rgb(255, 255, 0);
+                }
             }
 
-
-
-            i {
-                cursor: pointer;
-                margin: auto;
-                font-size: 30px;
-                color: lightgray;
+            mat-icon.active {
+              color:yellow;
             }
 
-            i.active {
-                color: #e0e05c;
-            }
+            // i {
+            //     cursor: pointer;
+            //     margin: auto;
+            //     font-size: 30px;
+            //     color: lightgray;
+            // }
 
-            i.sync {
-                color: #8bc34a;
-            }
+            // i.active {
+            //     color: #e0e05c;
+            // }
+
+            // i.sync {
+            //     color: #8bc34a;
+            // }
+
+
         }
 
-
-
     }
-
-
 
     .exit-item {
         i {
@@ -217,14 +203,15 @@ ul {
     Comclass navbar
     */
 
-
-
-
+    .navbar-nav {
+        flex-direction: unset;
+    }
 
     .navbar-header,
     .navbar-nav {
         float: left;
         margin: 0;
+        list-style: none;
     }
 
     .navbar-right {
@@ -240,107 +227,125 @@ ul {
         color: black;
     }
 
-
-    // .comclass .nav.navbar-nav .penTool div,
-    // .comclass .nav.navbar-nav > li:nth-child(3) > div,
-    // .comclass .nav.navbar-nav.navbar-right .comclassExit {
-    //     width: 50px;
-    //     height: 66px;
-    //     position: relative;
-    //     display: inline-block;
-    // }
-
     .comclassExit {
         margin-right: 5px;
     }
 
+}
 
+.navbar {
+    padding: 0px;
 }
 
 
-.color-set,
-.width-set {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    flex: 1 1 auto;
+/*  cursor: not-allowed와 pointer-events:none은 
+    한 곳에서 사용 못하기 때문에  
+    부모에게는 커서 모양, 자식에게는 클릭 기능 제한
+*/
+.wrap {
+    cursor : not-allowed;
 }
 
-.color-set {
-    width: 60%;
-    margin-left: 20px;
-
-    div {
-        display: flex;
-        height: 69px;
-
-        i {
-            font-size: 22px;
-        }
-
-        i:before {
-            background-color: #333;
-            padding: 1px;
-            border-radius: 50%;
-        }
-    }
-
-    div:first-child,
-    div:nth-child(4) {
-        i:before {
-            background-color: lightgray;
-            padding: 1px;
-            border-radius: 50%;
-        }
-    }
-}
-
-.width-set {
-    width: 40%;
-    // margin-left:10px;
-    margin-right: 10px;
-    color: #eee;
-
-    div {
-        display: flex;
-        height: 69px;
-    }
-
-    div:first-child i {
-        font-size: 20px;
-    }
-
-    div:nth-child(2) i {
-        font-size: 30px;
-    }
-
-    div:last-child i {
-        font-size: 40px;
-    }
-}
-
-i {
-    cursor: pointer;
-    margin: auto;
-    // margin-left:10px;
-    // margin-right:10px;
+.participant {
+    /* 클릭 불가능 none */
+    pointer-events : none;
 }
 
 
-::ng-deep .mat-menu-panel .mat-raised-button {
-    width: 100% !important;
-    margin-top: 9px;
-}
-
-::ng-deep .mat-menu-content{
-    padding: 0 !important;
+.cdk-overlay-pane {
+    width: 136px;
 }
 
 // icon
 mat-icon.active {
-  color:yellow;
+    color:yellow;
 }
 
 ic-icon.active {
-  color:yellow;
+    color:yellow;
+}
+
+
+
+@media screen and (max-width: 780px) {
+
+    
+
+    .comclass-nav {
+        margin-left: 0;
+        margin-top: 56px;
+        margin-bottom: 0px !important;
+        background-color: #2d2f5f;
+        border-radius: 0px !important;
+        z-index: 50;
+        width: 100%;
+    }
+
+    .navbar-nav li {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    
+
+    .container-fluid {
+        // display: flex;
+        // padding: 0;
+
+        display: flex;
+        padding: 0;
+        width: 100vh;
+        margin: 0;
+        
+        ul {
+            width: 100vw;
+        }
+ 
+        .class-info_wrap {
+            display: none;
+        }
+
+        .drawing-config {
+            display: flex;
+            width: 100vw;
+            height: 45px;
+
+            .color-set {
+                width: 50%;
+                height: 45px;
+                margin: 0;
+            }          
+
+            .width-set {
+                width: 50px;
+                height: 46px;
+                margin: 0;
+            }
+        }
+
+        .tool-items { 
+            justify-content: space-around;
+            width: 100vw;
+            background-color: #2d2f5f;
+            height: 45px;
+            min-width: 48px;
+            
+            .mat-icon {
+                font-size: 28px;
+            }
+
+            .tool-set {
+                margin-left: 14px;
+                height: 45px;
+                min-width: 48px;
+
+                button {
+                    height: 70px;
+                    min-width: 50px;
+                }
+            }  
+        }
+
+    }
+    
 }

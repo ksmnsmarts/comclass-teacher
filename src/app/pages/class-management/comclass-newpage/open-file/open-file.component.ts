@@ -42,7 +42,7 @@ export class OpenFileComponent implements OnInit {
 
     /**
        * 새로운 File Load (Local)
-       * - @output으로 main component(white-board.component로 전달)
+       * - @output으로 main component(comclass.component로 전달)
        * @param event
        * @returns
        */
@@ -66,7 +66,7 @@ export class OpenFileComponent implements OnInit {
                 type: 'pdf'
             }
             // console.log(result)
-            // @OUTPUT -> white-board component로 전달
+            // @OUTPUT -> comclass component로 전달
             this.eventBusService.emit(new EventData('openFile', result))
             this.dialogRef.close();
             ///////////////////////////////////////////////////////////////////
@@ -104,7 +104,7 @@ export class OpenFileComponent implements OnInit {
                 files: event.target.files,
                 type: 'gstd'
             }
-            // @OUTPUT -> white-board component로 전달
+            // @OUTPUT -> comclass component로 전달
             this.eventBusService.emit(new EventData('openFile', result))
             ///////////////////////////////////////////////////////////////////
             /*---------------------------------------
@@ -143,7 +143,7 @@ export class OpenFileComponent implements OnInit {
                 files: event.target.files,
                 type: 'media'
             }
-            // @OUTPUT -> white-board component로 전달
+            // @OUTPUT -> comclass component로 전달
             this.eventBusService.emit(new EventData('openFile', result))
             ///////////////////////////////////////////////////////////////////
             /*---------------------------------------

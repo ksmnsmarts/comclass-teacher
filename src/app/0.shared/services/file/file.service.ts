@@ -22,6 +22,8 @@ export class FileService {
               - urlFlag: boolean:
               => true: 저장된 file 읽는 경우 => text로 read...
               => false: PDF 문서 불러오는 경우
+
+              -- gstd나 media 기능 추가시 readFile 대신 사용해라
           --------------------------------------------------*/
     async pdfReadFile(file, docFormat) {
         const fileReader = new FileReader();
@@ -38,6 +40,26 @@ export class FileService {
             }
         });
     }
+
+    /**
+    *
+    * File read API
+     - urlFlag: boolean:
+     => true: 저장된 file 읽는 경우 => text로 read...
+     => false: PDF 문서 불러오는 경우
+    * -- gstd나 media 기능 추가시 pdfReadFile 를 사용해라
+    *
+    */
+    readFile(file) {
+        const fileReader = new FileReader();
+        return new Promise(function (resolve, reject) {
+            fileReader.onload = function (e) {
+                resolve((<FileReader>e.target).result);
+            };
+            fileReader.readAsArrayBuffer(file);
+        });
+    }
+
 
     /**
      *
@@ -144,7 +166,7 @@ export class FileService {
         // buffer 형식의 pdf에서 데이터 추출 (페이지 수 등)
         const results = await this.pdfConvert(file);
         // pdf id 랜덤으로 준다.
-        pdfVar._id = Math.random().toString(36).substr(2,11);
+        pdfVar._id = Math.random().toString(36).substr(2, 11);
         pdfVar.pdfPages = results.pdfPages; //pdf 문서의 page별 정보
         pdfVar.pdfDestroy = results.pdfDoc;
         pdfVar.loadedDate = new Date().getTime();

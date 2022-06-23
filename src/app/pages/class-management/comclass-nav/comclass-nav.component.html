@@ -1,22 +1,17 @@
 <nav class="navbar comclass-nav animated fadeInDown">
     <div class="container-fluid">
-        <!-- <div class="navbar-header">
-            <a class="navbar-brand"><img src="../assets/img/comclass/navbar/logo-comclass_.png"></a>
-        </div> -->
 
         <ul class="nav navbar-nav main-nav">
-            <!----------------------------
-                수업 제목 + 학생 수
-            ----------------------------- -->
-            <li>
+
+            <li class="class-info_wrap">
                 <div class="class-info">
-                    <div class="class-name"> 과학 </div>
-                    <div class="student-info" [hidden]="offLine" (click)="clickMenu('studentList')">
-                        <i class="material-icons">
-                            face
-                        </i>
-                        <span>&nbsp; 4</span>
-                    </div>
+                    <div class="class-name"></div>
+                    <!-- <div class="student-info">
+						<i class="material-icons">
+							facew
+						</i>
+						<span>&nbsp;5</span>
+					</div> -->
 
                     <!-- <div class="student-numbers"{{vm.numStudents}}</div> -->
                 </div>
@@ -29,8 +24,6 @@
                             [style.color]="item.color"></i>
                     </div>
                 </div>
-
-
                 <div class="width-set">
                     <!----------------------------
                          Width 선택 부분 (현재 3종)
@@ -45,86 +38,114 @@
 
 
             <li class="tool-items">
-
                 <div class="tool-set">
-                    <!-- Pen -->
-                    <button class="toolBtn" (click)="changeTool('pen');" aria-label="change tool">
-                        <i class="material-icons" [ngClass]="(currentTool == 'pen') && (mode == 'draw')?'active':''">
-                            edit
-                        </i>
-                    </button>
-                    <!-- Eraser -->
-                    <button class="toolBtn" (click)="changeTool('eraser');" mat-icon-button>
-                        <ic-icon [icon]="eraserIcon" [width]="30" [height]="30" [align]="'center'"
-                            [ngClass]="(currentTool == 'eraser') && (mode == 'draw')?'active':''"></ic-icon>
-                    </button>
 
-                    <!-- Pan -->
-                    <button class="toolBtn" (click)="changeMode('move');" aria-label="move">
-                        <mat-icon [ngClass]="(mode == 'move')?'active':''"> open_with </mat-icon>
-                    </button>
+                    <!-- <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
+                        <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' " (click)="changeTool('pointer');" mat-icon-button>
+                            <mat-icon [ngClass]="(currentTool == 'pointer') && (mode == 'draw')?'active':''">
+                                radio_button_checked
+                            </mat-icon>
+                        </button>
+                    </div> -->
 
-                    <!-- sync button -->
-                    <button class="toolBtn" ng-if="!offLine" (click)="changeSyncState($event);" aria-label="link">
-                        <mat-icon> link </mat-icon>
-                    </button>
+                    <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
+                        <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' "
+                            (click)="changeTool('pen');" mat-icon-button>
+                            <mat-icon [ngClass]="(currentTool == 'pen') && (mode == 'draw')?'active':''" >draw</mat-icon>
+                        </button>
+                    </div>
 
+                    <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
+                        <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' "
+                            (click)="changeTool('highlighter');" mat-icon-button>
+                            <ic-icon [icon]="markerIcon" [width]="30" [height]="30" [ngClass]="(currentTool == 'highlighter') && (mode == 'draw')?'active':''" ></ic-icon>
+                            <span class="iconify" data-icon="mdi:marker"></span>
+                        </button>
+                    </div>
+
+                    <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
+                        <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' "
+                            (click)="changeTool('eraser');" mat-icon-button>
+                            <!-- <mat-icon [ngClass]="(currentTool == 'eraser') && (mode == 'draw')?'active':''">crop_square
+                            </mat-icon> -->
+                            <ic-icon [icon]="eraserIcon" [width]="40" [height]="40" [ngClass]="(currentTool == 'eraser') && (mode == 'draw')?'active':''"></ic-icon>
+                        </button>
+                    </div>
+
+                    <!-- <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
+                        <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' "
+                            (click)="changeTool('textarea');" mat-icon-button>
+                            <mat-icon [ngClass]="(currentTool == 'textarea' || currentTool == 'text') && (mode == 'draw')?'active':''" >title</mat-icon>
+                        </button>
+                    </div> -->
+                    
 
                     <div>
-                        <button mat-button [matMenuTriggerFor]="menu">
-                            <mat-icon>more_horiz</mat-icon>
+                        <button type="button" (click)="changeMode('move');" mat-icon-button>
+                            <mat-icon [ngClass]="(mode == 'move')?'active':''" > open_with </mat-icon>
                         </button>
-
-                        <mat-menu width="4" #menu="matMenu">
-                            <div class="menuBtn">
-                                <button mat-raised-button (click)="clickMenu('open')" ng-disabled="isGuideMode">
-                                    <mat-icon>folder_open</mat-icon>
-                                    파일열기
-                                </button>
-                            </div>
-                            <div class="menuBtn">
-                                <button mat-raised-button (click)="clickMenu('save')"
-                                    ng-disabled='!isDocLoaded || isGuideMode'>
-                                    <mat-icon>save</mat-icon>
-                                    저장
-                                </button>
-                            </div>
-                            <div class="menuBtn">
-                                <button mat-raised-button (click)="clickMenu('init')"
-                                    ng-disabled="!isDocLoaded || isGuideMode">
-                                    <mat-icon>refresh</mat-icon>
-                                    초기화
-                                </button>
-                            </div>
-
-                            <div class="menuBtn">
-                                <button mat-raised-button (click)="clickMenu('exam')" ng-disabled='offLine'>
-                                    <mat-icon>view_list</mat-icon>
-                                    시험출제
-                                </button>
-                            </div>
-                        </mat-menu>
                     </div>
 
 
+                    <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
+                        <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' " (click)="changeTool('line');" mat-icon-button mat-button
+                        [matMenuTriggerFor]="shapeMemu">
+                        <!-- <mat-icon
+                            [ngClass]="(currentTool == 'line' || currentTool == 'circle'  ||currentTool == 'rectangle' || currentTool == 'roundedRectangle' ) && (mode == 'draw')?'active':''">
+                            star_border_purple500 </mat-icon> -->
+                            <!-- interests -->
+                            <ic-icon [icon]="shapeOutlineIcon" [width]="40" [height]="40" [ngClass]="(currentTool == 'line' || currentTool == 'circle'  ||currentTool == 'rectangle' || currentTool == 'roundedRectangle' ) && (mode == 'draw')?'active':''"></ic-icon>
+                        </button>
+                    </div>
+                    
+                    <mat-menu #shapeMemu="matMenu" class="menuCustomize">
+                        <div fxFlex fxLayout="row">
 
+                            <div (click)="changeTool('line');">
+                                <button mat-menu-item [ngClass]="(currentTool == 'line') && (mode == 'draw')?'active':''">
+                                    <mat-icon>remove</mat-icon>
+                                </button>
+                            </div>
+                            <div (click)="changeTool('circle');">
+                                <button mat-menu-item [ngClass]="(currentTool == 'circle') && (mode == 'draw')?'active':''">
+                                    <mat-icon>panorama_fish_eye</mat-icon>
+                                </button>
+                            </div>
+                            <div (click)="changeTool('rectangle');">
+                                <button mat-menu-item [ngClass]="(currentTool == 'rectangle') && (mode == 'draw')?'active':''">
+                                    <mat-icon>crop_din</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- 버그 수정중 -->
+                        <!-- <button type="button" (click)="changeTool('roundedRectangle');" mat-icon-button>
+                            <mat-icon [ngClass]="(currentTool == 'roundedRectangle') && (mode == 'draw')?'active':''">
+                                crop_3_2
+                            </mat-icon>
+                        </button> -->
+                    </mat-menu>
 
-                    <!-- More Menu -->
-
+                    <!-- <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
+                        <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' "
+                            (click)="changeTool('textarea');" mat-icon-button>
+                            
+                            <mat-icon [ngClass]="(currentTool == 'textarea') && (mode == 'draw')?'active':''"> title </mat-icon>
+                        </button>
+                    </div> -->
 
                 </div>
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li class="exit-item">
-                <!-- <div class="nav_menu comclass-exit" ng-click="vm.select.Menu == 'exit'? vm.select.Menu = null : vm.select.Menu = 'exit'">                     -->
-                <div class="nav_menu comclass-exit" (click)="clickMenu('exit')">
+            <!-- <li class="exit-item">
+        <div class="nav_menu comclass-exit">
 
-                    <i class="material-icons" ng-class="(vm.select.Menu == 'exit')?'active':''">
-                        exit_to_app
-                    </i>
-                </div>
-            </li>
+          <i class="material-icons">
+            exit_to_app
+          </i>
+        </div>
+      </li> -->
         </ul>
     </div>
 </nav>

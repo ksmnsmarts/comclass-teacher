@@ -51,5 +51,5 @@ export const DRAWING_TYPE = {
 ------------------------*/
 export const PDF_VERSION = {
 	pdfVersion: '0.0.1',
-	version: 'white-board-cloud',
+	version: 'comclass-cloud',
 }
