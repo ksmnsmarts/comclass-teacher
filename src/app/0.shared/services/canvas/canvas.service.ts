@@ -360,7 +360,7 @@ export class CanvasService {
 
 			points = [];
 
-			console.log('upEvent', points)
+			// console.log('upEvent', points)
 		};
 		/**
 		 * canvas 초기화

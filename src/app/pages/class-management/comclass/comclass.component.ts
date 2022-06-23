@@ -132,6 +132,7 @@ export class ComclassComponent implements OnInit {
         /////////////////////////////////////////////////////////
         // 새로운 판서 Event local 저장 + 서버 전송
         this.eventBusService.on('gen:newDrawEvent', this.unsubscribe$, async (data) => {
+            console.log(data)
             const pageInfo = this.viewInfoService.state.pageInfo;
             // local Store 저장
             if (data.tool.type != 'pointer') {
@@ -145,7 +146,7 @@ export class ComclassComponent implements OnInit {
                 pageNum: pageInfo.currentPage
             }
 
-            // console.log(newDataEvent);
+            console.log(newDataEvent);
 
             this.socket.emit('draw:teacher', newDataEvent);
 
