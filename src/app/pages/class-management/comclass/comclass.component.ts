@@ -257,7 +257,6 @@ export class ComclassComponent implements OnInit {
         for (let i = 0; i < result.docResult.length; i++) {
             // this._docIdList.push(result.docResult[i]._id);
             const updatedTime = result.docResult[i].updatedAt;
-
             ////////////////////////////////////////////////////////////////////////
             // PDF File Buffer update
             // pdf가 load된 시간을 비교하여 변경된 경우에만 file 요청)
@@ -271,7 +270,6 @@ export class ComclassComponent implements OnInit {
 
                     // PDF File 정보 요청
                     const res = await this.comclassService.getPdfFile(data).toPromise()
-
                     console.log(res)
 
 
