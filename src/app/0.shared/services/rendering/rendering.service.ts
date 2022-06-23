@@ -31,7 +31,7 @@ export class RenderingService {
    */
   async renderThumbBackground(imgElement, pdfNum, pageNum) {
     const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
-
+    console.log(pdfPage)
     // 배경 처리를 위한 임시 canvas
     const tmpCanvas = document.createElement('canvas');
     const tmpCtx = tmpCanvas.getContext("2d");

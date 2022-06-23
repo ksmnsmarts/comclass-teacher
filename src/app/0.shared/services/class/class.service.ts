@@ -35,7 +35,7 @@ export class ClassService {
 
     // 각 pdf 요청
     getPdfFile(data) {
-        console.log('[API] -----> get: document');
+        console.log('[API] -----> get: document', data);
         return this.http.get('/api/v1/admin/classInfo/getPdfFile/', { responseType: 'blob', params: data});
     }
 

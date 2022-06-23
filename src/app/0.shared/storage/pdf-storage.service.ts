@@ -55,7 +55,6 @@ export class PdfStorageService {
      */
     memoryRelease() {
         // console.log('PDF Memeory Release');
-
         for (const item of this._pdfVarArray) {
             if (item.pdfDestroy) {
                 item.pdfDestroy.cleanup();

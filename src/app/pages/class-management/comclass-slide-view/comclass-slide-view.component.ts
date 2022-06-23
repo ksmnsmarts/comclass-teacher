@@ -150,7 +150,7 @@ export class ComclassSlideViewComponent implements OnInit {
 	}
 
 
-	ngOnDestory(): void {
+	ngOnDestroy(): void {
 		// unsubscribe all subscription
 		this.unsubscribe$.next();
 		this.unsubscribe$.complete();
