@@ -229,7 +229,7 @@ export class ComclassComponent implements OnInit {
 
         ///////////////////////////////////////////////////////////////////
         /*---------------------------------------
-          pdf 업로드 시 spinner 
+          pdf 업로드 시 spinner
         -----------------------------------------*/
         this.eventBusService.on('spinner', this.unsubscribe$, (dialogRef) => {
             this.spinner = dialogRef;
