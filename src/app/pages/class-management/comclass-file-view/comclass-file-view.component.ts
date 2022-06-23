@@ -73,6 +73,10 @@ export class ComclassFileViewComponent implements OnInit {
                   this.renderFileList();
                 }
 
+                if(this.documentInfo) {
+                    this.renderFileList();
+                }
+
             });
 
 
@@ -97,11 +101,10 @@ export class ComclassFileViewComponent implements OnInit {
 
     }
 
-    ngOnDestory(): void {
+    ngOnDestroy(): void {
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
-
-      this.viewInfoService.memoryRelease();
+        this.viewInfoService.memoryRelease();
     }
 
 

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
+import { lastValueFrom, Subject } from 'rxjs';
 import { pluck, takeUntil } from 'rxjs/operators';
 
 import { ApiService } from 'src/app/0.shared/services/apiService/api.service';
@@ -158,7 +158,7 @@ export class ComclassComponent implements OnInit {
         // unsubscribe all subscription
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
-
+        this.pdfStorageService.memoryRelease();
         // socket off
         this.socket.off("draw:teacher");
         this.socket.off("check:documents");
@@ -219,8 +219,6 @@ export class ComclassComponent implements OnInit {
         // 1. get PDF File & Generate Pdf File Buffer
         const docResult = await this.generatePdfData(result);
 
-        console.log(docResult)
-
         // 2. PDF DRAW Storage Update
         await this.updatePdfAndDrawStorage(docResult);
 
@@ -257,29 +255,29 @@ export class ComclassComponent implements OnInit {
         for (let i = 0; i < result.docResult.length; i++) {
             // this._docIdList.push(result.docResult[i]._id);
             const updatedTime = result.docResult[i].updatedAt;
+            console.log("[[[ result length ]]]", result.docResult.length);
+            console.log("[[[ result i ]]]", i);
             ////////////////////////////////////////////////////////////////////////
             // PDF File Buffer update
             // pdf가 load된 시간을 비교하여 변경된 경우에만 file 요청)
             // https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Optional_chaining
             if (pdfArrayVar[i]?.updatedAt !== updatedTime) {
                 try {
-
+                    console.log(result.docResult[i]._id)
                     const data = {
                         _id: result.docResult[i]._id
                     }
 
                     // PDF File 정보 요청
-                    const res = await this.comclassService.getPdfFile(data).toPromise()
-                    console.log(res)
-
+                    const res = await lastValueFrom(this.comclassService.getPdfFile(data));
 
                     // Array buffer로 변환
                     const file = await this.fileService.readFile(res);
 
-                    console.log(file)
                     result.docResult[i].fileBuffer = file;
 
-                    console.log('111111111111111111111111111')
+                    console.log(file)
+
                 } catch (err) {
                     console.log(err);
                     return err;
@@ -288,17 +286,11 @@ export class ComclassComponent implements OnInit {
 
             // 이미 있는 filebuffer에 대해서는 기존 array buffer값을 복사
             else {
-                console.log('2222222222222222222222222222222222222222222222222')
                 result.docResult[i].fileBuffer = pdfArrayVar[i].fileBuffer;
             }
             ////////////////////////////////////////////////////////////////////////
 
-            console.log(result.docResult)
         }
-        console.log('3333333333333333333333333333333333333333333333333')
-        // console.log(result.docResult[0])
-        // console.log(result)
-        console.log(result)
         return result.docResult;
 
     }
@@ -311,7 +303,6 @@ export class ComclassComponent implements OnInit {
     async updatePdfAndDrawStorage(documentData) {
 
         console.log(">> do:update Pdf And Draw Storage");
-        console.log(documentData)
 
         /*---------------------------------------
           pdf 관련 변수 초기화 : 기존의 pdf clear 및 destroy 수행
