@@ -69,8 +69,10 @@ export class ComclassFileViewComponent implements OnInit {
                 this.documentInfo = documentInfo;
                 console.log(this.documentInfo)
                 await new Promise(res => setTimeout(res, 0));
+                if (this.documentInfo){
+                  this.renderFileList();
+                }
 
-                this.renderFileList();
             });
 
 
@@ -98,6 +100,8 @@ export class ComclassFileViewComponent implements OnInit {
     ngOnDestory(): void {
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
+
+      this.viewInfoService.memoryRelease();
     }
 
 
@@ -176,7 +180,7 @@ export class ComclassFileViewComponent implements OnInit {
 
             ///////////////////////////////////////////////////////////////////
             /*---------------------------------------
-            pdf 업로드 시 spinner 
+            pdf 업로드 시 spinner
             -----------------------------------------*/
             const dialogRef = this.dialog.open(SpinnerDialogComponent, {
                 // width: '300px',
@@ -219,7 +223,7 @@ export class ComclassFileViewComponent implements OnInit {
 
                 ///////////////////////////////////////////////////////////////////
                 /*---------------------------------------
-                    pdf 삭제 시 spinner 
+                    pdf 삭제 시 spinner
                 -----------------------------------------*/
                 const dialogRef = this.dialog.open(SpinnerDialogComponent, {
                     // width: '300px',
