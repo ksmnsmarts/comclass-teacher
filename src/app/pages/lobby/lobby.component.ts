@@ -60,7 +60,6 @@ export class LobbyComponent implements OnInit {
     openClass(meeting) {
         console.log(meeting)
         this.router.navigate([`comclass/${meeting?._id}`]);
-        this.classInfoService.setClassInfo(meeting);
     }
 
 }

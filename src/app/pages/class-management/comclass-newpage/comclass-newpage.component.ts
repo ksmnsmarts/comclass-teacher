@@ -24,8 +24,6 @@ export class ComclassNewpageComponent implements OnInit {
     ngOnInit(): void {
         this.route.params.subscribe(params => {
             this.classId = params;
-
-            console.log(this.classId)
         });
     }
 

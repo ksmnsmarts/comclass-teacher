@@ -23,8 +23,19 @@ export class ClassService {
 
     // 파일 업로드
     uploadDocument(formData, classId) {
-        console.log(formData, classId)
         return this.http.post(`/api/v1/admin/classInfo/upload/${classId}`, formData);
+    }
+
+    // 문서 정보 불러오기
+    getDocumentsInfo(data) {
+        console.log('[API] -----> get: Document Info');
+        return this.http.get(`/api/v1/admin/classInfo/documentInfo`, {params: data})
+    }
+
+    // 각 pdf 요청
+    getPdfFile(data) {
+        console.log('[API] -----> get: document');
+        return this.http.get('/api/v1/admin/classInfo/getPdfFile/', { responseType: 'blob', params: data});
     }
 
 }

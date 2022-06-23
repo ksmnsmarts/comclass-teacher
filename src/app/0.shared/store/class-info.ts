@@ -10,9 +10,9 @@ export class ClassInfoService extends Store<any> {
 		super({});
 	}
 
-  setClassInfo(ClassInfo : any) : void {
+  setClassInfo(classInfo : any) : void {
     this.setState({
-      ...this.state, ...ClassInfo
+      ...this.state, ...classInfo
     });
   }
 

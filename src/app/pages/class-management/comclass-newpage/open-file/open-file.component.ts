@@ -54,7 +54,7 @@ export class OpenFileComponent implements OnInit {
         if (event.target.files.length === 0) {
             console.log('file 안들어옴');
             return;
-        }       
+        }
 
         // 파일 유효성 검사
         const ext = (files[0].name).substring((files[0].name).lastIndexOf('.') + 1);
@@ -62,8 +62,8 @@ export class OpenFileComponent implements OnInit {
             this.dialogService.openDialogNegative(`Please, upload the '.pdf' file.`);
         } else {
             const result = {
-                files : event.target.files,
-                type : 'pdf'
+                files: event.target.files,
+                type: 'pdf'
             }
             // console.log(result)
             // @OUTPUT -> white-board component로 전달
@@ -101,8 +101,8 @@ export class OpenFileComponent implements OnInit {
         } else {
 
             const result = {
-                files : event.target.files,
-                type : 'gstd'
+                files: event.target.files,
+                type: 'gstd'
             }
             // @OUTPUT -> white-board component로 전달
             this.eventBusService.emit(new EventData('openFile', result))
@@ -133,15 +133,15 @@ export class OpenFileComponent implements OnInit {
         let result;
         // 파일 유효성 검사
         const ext = (files[0].name).substring((files[0].name).lastIndexOf('.') + 1);
-        if (!(ext.toLowerCase() == 'mp3' &&  ext.toLowerCase() == 'wav' && ext.toLowerCase() == 'avi' &&
-        ext.toLowerCase() == 'mpg' && ext.toLowerCase() == 'mpeg' && ext.toLowerCase() == 'mp4'
+        if (!(ext.toLowerCase() == 'mp3' && ext.toLowerCase() == 'wav' && ext.toLowerCase() == 'avi' &&
+            ext.toLowerCase() == 'mpg' && ext.toLowerCase() == 'mpeg' && ext.toLowerCase() == 'mp4'
         )) {
             this.dialogService.openDialogNegative(`Please, upload the '.pdf' file.`);
         } else {
 
             const result = {
-                files : event.target.files,
-                type : 'media'
+                files: event.target.files,
+                type: 'media'
             }
             // @OUTPUT -> white-board component로 전달
             this.eventBusService.emit(new EventData('openFile', result))

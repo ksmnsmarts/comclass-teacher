@@ -60,11 +60,7 @@ export class ComclassFileViewComponent implements OnInit {
             .subscribe(async (documentInfo) => {
                 this.documentInfo = documentInfo;
                 await new Promise(res => setTimeout(res, 0));
-
-                console.log(this.documentInfo)
-
-                    this.renderFileList();
-                
+                this.renderFileList();                
             });
     }
 
