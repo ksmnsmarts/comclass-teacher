@@ -12,21 +12,10 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = './assets/lib/pdf/pdf.worker.js';
 export class PdfStorageService {
     private _pdfVarArray: Array<any> = [];
 
-
-    private pdfVar= {
-        fileBuffer: [], // pdf의 실제 array buffer : 저장 및 공유용도.
-        loadedDate: [], // file buffer별 로딩 시간 저장
-        pagePerFileBuffer: [], // file buffer별 page 수 => 사용하지는 않음.
-        // version: CONFIG.pdfVersion, // 문서 버전 표시 => 추후 cloud와 연동등 고려.
-        pdfDestroy: [] // PDF 객체 자체 => destory를 위해서 저장
-    }
-
-
     constructor() { }
 
 
     get pdfVarArray(): any {
-
         return [...this._pdfVarArray];
     }
 
@@ -55,7 +44,7 @@ export class PdfStorageService {
     */
     getViewportSize(docNum, pageNum) {
         // console.log(`> get ViewPort size: docNum : ${docNum}, pageNum : ${pageNum}`);
-        return this._pdfVarArray[docNum - 1]?.pdfPages[pageNum - 1].getViewport({ scale: 1 });
+        return this._pdfVarArray[docNum - 1].pdfPages[pageNum - 1].getViewport({ scale: 1 });
     }
 
     /**
@@ -81,18 +70,5 @@ export class PdfStorageService {
             item.pdfPages = [];
 
         }
-    }
-
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    
-
-    getPdfVar() {
-        return this.pdfVar;
-    }
-
-    setPdfVar(pdfVar) {
-        this.pdfVar = pdfVar;
     }
 }

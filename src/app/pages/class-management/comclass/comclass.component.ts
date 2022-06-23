@@ -252,7 +252,7 @@ export class ComclassComponent implements OnInit {
 
     async generatePdfData(result) {
         const pdfArrayVar = this.pdfStorageService.pdfVarArray;
-        console.log(result)
+
         // document 길이에 따라 반복 수행
         for (let i = 0; i < result.docResult.length; i++) {
             // this._docIdList.push(result.docResult[i]._id);
@@ -271,12 +271,17 @@ export class ComclassComponent implements OnInit {
 
                     // PDF File 정보 요청
                     const res = await this.comclassService.getPdfFile(data).toPromise()
+
                     console.log(res)
+
+
                     // Array buffer로 변환
                     const file = await this.fileService.readFile(res);
+
                     console.log(file)
                     result.docResult[i].fileBuffer = file;
-                    console.log(result.docResult[i].fileBuffer)
+
+                    console.log('111111111111111111111111111')
                 } catch (err) {
                     console.log(err);
                     return err;
@@ -285,14 +290,17 @@ export class ComclassComponent implements OnInit {
 
             // 이미 있는 filebuffer에 대해서는 기존 array buffer값을 복사
             else {
+                console.log('2222222222222222222222222222222222222222222222222')
                 result.docResult[i].fileBuffer = pdfArrayVar[i].fileBuffer;
             }
             ////////////////////////////////////////////////////////////////////////
+
+            console.log(result.docResult)
         }
-        console.log('-----------------------')
+        console.log('3333333333333333333333333333333333333333333333333')
         // console.log(result.docResult[0])
         // console.log(result)
-        // console.log(result.docResult)
+        console.log(result)
         return result.docResult;
 
     }
