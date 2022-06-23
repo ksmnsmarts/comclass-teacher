@@ -51,9 +51,6 @@
         height: 69px;
         display: flex;
         width: 40%;
-        // max-width: 600px;
-        // min-width: 400px;
-
 
         .color-set,
         .width-set {
@@ -93,7 +90,6 @@
 
         .width-set {
             width: 40%;
-            // margin-left:10px;
             margin-right: 10px;
             color: #eee;
 
@@ -118,18 +114,12 @@
         i {
             cursor: pointer;
             margin: auto;
-            // margin-left:10px;
-            // margin-right:10px;
         }
 
     }
 
     .tool-items {
-
         width: 40%;
-        // max-width: 500px;
-        // min-width: 350px;
-
         .tool-set {
             display: flex;
             align-items: center;
@@ -139,11 +129,6 @@
             margin-right: 10px;
             color: lightgray;
 
-            // div {
-            // display:flex;
-            // height:69px;
-            // width:70px;
-            // }
 
             button {
                 // display: flex;
@@ -154,6 +139,7 @@
                 background-color:transparent;
                 border: 0;
                 color: white;
+                line-height: 1;
                 :hover{
                     color: rgb(255, 255, 0);
                 }
@@ -162,23 +148,6 @@
             mat-icon.active {
               color:yellow;
             }
-
-            // i {
-            //     cursor: pointer;
-            //     margin: auto;
-            //     font-size: 30px;
-            //     color: lightgray;
-            // }
-
-            // i.active {
-            //     color: #e0e05c;
-            // }
-
-            // i.sync {
-            //     color: #8bc34a;
-            // }
-
-
         }
 
     }
