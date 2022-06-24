@@ -3,13 +3,13 @@
 
         <ul class="nav navbar-nav main-nav">
 
-            <li class="class-info_wrap">
+            <li class="class-info">
                 <div class="class-name">{{classInfo.subject}} </div>
                 <div class="student-info" ng-show="!vm.offLine" ng-click="vm.clickMenu('studentList', $event)">
                   <i class="material-icons">
                     face
                   </i>
-                  <span>&nbsp;{{classInfo.teacher}}</span>
+                  <span>&nbsp;{{studentCount}}</span>
                 </div>
             </li>
 

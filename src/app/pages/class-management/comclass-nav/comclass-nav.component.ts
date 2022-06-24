@@ -42,14 +42,15 @@ export class ComclassNavComponent implements OnInit {
     currentDocNum: any;
     currentPage: any;
     currentDocId: string;
+    studentCount: any;
     private socket;
 
-    classInfo:any;
-     // iconify TEST //////////////////////
+    classInfo: any;
+    // iconify TEST //////////////////////
     eraserIcon = eraserIcon;
     shapeOutlineIcon = shapeOutlineIcon;
     markerIcon = markerIcon;
-  //////////////////////////////////////
+    //////////////////////////////////////
 
     // Width: 3단계 설정
     widthSet = CANVAS_CONFIG.widthSet;
@@ -77,20 +78,22 @@ export class ComclassNavComponent implements OnInit {
         private viewInfoService: ViewInfoService,
         private apiService: ApiService,
         private socketService: SocketService,
-        private classInfoService:ClassInfoService
+        private classInfoService: ClassInfoService
     ) {
         this.socket = this.socketService.socket;
     }
 
 
     ngOnInit(): void {
-      this.classInfoService.state$
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((classInfo) => {
-          if (classInfo){
-            this.classInfo = classInfo
-          }
-        });
+        this.classInfoService.state$
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((classInfo) => {
+                if (classInfo) {
+
+                    console.log(this.classInfo)
+                    this.classInfo = classInfo
+                }
+            });
 
         // 현재 Page 변경
         this.viewInfoService.state$
@@ -134,6 +137,13 @@ export class ComclassNavComponent implements OnInit {
             }
 
         })
+
+        this.socket.on('studentCount', (data) => {
+            console.log('<--- [SOCKET] 현재 참가자 수', data);
+            console.log(typeof(data))
+            this.studentCount = data -1;
+
+        });
     }
 
 
@@ -172,10 +182,10 @@ export class ComclassNavComponent implements OnInit {
         if (editInfo.mode != 'draw') return;
 
         // textarea 모드거나 text모드 상태에서 width를 수정하면 같이 바뀥다.
-        if(editInfo.tool == 'text' || editInfo.tool == 'textarea'){
+        if (editInfo.tool == 'text' || editInfo.tool == 'textarea') {
             editInfo.toolsConfig['text'].width = width;
             editInfo.toolsConfig['textarea'].width = width;
-          } else {
+        } else {
             const tool = editInfo.tool; // tool: 'pen', 'eraser', 'shape'
             editInfo.toolsConfig[tool].width = width;
         }
@@ -195,7 +205,7 @@ export class ComclassNavComponent implements OnInit {
 
 
         if (editInfo.tool == 'eraser' && editInfo.mode == 'draw' && tool == 'eraser') {
-            if(confirm("Do you want to delete all drawings on the current page?")){
+            if (confirm("Do you want to delete all drawings on the current page?")) {
                 const data = {
                     docId: this.currentDocId,
                     currentDocNum: this.currentDocNum,
