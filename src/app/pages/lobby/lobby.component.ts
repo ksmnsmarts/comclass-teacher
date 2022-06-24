@@ -7,6 +7,7 @@ import { AddClassComponent } from './add-class/add-class.component';
 import { SocketService } from '../../0.shared/services/socket/socket.service';
 import { ClassInfoService } from '../../0.shared/store/class-info'
 import { Subject, takeUntil } from 'rxjs';
+import { MeetingInfoService } from 'src/app/0.shared/store/meeting-info.service';
 
 @Component({
     selector: 'app-lobby',
@@ -23,7 +24,9 @@ export class LobbyComponent implements OnInit {
         private classService: ClassService,
         private router: Router,
         private socketService: SocketService,
-        private classInfoService: ClassInfoService
+        private classInfoService: ClassInfoService,
+
+        private sockService: SocketService,
     ) {
         this.socket = socketService.socket;
     }
@@ -50,7 +53,7 @@ export class LobbyComponent implements OnInit {
 
     // 수업 목록 가져오기
     getClass() {
-        this.classService.getClass().subscribe((data)=> {
+        this.classService.getClass().subscribe((data) => {
             this.meetingList = data;
 
         })
@@ -58,7 +61,6 @@ export class LobbyComponent implements OnInit {
 
     // 수업 개설
     openClass(meeting) {
-        console.log(meeting)
         this.router.navigate([`comclass/${meeting?._id}`]);
     }
 

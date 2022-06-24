@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { lastValueFrom, Subject } from 'rxjs';
 import { pluck, takeUntil } from 'rxjs/operators';
 
-import { ApiService } from 'src/app/0.shared/services/apiService/api.service';
 import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
 import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
 
@@ -10,7 +9,6 @@ import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { FileService } from 'src/app/0.shared/services/file/file.service';
 import { ZoomService } from 'src/app/0.shared/services/zoom/zoom.service'
 
-import { MeetingInfoService } from 'src/app/0.shared/store/meeting-info.service';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
@@ -18,6 +16,7 @@ import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.servic
 
 import { ActivatedRoute } from '@angular/router';
 import { ClassService } from 'src/app/0.shared/services/class/class.service';
+import { ClassInfoService } from 'src/app/0.shared/store/class-info';
 
 
 
@@ -54,10 +53,9 @@ export class ComclassComponent implements OnInit {
 
     constructor(
         private comclassService: ClassService,
-        private meetingInfoService: MeetingInfoService,
         private viewInfoService: ViewInfoService,
         private eventBusService: EventBusService,
-
+        private classInfoService: ClassInfoService,
         private pdfStorageService: PdfStorageService,
         private drawStorageService: DrawStorageService,
         private fileService: FileService,
@@ -75,7 +73,8 @@ export class ComclassComponent implements OnInit {
         ////////////////////////////////////////////////
         // param을 가져와 룸 번호 클래스 생성
         this.classId = this.route.snapshot.params['id'];
-        this.socket.emit('join:class', this.classId);
+        // this.socket.emit('join:class', this.classId);
+        this.getMeetingInfo()
         this.updateDocuments();
         ////////////////////////////////////////////////
 
@@ -163,9 +162,17 @@ export class ComclassComponent implements OnInit {
         // socket off
         this.socket.off("draw:teacher");
         this.socket.off("check:documents");
-
+        this.socket.close()
     }
 
+    async getMeetingInfo(){
+      const data = {
+        _id: this.classId
+      }
+      const classInfo: any = await lastValueFrom(this.comclassService.getClassInfo(data))
+      this.socket.emit('join:class', classInfo);
+      this.classInfoService.setClassInfo(classInfo);
+    }
     /**
      * Open Local PDF File
      *  - Board File View Component의 @output

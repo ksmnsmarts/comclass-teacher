@@ -16,6 +16,11 @@ export class ClassService {
         return this.http.get('/api/v1/admin/classInfo/getClass');
     }
 
+    // 수업 가져오기
+    getClassInfo(data) {
+      return this.http.get('/api/v1/admin/classInfo/getClassInfo', { params: data });
+    }
+
     // 수업 등록
     addClass(data) {
         return this.http.post('/api/v1/admin/classInfo/addClass', data);

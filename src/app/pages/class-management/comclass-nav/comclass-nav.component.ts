@@ -17,6 +17,7 @@ import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
 import eraserIcon from '@iconify/icons-mdi/eraser';
 import markerIcon from '@iconify/icons-mdi/marker';
 import shapeOutlineIcon from '@iconify/icons-mdi/shape-outline';
+import { ClassInfoService } from 'src/app/0.shared/store/class-info';
 
 
 
@@ -42,8 +43,8 @@ export class ComclassNavComponent implements OnInit {
     currentPage: any;
     currentDocId: string;
     private socket;
-    
 
+    classInfo:any;
      // iconify TEST //////////////////////
     eraserIcon = eraserIcon;
     shapeOutlineIcon = shapeOutlineIcon;
@@ -76,12 +77,21 @@ export class ComclassNavComponent implements OnInit {
         private viewInfoService: ViewInfoService,
         private apiService: ApiService,
         private socketService: SocketService,
+        private classInfoService:ClassInfoService
     ) {
         this.socket = this.socketService.socket;
     }
 
 
     ngOnInit(): void {
+      this.classInfoService.state$
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe((classInfo) => {
+          if (classInfo){
+            this.classInfo = classInfo
+          }
+        });
+
         // 현재 Page 변경
         this.viewInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'), distinctUntilChanged())
@@ -182,7 +192,7 @@ export class ComclassNavComponent implements OnInit {
     async changeTool(tool) {
         // console.log(tool)
         const editInfo = Object.assign({}, this.editInfoService.state);
-        
+
 
         if (editInfo.tool == 'eraser' && editInfo.mode == 'draw' && tool == 'eraser') {
             if(confirm("Do you want to delete all drawings on the current page?")){
