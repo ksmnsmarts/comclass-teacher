@@ -181,6 +181,7 @@ export class ComclassComponent implements OnInit {
         _id: this.classId
       }
       const classInfo: any = await lastValueFrom(this.comclassService.getClassInfo(data))
+      console.log(classInfo)
       this.socket.emit('join:class', classInfo);
       this.classInfoService.setClassInfo(classInfo);
     }
