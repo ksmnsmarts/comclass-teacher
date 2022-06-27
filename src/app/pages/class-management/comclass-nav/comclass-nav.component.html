@@ -5,7 +5,7 @@
 
             <li class="class-info">
                 <div class="class-name">{{classInfo.subject}} </div>
-                <div class="student-info" ng-show="!vm.offLine" ng-click="vm.clickMenu('studentList', $event)">
+                <div class="student-info" ng-show="!vm.offLine" (click)="studentList()">
                   <i class="material-icons">
                     face
                   </i>

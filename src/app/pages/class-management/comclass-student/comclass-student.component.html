@@ -1,1 +1,40 @@
-<p>comclass-student works!</p>
+<div class="student-list-sidenav">
+	<mat-toolbar class="toolbar_container" layout="row"> 
+        <h1>학생 리스트</h1> 
+
+        <div class="nav_button">
+            <button class="selectPresenterBtn" *ngIf="studentCount > 0">
+                발표자 선정
+            </button>
+    
+            <button class="clearBtn" (click)="clearBtn()">
+                <mat-icon>clear</mat-icon>
+            </button>
+        </div>
+    </mat-toolbar>
+    
+	
+    <div>
+        <!-- 학생 모니터링 정보 => 추후 위치 이동... -->
+		<div class="monitoringPage" id="monitoring-page">
+            <div *ngIf="studentCount == 0">
+                <span class="studentNothing">
+                    현재 접속한 학생이 없습니다.
+                </span>
+            </div>
+            <div *ngIf="studentCount > 0">
+                <div *ngFor="let student of studentList">
+                    <div class="studentScreen" >
+                        <canvas student-monitoring ></canvas>
+                    </div>
+                    <div class="studentId" ><span>이름 ( page: 1 )</span></div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+      
+</div>
+
+			
+

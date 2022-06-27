@@ -18,6 +18,7 @@ import eraserIcon from '@iconify/icons-mdi/eraser';
 import markerIcon from '@iconify/icons-mdi/marker';
 import shapeOutlineIcon from '@iconify/icons-mdi/shape-outline';
 import { ClassInfoService } from 'src/app/0.shared/store/class-info';
+import { StudentInfoService } from 'src/app/0.shared/store/student-info.service';
 
 
 
@@ -42,7 +43,7 @@ export class ComclassNavComponent implements OnInit {
     currentDocNum: any;
     currentPage: any;
     currentDocId: string;
-    studentCount: any;
+    studentCount;
     private socket;
 
     classInfo: any;
@@ -78,7 +79,8 @@ export class ComclassNavComponent implements OnInit {
         private viewInfoService: ViewInfoService,
         private apiService: ApiService,
         private socketService: SocketService,
-        private classInfoService: ClassInfoService
+        private classInfoService: ClassInfoService,
+        private studentInfoService: StudentInfoService
     ) {
         this.socket = this.socketService.socket;
     }
@@ -139,11 +141,21 @@ export class ComclassNavComponent implements OnInit {
         })
 
         this.socket.on('studentCount', (data) => {
-            console.log('<--- [SOCKET] 현재 참가자 수', data);
-            console.log(typeof(data))
+            // console.log('<--- [SOCKET] 현재 참가자 수', data);
             this.studentCount = data -1;
 
+            this.studentInfoService.setStudentInfo(this.studentCount)
         });
+
+
+        this.studentInfoService.currentStudent.pipe(takeUntil(this.unsubscribe$)).subscribe(
+            (res: any) => {
+                console.log(res)
+                this.studentCount = res;
+            }	
+        );
+            
+        
     }
 
 
@@ -239,6 +251,12 @@ export class ComclassNavComponent implements OnInit {
         const editInfo = Object.assign({}, this.editInfoService.state);
         editInfo.mode = 'move';
         this.editInfoService.setEditInfo(editInfo);
+    }
+
+
+    // student list 
+    studentList() {
+        this.eventBusService.emit(new EventData('studentList', 'studentListMode'));
     }
 
 }

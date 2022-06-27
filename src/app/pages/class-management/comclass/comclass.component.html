@@ -3,14 +3,14 @@
 	<!----------------------------------------------------------------
 		comclass-nav
 	--------------------------------------------------------------- -->
-	<div class="navbar_container">
+	<div class="navbar_container" *ngIf="mode != 'studentListMode'">
 		<app-comclass-nav></app-comclass-nav>
 	</div>
 
 	<!----------------------------------------------------------------
 		comclass-slide-view
 	--------------------------------------------------------------- -->
-	<div class="sidebar_container">
+	<div class="sidebar_container" *ngIf="mode != 'studentListMode'" >
 		<app-comclass-file-view [hidden] = "leftSideView != 'fileList'" (newLocalDocumentFile)="onDocumentOpened($event)" ></app-comclass-file-view>
 
         <app-comclass-slide-view [hidden] ="leftSideView !='thumbnail'" ></app-comclass-slide-view>
@@ -20,10 +20,13 @@
 	<!----------------------------------------------------------------
 		comclass-canvas
 	--------------------------------------------------------------- -->
-	<div class="comclass_container">
+	<div class="comclass_container" *ngIf="mode != 'studentListMode'">
 		<div class="comclass-main">
-			<app-comclass-canvas class="app-comclass-canvas"></app-comclass-canvas>
+			<app-comclass-canvas  class="app-comclass-canvas"></app-comclass-canvas>
 
+        <!----------------------------------------------------------------
+            comclass-fabs
+        --------------------------------------------------------------- -->
 			<!------------------------------------------
 				Floating Fab buttons
 				- zoom
@@ -31,34 +34,19 @@
 				- replay
 			------------------------------------------ -->
 			<div class="fabs_container">
-				<app-comclass-fabs></app-comclass-fabs>
+				<app-comclass-fabs *ngIf="mode != 'studentListMode'"></app-comclass-fabs>
 			</div>
 		</div>
 	</div>
 
-	<!----------------------------------------------------------------
-		comclass-fabs
-	--------------------------------------------------------------- -->
-
-	<div [ngClass]="{'hiddenVideoMode': hiddenVideoMode === true}">
-		<div  id="videoOverlay_container" [ngStyle]="{'visibility': hiddenVideoMode === false ? 'visible' : 'hidden'}" class="videoOverlay_container" [dragScroll]="dragOn">
-		</div>
-	</div>
-
-    <!-- <div id="videoOverlay_container" class="videoOverlay_container" [dragScroll]="dragOn">
-		</div> -->
-
-
-
-    <div [ngClass]="{'hiddenVideoMode': hiddenVideoMode === true}" (click)="hiddenVideo()" >
-        <mat-icon class="visibleVideo_button">arrow_forward</mat-icon>
+    <!-----------------------------------------------------------------------
+        Student List
+    --------------------------------------------------------------------- -->
+    <div>
+        <app-comclass-student *ngIf="mode == 'studentListMode'"></app-comclass-student>
     </div>
 
 
-    <div [ngClass]="{'hiddenVideoMode': hiddenVideoMode === false}" (click)="visibleVideo()" >
-        <mat-icon class="visibleVideo_button">arrow_back</mat-icon>
-    </div>
-    
 
 </div>
 

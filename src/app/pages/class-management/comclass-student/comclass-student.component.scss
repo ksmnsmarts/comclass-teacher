@@ -1,0 +1,124 @@
+@keyframes fadeInLeft {
+    0% {
+        // opacity: 0;
+        transform: translate3d(100%, 0, 0);
+    }
+    to {
+        // opacity: 1;
+        transform: translateZ(100, 0);
+    }
+}
+
+@keyframes fadeOutRight {
+    0% {
+        // opacity: 0;
+        transform: translate3d(100%, 0, 0);
+    }
+    to {
+        // opacity: 1;
+        transform: translateZ(100, 0);
+    }
+}
+
+.student-list-sidenav {
+    position: relative;
+    animation: fadeInLeft 0.5s;
+}
+
+
+.student-list-sidenav {
+    // top:$navbar-height; 
+	//응시인원 표시 관련
+	display: flex;
+    flex-direction: column;
+	width:100%;
+	max-width:100%;
+    height: 100vh;
+
+
+    .toolbar_container {
+        justify-content: space-between;
+        background-color: rgb(63,81,181);
+        color: rgba(255,255,255,0.87);
+        height: 70px;
+
+        .nav_button {
+
+            .selectPresenterBtn {
+                background-color: transparent;
+                color: white;
+                border: 0;
+                min-height: 58px;
+                min-width: 88px;
+                vertical-align: middle;
+            }
+
+            .clearBtn {
+                background-color: transparent;
+                color: white;
+                border: 0;
+                min-height: 58px;
+                min-width: 88px;
+                vertical-align: middle;
+                cursor: pointer;
+            }
+        }
+    }
+
+
+    /*  Monitoring page   */
+
+    .monitoringPage {
+        //position: fixed; //absolute => fixed로 변경.
+        z-index: 15;
+        background-color: #ffffff;
+        //left: 0;        
+        overflow-y: auto;
+        padding: 20px;
+    }
+
+    .monitoringPage > div {
+        display: inline-block;
+        margin-left: 5px;
+        margin-right: 5px;
+        margin-bottom: 37px;
+    }
+
+    .monitoringPage .studentScreen {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+    }
+
+    .monitoringPage .studentScreen canvas {
+        border: 2px solid #999;
+    }
+
+    .monitoringPage .studentId {
+        // width: 280px;
+        height: 25px;
+        display: block;
+        text-align: center;
+        margin-top: 8px;
+    }
+
+    .monitoringPage .studentId span {
+        font-size: 16px;
+        color: #666666;
+    }
+
+    .monitoringPage .studentNothing {
+        font-size: 40px;
+    }
+
+    //hide scroll bar
+    //https://stackoverflow.com/questions/16670931/hide-scroll-bar-but-while-still-being-able-to-scroll
+    // ::-webkit-scrollbar {
+    //     width: 0px;  /* remove scrollbar space */
+    //     background: transparent;  /* optional: just make scrollbar invisible */
+    // }
+    
+
+
+
+}

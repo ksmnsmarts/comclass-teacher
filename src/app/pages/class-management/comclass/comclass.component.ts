@@ -51,6 +51,8 @@ export class ComclassComponent implements OnInit {
     // Left Side Bar
     leftSideView;
 
+    mode = 'defaultMode';
+
     constructor(
         private comclassService: ClassService,
         private viewInfoService: ViewInfoService,
@@ -151,6 +153,12 @@ export class ComclassComponent implements OnInit {
 
         });
         //////////////////////////////////////////////////////////////////
+
+
+        this.eventBusService.on("studentList", this.unsubscribe$, (data) => {
+            console.log(data)
+            this.mode = data;
+        })
     }
     ///////////////////////////////////////////////////////////
 
@@ -433,22 +441,4 @@ export class ComclassComponent implements OnInit {
     }
     ///////////////////////////////////////////////////////////
 
-
-
-    // hiddenVideo 버튼 클릭 시 오버레이 비디오 숨기기
-    hiddenVideo() {
-        console.log(this.hiddenVideoMode)
-        if (this.hiddenVideoMode == false) {
-            this.hiddenVideoMode = true;
-            console.log(this.hiddenVideoMode)
-        }
-    }
-
-    visibleVideo() {
-        console.log(this.hiddenVideoMode)
-        if (this.hiddenVideoMode == true) {
-            this.hiddenVideoMode = false;
-            console.log(this.hiddenVideoMode)
-        }
-    }
 }
