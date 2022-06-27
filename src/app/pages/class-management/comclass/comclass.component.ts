@@ -17,6 +17,7 @@ import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.servic
 import { ActivatedRoute } from '@angular/router';
 import { ClassService } from 'src/app/0.shared/services/class/class.service';
 import { ClassInfoService } from 'src/app/0.shared/store/class-info';
+import { faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons';
 
 
 
@@ -95,7 +96,7 @@ export class ComclassComponent implements OnInit {
             // console.log('<---[SOCKET] rx drawEvent :', data);
             // console.log(data.drawingEvent, data.docNum, data.pageNum)
 
-            if (data.drawingEvent.tool.type != 'pointer') {
+            if (data.drawingEvent.tool.type != 'pointer' && data.participantName == 'teacher' && data.mod == 'syncMode') {
                 this.drawStorageService.setDrawEvent(data.docNum, data.pageNum, data.drawingEvent);
             }
             this.eventBusService.emit(new EventData('receive:drawEvent', data));
@@ -141,6 +142,8 @@ export class ComclassComponent implements OnInit {
             }
 
             const newDataEvent = {
+                mod:'syncMod',
+                participantName: 'teacher',
                 drawingEvent: data,
                 docId: pageInfo.currentDocId,
                 docNum: pageInfo.currentDocNum,

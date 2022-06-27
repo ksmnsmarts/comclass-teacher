@@ -81,7 +81,23 @@
                             <mat-icon [ngClass]="(mode == 'move')?'active':''" > open_with </mat-icon>
                         </button>
                     </div>
+                    <div>
+                    <!-- sync button -->
+                      <button type="button" (click)="changeSyncMode('nonSync');" aria-label="link">
+                        <!-- <i class="fas fa-2x fa-link" style="color:#8bc34a" >
+                      						</i> -->
+                        <!-- 수연 -->
 
+                        <mat-icon [ngClass]="(syncMode == 'sync') ? 'syncActive': '' ">
+                          link
+                        </mat-icon>
+                        <mat-icon [ngClass]="(syncMode == 'nonSync')? 'active': '' ">
+                          link_off
+                        </mat-icon>
+                        <!-- <i class="fas fa-2x fa-unlink" style="color:#9E9E9E" >
+                      						</i> -->
+                      </button>
+                    </div>
 
                     <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
                         <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' " (click)="changeTool('line');" mat-icon-button mat-button

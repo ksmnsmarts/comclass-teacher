@@ -26,7 +26,7 @@ class InitEditInfo {
 
     toolDisabled = false; // move인 경우
     editDisabled = false; // Edit 자체 동작을 모두 방지(권한 관련)
-
+    syncMode = 'sync';
     // syncMode, ....
 }
 

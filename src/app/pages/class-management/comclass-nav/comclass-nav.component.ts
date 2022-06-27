@@ -28,7 +28,7 @@ import { StudentInfoService } from 'src/app/0.shared/store/student-info.service'
     styleUrls: ['./comclass-nav.component.scss']
 })
 export class ComclassNavComponent implements OnInit {
-    isSyncMode: boolean;
+    // isSyncMode: boolean;
     colorList = [
         { color: 'black' },
         { color: 'white' },
@@ -43,9 +43,9 @@ export class ComclassNavComponent implements OnInit {
     currentDocNum: any;
     currentPage: any;
     currentDocId: string;
-    studentCount;
+    studentCount: any;
     private socket;
-
+    syncMode: String = 'sync';
     classInfo: any;
     // iconify TEST //////////////////////
     eraserIcon = eraserIcon;
@@ -72,18 +72,18 @@ export class ComclassNavComponent implements OnInit {
 
     private unsubscribe$ = new Subject<void>();
 
-    constructor(
-        private editInfoService: EditInfoService,
-        private eventBusService: EventBusService,
-        private drawStorageService: DrawStorageService,
-        private viewInfoService: ViewInfoService,
-        private apiService: ApiService,
-        private socketService: SocketService,
-        private classInfoService: ClassInfoService,
+	constructor(
+		private editInfoService: EditInfoService,
+		private eventBusService: EventBusService,
+		private drawStorageService: DrawStorageService,
+		private viewInfoService: ViewInfoService,
+		private apiService: ApiService,
+		private socketService: SocketService,
+		private classInfoService: ClassInfoService,
         private studentInfoService: StudentInfoService
-    ) {
-        this.socket = this.socketService.socket;
-    }
+	) {
+		this.socket = this.socketService.socket;
+	}
 
 
     ngOnInit(): void {
@@ -142,7 +142,7 @@ export class ComclassNavComponent implements OnInit {
 
         this.socket.on('studentCount', (data) => {
             // console.log('<--- [SOCKET] 현재 참가자 수', data);
-            this.studentCount = data -1;
+            this.studentCount = data - 1;
 
             this.studentInfoService.setStudentInfo(this.studentCount)
         });
@@ -152,10 +152,10 @@ export class ComclassNavComponent implements OnInit {
             (res: any) => {
                 console.log(res)
                 this.studentCount = res;
-            }	
+            }
         );
-            
-        
+
+
     }
 
 
@@ -250,6 +250,18 @@ export class ComclassNavComponent implements OnInit {
     changeMode(mode) {
         const editInfo = Object.assign({}, this.editInfoService.state);
         editInfo.mode = 'move';
+        this.editInfoService.setEditInfo(editInfo);
+    }
+
+    /**
+     * Move 선택
+     *
+     * @param mode : 현재는 'move'만 있음 (향후 sync?)
+     *
+     */
+    changeSyncMode(mode) {
+        const editInfo = Object.assign({}, this.editInfoService.state);
+        editInfo.syncMode = mode;
         this.editInfoService.setEditInfo(editInfo);
     }
 
