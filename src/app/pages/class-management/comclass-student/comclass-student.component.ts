@@ -45,8 +45,10 @@ export class ComclassStudentComponent implements OnInit {
             .subscribe(async (classInfo) => {
                 await new Promise(res => setTimeout(res, 0));
                 if (classInfo) {
+                    console.log(classInfo)
+
                     this.studentList = classInfo.currentMembers
-                  
+                    
 
                 }
             });
@@ -96,13 +98,6 @@ export class ComclassStudentComponent implements OnInit {
 
 
     
-
-
-    // this.socket.on('studentCount', (data) => {
-    //     console.log('<--- [SOCKET] 현재 참가자 수', data -1);
-    //     this.studentCount = data -1;
-    // });
-
 
 
     clearBtn() {
