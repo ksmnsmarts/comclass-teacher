@@ -16,4 +16,9 @@ export class ClassInfoService extends Store<any> {
     });
   }
 
+  memoryRelease() {
+    this.state.classInfo = {};
+
+  }
+
 }

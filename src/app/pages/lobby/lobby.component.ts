@@ -8,6 +8,8 @@ import { SocketService } from '../../0.shared/services/socket/socket.service';
 import { ClassInfoService } from '../../0.shared/store/class-info'
 import { Subject, takeUntil } from 'rxjs';
 import { MeetingInfoService } from 'src/app/0.shared/store/meeting-info.service';
+import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
+import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 
 @Component({
     selector: 'app-lobby',
@@ -25,6 +27,8 @@ export class LobbyComponent implements OnInit {
         private router: Router,
         private socketService: SocketService,
         private classInfoService: ClassInfoService,
+        private pdfStorageService: PdfStorageService,
+        private viewInfoService: ViewInfoService,
 
         private sockService: SocketService,
     ) {
@@ -34,6 +38,10 @@ export class LobbyComponent implements OnInit {
     ngOnInit(): void {
 
         this.getClass()
+        console.log('memoryRelease')
+        this.pdfStorageService.memoryRelease();
+        this.viewInfoService.memoryRelease();
+        this.classInfoService.memoryRelease();
     }
 
 

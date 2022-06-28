@@ -27,10 +27,10 @@
 
                     <div #studentScreen class="studentScreen">
                         <canvas #student_monitoring class="student_monitoring"></canvas>
-                        <img #studentBg id="studentBg_{{student.studentName}}" class="studentBg"
+                        <img #studentBg id="studentBg_{{student?.studentName}}" class="studentBg"
                             [width]="student_monitoring.offsetWidth" [height]="student_monitoring.offsetHeight">
                     </div>
-                    <div class="studentId"><span>{{student.studentName}} ( page: {{i+1}} )</span></div>
+                    <div class="studentId"><span>{{student?.studentName}} ( page: {{i+1}} )</span></div>
                 </div>
 
             </div>

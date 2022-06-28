@@ -6,6 +6,7 @@ export const ENV = {
 /***************  [ DRAWING/RECORDING 관련 설정 ]  **************** */
 export const CANVAS_CONFIG = {
 	thumbnailMaxSize: 150,
+    studentListMaxSize: 300, // 일단 고정으로 구현...
 	maxContainerHeight: 0,
 	maxContainerWidth: 0,
 	CSS_UNIT: 96 / 72, // 100% PDF 크기 => 실제 scale은 1.333....

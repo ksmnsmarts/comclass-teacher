@@ -78,6 +78,7 @@ export class ComclassComponent implements OnInit {
         this.classId = this.route.snapshot.params['id'];
         // this.socket.emit('join:class', this.classId);
         this.getMeetingInfo()
+
         this.updateDocuments();
         ////////////////////////////////////////////////
 
@@ -183,7 +184,10 @@ export class ComclassComponent implements OnInit {
       const classInfo: any = await lastValueFrom(this.comclassService.getClassInfo(data))
       console.log(classInfo)
       this.socket.emit('join:class', classInfo);
-      this.classInfoService.setClassInfo(classInfo);
+      this.socket.on('update:classInfo', (classInfo) => {
+        console.log('classInfo', classInfo)
+        this.classInfoService.setClassInfo(classInfo);
+      })
     }
     /**
      * Open Local PDF File
