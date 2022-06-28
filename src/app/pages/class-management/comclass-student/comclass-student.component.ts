@@ -23,6 +23,9 @@ export class ComclassStudentComponent implements OnInit {
     studentCount;
     toggle = false;
 
+    width = 300;
+    height;
+
     @ViewChildren('student_monitoring') student_monitoringRef: QueryList<ElementRef>
     @ViewChildren('studentBg') studentBgRef: QueryList<ElementRef>
     constructor(
@@ -44,11 +47,11 @@ export class ComclassStudentComponent implements OnInit {
                 await new Promise(res => setTimeout(res, 0));
                 if (classInfo) {
 
+                    console.log(classInfo)
                     this.studentList = classInfo.currentMembers
+
                     console.log(classInfo)
                     this.renderFileList();
-
-
                 }
             });
 
@@ -69,9 +72,13 @@ export class ComclassStudentComponent implements OnInit {
          ************************************************************/
         this.socket.emit('begin:monitoring', '');
 
-        this.socket.on('send:monitoringCanvas', (data)=> {
-            console.log(this.studentList)
-            this.renderingService.renderThumbBackground(document.getElementById('studentBg_'+data.studentName), data.pageInfo.currentDocNum, data.pageInfo.currentPage);
+        this.socket.on('send:monitoringCanvas', (data) => {
+            for (let i = 0; i < this.studentList.length; i++) {
+                if (this.studentList[i].studentName == data.studentName)
+                    this.studentList[i].pageInfo = data.pageInfo
+            }
+
+            this.renderingService.renderThumbBackground(document.getElementById('studentBg_' + data.studentName), data.pageInfo.currentDocNum, data.pageInfo.currentPage);
         })
     }
 
@@ -84,7 +91,7 @@ export class ComclassStudentComponent implements OnInit {
      * @param documentInfo
      * @returns
      */
-     async renderFileList() {
+    async renderFileList() {
         // File List Background 그리기 : 각 문서의 1page만 그림
         console.log(this.studentList.length)
         await new Promise(res => setTimeout(res, 300));
