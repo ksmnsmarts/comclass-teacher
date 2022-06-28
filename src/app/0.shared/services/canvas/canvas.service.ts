@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { fromEvent, Subject, merge} from 'rxjs';
+import { fromEvent, Subject, merge } from 'rxjs';
 import { takeUntil, throttleTime } from 'rxjs/operators';
 import { PdfStorageService } from '../../storage/pdf-storage.service';
 import { CANVAS_CONFIG } from '../../config/config';
@@ -57,7 +57,7 @@ export class CanvasService {
 			getThumbnailSize
 			- 각 thumbnail 별 canvas width/height
 		----------------------------------------*/
-	getThumbnailSize(docNum,pageNum) {
+	getThumbnailSize(docNum, pageNum) {
 		const viewport = this.pdfStorageService.getViewportSize(docNum, pageNum);
 
 		const size = {
@@ -81,15 +81,43 @@ export class CanvasService {
 		return size;
 	}
 
+	/*--------------------------------------
+		getThumbnailSize
+		- 각 thumbnail 별 canvas width/height
+	  ----------------------------------------*/
+	getStudentCanvasSize(docNum, pageNum) {
+		const viewport = this.pdfStorageService.getViewportSize(docNum, pageNum);
+
+		const size = {
+			width: 0,
+			height: 0,
+			scale: 1 // thumbnail draw에서 사용할 scale (thumbnail과 100% pdf size의 비율)
+		};
+
+		// landscape 문서 : 가로를 150px(thumbnailMaxSize)로 설정
+		if (viewport.width > viewport.height) {
+      size.width = CANVAS_CONFIG.studentListMaxSize;
+			size.height = size.width * viewport.height / viewport.width;
+		}
+		// portrait 문서 : 세로를 150px(thumbnailMaxSize)로 설정
+		else {
+      size.height = CANVAS_CONFIG.studentListMaxSize;
+			size.width = size.height * viewport.width / viewport.height;
+		}
+		size.scale = size.width / (viewport.width * CANVAS_CONFIG.CSS_UNIT);
+
+		return size;
+	}
+
 	/**
 	 * Main container관련 canvas Size 설정
 	 *
 	 */
 	setCanvasSize(pdfNum, pageNum, zoomScale, canvasContainer, coverCanvas, rxCoverCanvas, teacherCanvas, bgCanvas) {
-        console.log(`>>> set Canvas Size: pdfNum:${pdfNum}, pageNum:${pageNum}`)
+		console.log(`>>> set Canvas Size: pdfNum:${pdfNum}, pageNum:${pageNum}`)
 
-        const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
-		const canvasFullSize = pdfPage.getViewport({scale:zoomScale * CANVAS_CONFIG.CSS_UNIT});
+		const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
+		const canvasFullSize = pdfPage.getViewport({ scale: zoomScale * CANVAS_CONFIG.CSS_UNIT });
 		canvasFullSize.width = Math.round(canvasFullSize.width);
 		canvasFullSize.height = Math.round(canvasFullSize.height);
 		/*------------------------------------
@@ -134,7 +162,7 @@ export class CanvasService {
 		const ctx = coverCanvas.getContext("2d");
 		ctx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
 
-    	const rxCtx = rxCoverCanvas.getContext("2d");
+		const rxCtx = rxCoverCanvas.getContext("2d");
 		rxCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
 
 		const teacherCtx = teacherCanvas.getContext("2d");
@@ -189,7 +217,7 @@ export class CanvasService {
 
 		let oldPoint = {};
 		let newPoint = {};
-		let points:any = [];
+		let points: any = [];
 		let textareaPoints: any = []; // textarea를 그릴 때 사용하는 좌표
 
 		// var maxNumberOfPointsPerSocket = 100;
@@ -254,7 +282,7 @@ export class CanvasService {
 			drawingService.start(sourceCtx, points, tool, sourceCanvas);
 
 			// 포인터일 경우 end가 아닌 start와 move 때 socket으로 전송
-			if(tool.type == 'pointer'){
+			if (tool.type == 'pointer') {
 				eventBusService.emit(new EventData('gen:newDrawEvent', {
 					points: oldPoint,
 					tool
@@ -263,17 +291,17 @@ export class CanvasService {
 				merge(
 					fromEvent(sourceCanvas, 'mousemove'),
 					fromEvent(sourceCanvas, 'touchmove')
-				  ).pipe(
+				).pipe(
 					takeUntil(fromEvent(sourceCanvas, 'mouseup')),
 					takeUntil(fromEvent(sourceCanvas, 'mouseout')),
 					takeUntil(fromEvent(sourceCanvas, 'touchend')),
 					throttleTime(30)
-				  ).subscribe(()=>{
-					  	eventBusService.emit(new EventData('gen:newDrawEvent', {
-							points: oldPoint,
-							tool
-						}));
-				  });
+				).subscribe(() => {
+					eventBusService.emit(new EventData('gen:newDrawEvent', {
+						points: oldPoint,
+						tool
+					}));
+				});
 			}
 
 			startTime = Date.now();
@@ -310,24 +338,24 @@ export class CanvasService {
 				textareaPoints.push(event.clientX, event.clientY)
 			}
 
-			drawingService.end(targetCtx, points, tool,'', scale, textareaPoints);
+			drawingService.end(targetCtx, points, tool, '', scale, textareaPoints);
 			event.preventDefault();
 
 			if (tool.type == 'text') {
 				const editInfo = Object.assign({}, editInfoService.state);
 				editInfo.tool = 'textarea';
 				editInfoService.setEditInfo(editInfo);
-			return clear(sourceCanvas, scale);
+				return clear(sourceCanvas, scale);
 			}
 
 			if (tool.type == 'textarea') {
 				const editInfo = Object.assign({}, editInfoService.state);
 				editInfo.tool = 'text';
 				editInfoService.setEditInfo(editInfo);
-			return clear(sourceCanvas, scale);
+				return clear(sourceCanvas, scale);
 			}
 
-			if(tool.type == 'pointer'){
+			if (tool.type == 'pointer') {
 				sourceCtx.shadowColor = "";
 				sourceCtx.shadowBlur = 0;
 				tool.type = 'pointerEnd';
@@ -352,7 +380,7 @@ export class CanvasService {
 				timeDiff: endTime - startTime
 			};
 
-      		// Generate Event Emitter: new Draw 알림
+			// Generate Event Emitter: new Draw 알림
 			eventBusService.emit(new EventData('gen:newDrawEvent', drawingEvent));
 
 			// 3. cover canvas 초기화

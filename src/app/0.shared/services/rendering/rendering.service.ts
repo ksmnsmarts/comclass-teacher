@@ -79,8 +79,10 @@ export class RenderingService {
         // 해당 page의 drawing 정보가 있는 경우
         if (drawingEvents?.drawingEvent && drawingEvents?.drawingEvent.length > 0) {
             const viewport = this.pdfStorageService.getViewportSize(docNum, pageNum);
+            console.log(viewport.width)
+            console.log(thumbCanvas.width)
             const scale = thumbCanvas.width / (viewport.width * CANVAS_CONFIG.CSS_UNIT);
-            // const scale = 1;
+            // const scale = 0.3;
 
             console.log(scale)
             const thumbCtx = thumbCanvas.getContext('2d');
