@@ -63,6 +63,12 @@ export class ComclassStudentComponent implements OnInit {
             }
         );
 
+        this.socket.emit('begin:monitoring', '');
+
+        this.socket.on('update:studentList', (data)=> {
+            console.log(data)
+        })
+
 
         this.socket.on('send:monitoringCanvas', (data)=> {
             this.studentList.push(data);
@@ -86,7 +92,6 @@ export class ComclassStudentComponent implements OnInit {
         await new Promise(res => setTimeout(res, 300));
         // for (let i = 0; i < this.student_monitoringRef.toArray().length; i++) {
         for (let i = 0; i < this.studentList.length; i++) {
-            console.log(i)
             await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, i+1, 1);
             this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, i+1, 1);
         };
