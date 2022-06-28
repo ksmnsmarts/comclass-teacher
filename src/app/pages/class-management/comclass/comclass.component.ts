@@ -96,8 +96,8 @@ export class ComclassComponent implements OnInit {
         this.socket.on('draw:teacher', ((data: any) => {
             // console.log('<---[SOCKET] rx drawEvent :', data);
             // console.log(data.drawingEvent, data.docNum, data.pageNum)
-
-            if (data.drawingEvent.tool.type != 'pointer' && data.participantName == 'teacher' && data.mod == 'syncMode') {
+            // if (data.drawingEvent.tool.type != 'pointer' && data.participantName == 'teacher' && data.mode == 'syncMode') {
+            if (data.drawingEvent.tool.type != 'pointer' && data.participantName == 'teacher') {
                 this.drawStorageService.setDrawEvent(data.docNum, data.pageNum, data.drawingEvent);
             }
             this.eventBusService.emit(new EventData('receive:drawEvent', data));

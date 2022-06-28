@@ -319,7 +319,7 @@ export class DrawingService {
   }
 
   end(context, points, tool, txt?, scale?, textareaPoints?) {
-    // console.log(points)
+
     context.lineCap = "round";
     context.lineJoin = 'round';
     context.lineWidth = tool.width;
@@ -353,6 +353,10 @@ export class DrawingService {
           return;
         }
 
+        console.log('왜 안돼~~~~~~~~~~~~')
+        console.log(context)
+        console.log(points)
+        console.log(tool)
         context.beginPath();
         context.moveTo(points[0], points[1]);
         // console.log('end')

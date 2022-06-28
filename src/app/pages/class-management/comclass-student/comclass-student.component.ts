@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { distinctUntilChanged, pairwise, Subject, takeUntil } from 'rxjs';
+import { CanvasService } from 'src/app/0.shared/services/canvas/canvas.service';
 import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.service';
@@ -19,9 +20,14 @@ export class ComclassStudentComponent implements OnInit {
     private unsubscribe$ = new Subject<void>();
     private socket;
 
+    currentDocId: any;
+    currentDocNum: any; // 선택한 pdf
+    currentPageNum: number = 0;
+
     studentList = [];
     studentCount;
     toggle = false;
+    thumbArray = [];
 
 
     @ViewChildren('student_monitoring') student_monitoringRef: QueryList<ElementRef>
@@ -33,11 +39,14 @@ export class ComclassStudentComponent implements OnInit {
         private classInfoService: ClassInfoService,
         private renderingService: RenderingService,
         private viewInfoService: ViewInfoService,
+        private canvasService: CanvasService,
     ) {
         this.socket = this.socketService.socket;
     }
 
     ngOnInit(): void {
+
+
 
         this.classInfoService.state$
             .pipe(takeUntil(this.unsubscribe$))
@@ -51,6 +60,18 @@ export class ComclassStudentComponent implements OnInit {
                     console.log(classInfo)
                     this.renderFileList();
                 }
+            });
+
+
+        this.viewInfoService.state$
+            .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged(), pairwise())
+            .subscribe(([prevViewInfo, viewInfo]) => {
+
+                // 현재 Current Page Info 저장
+                // this.currentDocId = viewInfo.pageInfo.currentDocId;
+                this.currentDocNum = viewInfo.pageInfo.currentDocNum;
+                this.currentPageNum = viewInfo.pageInfo.currentPage;
+
             });
 
         this.socket.on('studentCount', (data) => {
@@ -91,12 +112,22 @@ export class ComclassStudentComponent implements OnInit {
      */
     async renderFileList() {
         // File List Background 그리기 : 각 문서의 1page만 그림
-        console.log(this.studentList.length)
+
+        // const numPages = this.viewInfoService.state.documentInfo[this.currentDocNum - 1].numPages;
+        this.thumbArray = [];
+
+        for (let i = 0; i < this.studentList.length; i++) {
+          const thumbSize = this.canvasService.getStudentCanvasSize(i+1, 1);
+          this.thumbArray.push(thumbSize);
+        };
+
         await new Promise(res => setTimeout(res, 300));
         // for (let i = 0; i < this.student_monitoringRef.toArray().length; i++) {
         for (let i = 0; i < this.studentList.length; i++) {
-            await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, 1, 1);
-            // await this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, 1, 1);
+            console.log(this.student_monitoringRef.toArray()[i].nativeElement)
+            await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, i + 1, 1);
+            this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, i + 1, 1);
+
         };
 
         // 아래와 같은 방식도 사용가능(참고용)
