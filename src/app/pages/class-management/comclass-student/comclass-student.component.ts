@@ -23,8 +23,6 @@ export class ComclassStudentComponent implements OnInit {
     studentCount;
     toggle = false;
 
-    width = 300;
-    height;
 
     @ViewChildren('student_monitoring') student_monitoringRef: QueryList<ElementRef>
     @ViewChildren('studentBg') studentBgRef: QueryList<ElementRef>
