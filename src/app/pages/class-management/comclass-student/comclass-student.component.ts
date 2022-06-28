@@ -29,7 +29,6 @@ export class ComclassStudentComponent implements OnInit {
     toggle = false;
     thumbArray = [];
 
-
     @ViewChildren('student_monitoring') student_monitoringRef: QueryList<ElementRef>
     @ViewChildren('studentBg') studentBgRef: QueryList<ElementRef>
     constructor(
@@ -92,12 +91,30 @@ export class ComclassStudentComponent implements OnInit {
         this.socket.emit('begin:monitoring', '');
 
         this.socket.on('send:monitoringCanvas', (data) => {
+
             for (let i = 0; i < this.studentList.length; i++) {
                 if (this.studentList[i].studentName == data.studentName)
                     this.studentList[i].pageInfo = data.pageInfo
             }
 
-            this.renderingService.renderThumbBackground(document.getElementById('studentBg' + data.studentName), data.pageInfo.currentDocNum, data.pageInfo.currentPage);
+
+            const canvas = (<HTMLDivElement>document.getElementById('student_monitoring'));
+            const studentImgBg = (<HTMLDivElement>document.getElementById('studentBg' + data.studentName));
+
+            console.log(canvas)
+
+            // if (studentImgBg.width > studentImgBg.height) {
+            //     canvas.width = CANVAS_CONFIG.studentListMaxSize;
+            //     canvas.height = canvas.width * studentImgBg.height / studentImgBg.width;
+            // }
+            // else {
+            //     canvas.height = CANVAS_CONFIG.studentListMaxSize;
+            //     canvas.width = canvas.height * studentImgBg.width / studentImgBg.height;
+            // }
+
+            this.renderingService.renderThumbBackground(studentImgBg, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
+
+            
         })
     }
 
@@ -117,7 +134,7 @@ export class ComclassStudentComponent implements OnInit {
         this.thumbArray = [];
         let thumbSize;
         for (let i = 0; i < this.studentList.length; i++) {
-            thumbSize = this.canvasService.getStudentCanvasSize(i+1, 1);
+            thumbSize = this.canvasService.getStudentCanvasSize(1, 1);
             thumbSize.studentName = this.studentList[i]?.studentName
             this.thumbArray.push(thumbSize);
         };
@@ -126,8 +143,8 @@ export class ComclassStudentComponent implements OnInit {
         // for (let i = 0; i < this.student_monitoringRef.toArray().length; i++) {
         for (let i = 0; i < this.studentList.length; i++) {
             console.log(this.student_monitoringRef.toArray()[i].nativeElement)
-            await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, i + 1, 1);
-            this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, i + 1, 1);
+            await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, 1, 1);
+            this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, 1, 1);
 
         };
 

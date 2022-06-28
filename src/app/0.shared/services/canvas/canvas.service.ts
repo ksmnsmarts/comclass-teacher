@@ -96,12 +96,12 @@ export class CanvasService {
 
 		// landscape 문서 : 가로를 150px(thumbnailMaxSize)로 설정
 		if (viewport.width > viewport.height) {
-      size.width = CANVAS_CONFIG.studentListMaxSize;
+            size.width = CANVAS_CONFIG.studentListMaxSize;
 			size.height = size.width * viewport.height / viewport.width;
 		}
 		// portrait 문서 : 세로를 150px(thumbnailMaxSize)로 설정
 		else {
-      size.height = CANVAS_CONFIG.studentListMaxSize;
+            size.height = CANVAS_CONFIG.studentListMaxSize;
 			size.width = size.height * viewport.width / viewport.height;
 		}
 		size.scale = size.width / (viewport.width * CANVAS_CONFIG.CSS_UNIT);
