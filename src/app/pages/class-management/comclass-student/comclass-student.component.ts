@@ -23,18 +23,14 @@ export class ComclassStudentComponent implements OnInit {
     toggle = false;
 
     @ViewChildren('student_monitoring') student_monitoringRef: QueryList<ElementRef>
-
-    student_monitoringCanvas: HTMLCanvasElement;
-
-
-
+    @ViewChildren('studentBg') studentBgRef: QueryList<ElementRef>
     constructor(
         private socketService: SocketService,
         private eventBusService: EventBusService,
         private studentInfoService: StudentInfoService,
         private classInfoService: ClassInfoService,
         private renderingService: RenderingService
-    ) { 
+    ) {
         this.socket = this.socketService.socket;
     }
 
@@ -48,21 +44,23 @@ export class ComclassStudentComponent implements OnInit {
                     console.log(classInfo)
 
                     this.studentList = classInfo.currentMembers
-                    
+                    console.log(classInfo)
+                    this.renderFileList();
+
 
                 }
             });
-       
+
         this.socket.on('studentCount', (data) => {
-            console.log('<--- [SOCKET] 현재 참가자 수', data -1);
-            this.studentCount = data -1;
+            console.log('<--- [SOCKET] 현재 참가자 수', data - 1);
+            this.studentCount = data - 1;
         });
 
         this.studentInfoService.currentStudent.pipe(takeUntil(this.unsubscribe$)).subscribe(
             (res: any) => {
                 console.log(res)
                 this.studentCount = res;
-            }	
+            }
         );
 
 
@@ -84,8 +82,13 @@ export class ComclassStudentComponent implements OnInit {
      */
      async renderFileList() {
         // File List Background 그리기 : 각 문서의 1page만 그림
-        for (let i = 0; i < this.student_monitoringRef.toArray().length; i++) {
-            await this.renderingService.renderBackground('', this.student_monitoringRef.toArray()[i].nativeElement, 1, 1);
+        console.log(this.studentList.length)
+        await new Promise(res => setTimeout(res, 300));
+        // for (let i = 0; i < this.student_monitoringRef.toArray().length; i++) {
+        for (let i = 0; i < this.studentList.length; i++) {
+            console.log(i)
+            await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, i+1, 1);
+            this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, i+1, 1);
         };
 
         // 아래와 같은 방식도 사용가능(참고용)
@@ -97,7 +100,7 @@ export class ComclassStudentComponent implements OnInit {
     };
 
 
-    
+
 
 
     clearBtn() {

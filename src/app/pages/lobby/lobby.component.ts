@@ -38,9 +38,10 @@ export class LobbyComponent implements OnInit {
     ngOnInit(): void {
 
         this.getClass()
-
+        console.log('memoryRelease')
         this.pdfStorageService.memoryRelease();
         this.viewInfoService.memoryRelease();
+        this.classInfoService.memoryRelease();
     }
 
 

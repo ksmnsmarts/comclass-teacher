@@ -134,7 +134,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                // 현재 sideBar doc. view 정보 받아서 저장.
                this.prevViewInfo = prevViewInfo.leftSideView
 
-            
+
         });
 
         ///////////////////////////////////////////////
@@ -314,10 +314,10 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
      * @param zoomScale
      */
     async pageRender(currentDocNum, currentPage, zoomScale) {
-       
+
         // 화면을 급하게 확대하거나 축소 시 깜빡거리는 UI 측면 문제 해결 위한 함수
         this.preRenderBackground(currentPage)
-        
+
         console.log('>>> page Render! [background and board] + addEventHandler');
 
         // board rendering
@@ -345,10 +345,10 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
         * 처음 화이트보드에 들어오면 thumbnail view 아니라 fileList view이기 때문에
         * document.getElementById('thumb_' + pageNum) (이미지)가 정의되지 않아 오류가 난다.
         * 그래서 doc을 클릭하여 thumbnail view 일 경우에만 실행하도록 설정함.
-        ****************************************************/ 
+        ****************************************************/
         if(this.prevViewInfo === 'thumbnail'){
             ctx.drawImage(imgElement, 0, 0, targetCanvas.width, targetCanvas.height);
-        }        
+        }
     }
 
 
