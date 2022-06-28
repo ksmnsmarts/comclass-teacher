@@ -97,7 +97,7 @@ export class ComclassStudentComponent implements OnInit {
                     this.studentList[i].pageInfo = data.pageInfo
             }
 
-            this.renderingService.renderThumbBackground(document.getElementById('studentBg_' + data.studentName), data.pageInfo.currentDocNum, data.pageInfo.currentPage);
+            this.renderingService.renderThumbBackground(document.getElementById('studentBg' + data.studentName), data.pageInfo.currentDocNum, data.pageInfo.currentPage);
         })
     }
 
@@ -115,10 +115,11 @@ export class ComclassStudentComponent implements OnInit {
 
         // const numPages = this.viewInfoService.state.documentInfo[this.currentDocNum - 1].numPages;
         this.thumbArray = [];
-
+        let thumbSize;
         for (let i = 0; i < this.studentList.length; i++) {
-          const thumbSize = this.canvasService.getStudentCanvasSize(i+1, 1);
-          this.thumbArray.push(thumbSize);
+            thumbSize = this.canvasService.getStudentCanvasSize(i+1, 1);
+            thumbSize.studentName = this.studentList[i]?.studentName
+            this.thumbArray.push(thumbSize);
         };
 
         await new Promise(res => setTimeout(res, 300));
