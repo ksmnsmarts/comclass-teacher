@@ -64,12 +64,10 @@ export class ComclassStudentComponent implements OnInit {
             }
         );
 
+        /************************************************************
+         * 모니터링
+         ************************************************************/
         this.socket.emit('begin:monitoring', '');
-
-        this.socket.on('update:studentList', (data)=> {
-            console.log(data)
-        })
-
 
         this.socket.on('send:monitoringCanvas', (data)=> {
             console.log(this.studentList)
