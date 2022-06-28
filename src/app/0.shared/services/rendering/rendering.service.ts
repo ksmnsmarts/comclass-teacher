@@ -75,22 +75,18 @@ export class RenderingService {
      */
     renderThumbBoard(thumbCanvas, docNum, pageNum) {
         let drawingEvents = this.drawStorageService.getDrawingEvents(docNum, pageNum);
-        console.log(drawingEvents)
         // 해당 page의 drawing 정보가 있는 경우
         if (drawingEvents?.drawingEvent && drawingEvents?.drawingEvent.length > 0) {
             const viewport = this.pdfStorageService.getViewportSize(docNum, pageNum);
             const scale = thumbCanvas.width / (viewport.width * CANVAS_CONFIG.CSS_UNIT);
             // const scale = 1;
 
-            console.log(scale)
             const thumbCtx = thumbCanvas.getContext('2d');
-            console.log(thumbCtx)
             thumbCtx.clearRect(0, 0, thumbCanvas.width, thumbCanvas.height);
             thumbCtx.save();
             thumbCtx.scale(scale, scale);
             for (const item of drawingEvents?.drawingEvent) {
                 // Draw Service의 'end'관련 event 이용.
-                console.log(item.points)
                 this.drawingService.end(thumbCtx, item.points, item.tool, item.txt, scale);
             }
             thumbCtx.restore();

@@ -6,6 +6,7 @@ import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.
 import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
 import { ClassInfoService } from 'src/app/0.shared/store/class-info';
 import { StudentInfoService } from 'src/app/0.shared/store/student-info.service';
+import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 import { CANVAS_CONFIG } from '../../../0.shared/config/config';
 
 @Component({
@@ -29,7 +30,8 @@ export class ComclassStudentComponent implements OnInit {
         private eventBusService: EventBusService,
         private studentInfoService: StudentInfoService,
         private classInfoService: ClassInfoService,
-        private renderingService: RenderingService
+        private renderingService: RenderingService,
+        private viewInfoService: ViewInfoService,
     ) {
         this.socket = this.socketService.socket;
     }
@@ -41,7 +43,6 @@ export class ComclassStudentComponent implements OnInit {
             .subscribe(async (classInfo) => {
                 await new Promise(res => setTimeout(res, 0));
                 if (classInfo) {
-                    console.log(classInfo)
 
                     this.studentList = classInfo.currentMembers
                     console.log(classInfo)
@@ -71,9 +72,8 @@ export class ComclassStudentComponent implements OnInit {
 
 
         this.socket.on('send:monitoringCanvas', (data)=> {
-            this.studentList.push(data);
             console.log(this.studentList)
-            this.renderFileList();
+            this.renderingService.renderThumbBackground(document.getElementById('studentBg_'+data.studentName), data.pageInfo.currentDocNum, data.pageInfo.currentPage);
         })
     }
 
@@ -92,8 +92,8 @@ export class ComclassStudentComponent implements OnInit {
         await new Promise(res => setTimeout(res, 300));
         // for (let i = 0; i < this.student_monitoringRef.toArray().length; i++) {
         for (let i = 0; i < this.studentList.length; i++) {
-            await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, i+1, 1);
-            this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, i+1, 1);
+            await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, 1, 1);
+            // await this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, 1, 1);
         };
 
         // 아래와 같은 방식도 사용가능(참고용)
