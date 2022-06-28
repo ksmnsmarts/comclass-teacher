@@ -24,10 +24,8 @@
             </div>
             <div *ngIf="studentCount > 0">
                 <div *ngFor="let student of studentList let i = index">
-                   
                     <div class="studentScreen" >
-                        <img #thumb id="{{student.studentName}}" class="thumbBg" width="{{studentScreen.width}}" height="{{studentScreen.height}}">
-                        <canvas #student_monitoring class="student_monitoring"></canvas>
+                        <canvas #student_monitoring id="{{student.studentName}}" class="student_monitoring"></canvas>
                     </div>
                     <div class="studentId" ><span>{{student.studentName}} ( page: {{i+1}} )</span></div>
                 </div>

@@ -275,7 +275,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
         this.rendererEvent1();
 
         // pdf memory release
-        this.pdfStorageService.memoryRelease();
+        // this.pdfStorageService.memoryRelease();
 
     }
 

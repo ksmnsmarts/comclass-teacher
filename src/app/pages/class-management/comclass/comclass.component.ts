@@ -169,7 +169,7 @@ export class ComclassComponent implements OnInit {
         // unsubscribe all subscription
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
-        this.pdfStorageService.memoryRelease();
+        // this.pdfStorageService.memoryRelease();
         // socket off
         this.socket.off("draw:teacher");
         this.socket.off("check:documents");

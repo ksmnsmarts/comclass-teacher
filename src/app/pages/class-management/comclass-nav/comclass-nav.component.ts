@@ -140,6 +140,13 @@ export class ComclassNavComponent implements OnInit {
 
         })
 
+        this.studentInfoService.currentStudent.pipe(takeUntil(this.unsubscribe$)).subscribe(
+            (res: any) => {
+                console.log(res)
+                this.studentCount = res;
+            }
+        );
+
         this.socket.on('studentCount', (data) => {
             // console.log('<--- [SOCKET] 현재 참가자 수', data);
             this.studentCount = data - 1;
@@ -148,12 +155,7 @@ export class ComclassNavComponent implements OnInit {
         });
 
 
-        this.studentInfoService.currentStudent.pipe(takeUntil(this.unsubscribe$)).subscribe(
-            (res: any) => {
-                console.log(res)
-                this.studentCount = res;
-            }
-        );
+        
 
 
     }
