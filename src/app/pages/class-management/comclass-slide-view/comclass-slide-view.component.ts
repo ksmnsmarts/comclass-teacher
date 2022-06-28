@@ -37,7 +37,7 @@ export class ComclassSlideViewComponent implements OnInit {
     private drawingService: DrawingService,
     private socketService: SocketService,
     private drawStorageService: DrawStorageService,
-	private pdfStorageService: PdfStorageService,
+	  private pdfStorageService: PdfStorageService,
   ) {
     this.socket = this.socketService.socket;
   }
@@ -94,7 +94,7 @@ export class ComclassSlideViewComponent implements OnInit {
 					this.renderThumbnails();
 				}
 
-				
+
 			});
 
 		// container Scroll, Size, 판서event
@@ -117,7 +117,7 @@ export class ComclassSlideViewComponent implements OnInit {
         if(this.myRole != 'Participant'){
 			this.socket.on('sync:pageChange', async (data)=> {
 
-				
+
 				// 'Presenter' 모드 였다가 도중 'Participant'모드로 변경 후 문서 변경 시 doc sync 해결 위해
 				// 해당 doc.docId를 받아와서 doc.docId가 다를 경우 변경된 doc으로 변경 후 새로 썸네일 렌더링
 				if(this.currentDocId !== data.docId){
@@ -189,7 +189,7 @@ export class ComclassSlideViewComponent implements OnInit {
 			  const thumbScale = this.thumbArray[this.currentPageNum - 1].scale;
 			  this.drawingService.clearThumb(data, thumbCanvas, thumbScale);
 		  })
-		  // 다른 사림이 보고있는 판서 드로잉 삭제 
+		  // 다른 사림이 보고있는 판서 드로잉 삭제
 		  this.eventBusService.on('receive:clearDrawEvent', this.unsubscribe$, async (data) => {
 			if (this.viewInfoService.state.leftSideView == 'fileList') return;
 			if(this.currentDocId == data.docId){
@@ -211,7 +211,7 @@ export class ComclassSlideViewComponent implements OnInit {
 
 		/*-------------------------------------------
 			zoom, page 전환등을 하는 경우
-	
+
 			1. scroll에 필요한 ratio 계산(thumbnail과 canvas의 크기비율)은 여기서 수행
 			2. thumbnail의 window size 계산 수행
 		---------------------------------------------*/
@@ -252,7 +252,7 @@ export class ComclassSlideViewComponent implements OnInit {
 			docId: this.viewInfoService.state.pageInfo.currentDocId,
 			pageNum: pageNum
 		}
-		
+
 		// Participant 모드 일 경우 sync 기능 적용 제외
 		if(this.myRole != 'Participant'){
 			this.socket.emit('sync:page', data)
@@ -287,9 +287,9 @@ export class ComclassSlideViewComponent implements OnInit {
 	 async renderThumbnails() {
 
 		const numPages = this.viewInfoService.state.documentInfo[this.currentDocNum - 1].numPages;
-	
+
 		this.thumbArray = [];
-	
+
 		for (let pageNum = 1; pageNum <= numPages; pageNum++) {
 		  /*-----------------------------------------------------------
 			1. get size of thumbnail canvas --> thumbnail element 생성.
@@ -298,21 +298,21 @@ export class ComclassSlideViewComponent implements OnInit {
 		  const thumbSize = this.canvasService.getThumbnailSize(this.currentDocNum, pageNum);
 		  this.thumbArray.push(thumbSize);
 		}
-	
+
 		// 엔트리와 함께... 초기 썸네일 오류... => Main Canvas와 겹치면 이상해지는듯?
 		await new Promise(res => setTimeout(res, 300));
-	
+
 		// Render Background & Board
 		for (let i = 0; i < numPages; i++) {
 		  await this.renderingService.renderThumbBackground(this.thumRef.toArray()[i].nativeElement, this.currentDocNum, i + 1);
-	
+
 		  this.renderingService.renderThumbBoard(this.thumbCanvasRef.toArray()[i].nativeElement, this.currentDocNum, i + 1);
-	
+
 		  // 그리는 중 docList로 변경된 경우
 		  if (this.stopRendering) {
 			i = numPages;
 		  }
-	
+
 		};
 	}
 	// async renderThumbnails() {
