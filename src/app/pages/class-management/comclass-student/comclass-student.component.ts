@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
-import { distinctUntilChanged, pairwise, Subject, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { CanvasService } from 'src/app/0.shared/services/canvas/canvas.service';
 import { DrawingService } from 'src/app/0.shared/services/drawing/drawing.service';
 import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
@@ -58,20 +58,15 @@ export class ComclassStudentComponent implements OnInit {
             .subscribe(async (classInfo) => {
                 await new Promise(res => setTimeout(res, 0));
                 if (classInfo) {
-
-                    console.log(classInfo)
                     this.studentList = classInfo.currentMembers
-
-                    console.log(classInfo)
                     this.renderFileList();
                 }
             });
 
 
         this.viewInfoService.state$
-            .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged(), pairwise())
-            .subscribe(([prevViewInfo, viewInfo]) => {
-
+            .pipe(takeUntil(this.unsubscribe$))
+            .subscribe((viewInfo) => {
                 // 현재 Current Page Info 저장
                 // this.currentDocId = viewInfo.pageInfo.currentDocId;
                 this.currentDocNum = viewInfo.pageInfo.currentDocNum;
@@ -209,8 +204,7 @@ export class ComclassStudentComponent implements OnInit {
     startOneOnOneMode(data) {
         console.log(data.studentName)
         const editInfo = Object.assign({}, this.editInfoService.state);
-
-        console.log(editInfo)
+        editInfo.syncMode = 'oneOnOneMode'
         this.editInfoService.setEditInfo(editInfo);
 
         this.socket.emit('begin:guidance', data.studentName, this.currentDocNum, this.currentPageNum);
