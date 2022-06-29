@@ -43,8 +43,6 @@ export class EditInfoService extends Store<any> {
 
     setEditInfo(editInfo: any): void {
 
-        console.log(editInfo)
-
         // Tool Disable 설정
         if (editInfo.mode == 'draw') {
             editInfo.toolDisabled = false;
@@ -56,6 +54,5 @@ export class EditInfoService extends Store<any> {
         this.setState({
             ...this.state, ...editInfo
         });
-        console.log(editInfo)
     }
 }

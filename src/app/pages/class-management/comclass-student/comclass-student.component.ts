@@ -209,9 +209,11 @@ export class ComclassStudentComponent implements OnInit {
     startOneOnOneMode(data) {
         console.log(data.studentName)
         const editInfo = Object.assign({}, this.editInfoService.state);
-        this.eventBusService
+
+        console.log(editInfo)
         this.editInfoService.setEditInfo(editInfo);
 
+        this.socket.emit('begin:guidance', data.studentName, this.currentDocNum, this.currentPageNum);
     }
 
 }
