@@ -13,6 +13,7 @@ import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.
 import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
 import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.service';
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
+import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
 
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 
@@ -38,6 +39,7 @@ export class ComclassSlideViewComponent implements OnInit {
     private socketService: SocketService,
     private drawStorageService: DrawStorageService,
     private pdfStorageService: PdfStorageService,
+    private editInfoService: EditInfoService
   ) {
     this.socket = this.socketService.socket;
   }
@@ -254,7 +256,7 @@ export class ComclassSlideViewComponent implements OnInit {
     }
 
     // Participant 모드 일 경우 sync 기능 적용 제외
-    if (this.myRole != 'Participant') {
+    if (this.editInfoService.state.syncMode != 'nonSync') {
       this.socket.emit('sync:page', data)
     }
 
@@ -274,7 +276,7 @@ export class ComclassSlideViewComponent implements OnInit {
     }
 
     // Participant 모드 일 경우 sync 기능 적용 제외
-    if (this.myRole != 'Participant') {
+    if (this.editInfoService.state.syncMode != 'nonSync') {
       this.socket.emit('sync:FileList', data)
     }
   }
