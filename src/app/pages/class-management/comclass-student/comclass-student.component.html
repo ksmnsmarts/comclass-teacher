@@ -26,7 +26,7 @@
                 <div *ngFor="let student of thumbArray let i = index">
                     <div #studentScreen class="studentScreen">
                         <img #studentBg id="studentBg{{student.studentName}}" class="studentBg" width="{{student.width}}" height="{{student.height}}">
-                        <canvas #student_monitoring id="student_monitoring" class="student_monitoring" width="{{student.width}}" height="{{student.height}}"></canvas>
+                        <canvas #student_monitoring id="student_monitoring{{student.studentName}}" class="student_monitoring" width="{{student.width}}" height="{{student.height}}"></canvas>
                     </div>
                     <div class="studentId"><span> ( page: {{i+1}} )</span></div>
                 </div>

@@ -5,6 +5,7 @@ import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.se
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.service';
 import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
+import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
 import { ClassInfoService } from 'src/app/0.shared/store/class-info';
 import { StudentInfoService } from 'src/app/0.shared/store/student-info.service';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
@@ -39,6 +40,7 @@ export class ComclassStudentComponent implements OnInit {
         private renderingService: RenderingService,
         private viewInfoService: ViewInfoService,
         private canvasService: CanvasService,
+        private pdfStorageService: PdfStorageService
     ) {
         this.socket = this.socketService.socket;
     }
@@ -97,21 +99,31 @@ export class ComclassStudentComponent implements OnInit {
                     this.studentList[i].pageInfo = data.pageInfo
             }
 
+            
+            const canvas = (document.getElementById('student_monitoring' + data.studentName) as HTMLInputElement);
+            const studentImgBg = (document.getElementById('studentBg' + data.studentName) as HTMLInputElement);
 
-            const canvas = (<HTMLDivElement>document.getElementById('student_monitoring'));
-            const studentImgBg = (<HTMLDivElement>document.getElementById('studentBg' + data.studentName));
+            const viewport = this.pdfStorageService.getViewportSize(data.pageInfo.currentDocNum, data.pageInfo.currentPage);
 
-            console.log(canvas)
+            
+            // landscape 문서 : 가로를 150px(thumbnailMaxSize)로 설정
+            if (viewport.width > viewport.height) {
+                canvas.width = CANVAS_CONFIG.studentListMaxSize;
+                canvas.height = canvas.width * viewport.height / viewport.width;
 
-            // if (studentImgBg.width > studentImgBg.height) {
-            //     canvas.width = CANVAS_CONFIG.studentListMaxSize;
-            //     canvas.height = canvas.width * studentImgBg.height / studentImgBg.width;
-            // }
-            // else {
-            //     canvas.height = CANVAS_CONFIG.studentListMaxSize;
-            //     canvas.width = canvas.height * studentImgBg.width / studentImgBg.height;
-            // }
+                studentImgBg.width = CANVAS_CONFIG.studentListMaxSize;
+                studentImgBg.height = studentImgBg.width * viewport.height / viewport.width;
+            }
+            // portrait 문서 : 세로를 150px(thumbnailMaxSize)로 설정
+            else {
+                canvas.height = CANVAS_CONFIG.studentListMaxSize;
+                canvas.width = canvas.height * viewport.width / viewport.height;
 
+                studentImgBg.height = CANVAS_CONFIG.studentListMaxSize;
+                studentImgBg.width = studentImgBg.height * viewport.width / viewport.height;
+            }
+    
+    
             this.renderingService.renderThumbBackground(studentImgBg, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
 
             
