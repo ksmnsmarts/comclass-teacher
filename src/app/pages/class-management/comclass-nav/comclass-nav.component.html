@@ -88,10 +88,10 @@
                       						</i> -->
                         <!-- 수연 -->
 
-                        <mat-icon [ngClass]="(syncMode == 'sync') ? 'syncActive': '' ">
+                        <mat-icon *ngIf="syncMode == 'sync'" [ngClass]="(syncMode == 'sync') ? 'syncActive': '' ">
                           link
                         </mat-icon>
-                        <mat-icon [ngClass]="(syncMode == 'nonSync')? 'active': '' ">
+                        <mat-icon *ngIf="syncMode == 'nonSync'">
                           link_off
                         </mat-icon>
                         <!-- <i class="fas fa-2x fa-unlink" style="color:#9E9E9E" >

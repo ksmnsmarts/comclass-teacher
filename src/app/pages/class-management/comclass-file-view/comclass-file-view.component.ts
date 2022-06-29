@@ -13,6 +13,7 @@ import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 
 import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.service';
 import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
+import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 
 
@@ -36,7 +37,7 @@ export class ComclassFileViewComponent implements OnInit {
         private apiService: ApiService,
         private socketService: SocketService,
         private eventBusService: EventBusService,
-
+        private editInfoService: EditInfoService,
         private dialogService: DialogService,
         public dialog: MatDialog,
     ) {
@@ -151,7 +152,7 @@ export class ComclassFileViewComponent implements OnInit {
         }
 
         // Participant 모드 일 경우 sync 기능 적용 제외
-        if (this.myRole != 'Participant') {
+        if (this.editInfoService.state.syncMode != 'nonSync') {
             this.socket.emit('sync:doc', data)
         }
         //////////////////////////////////////////////////////////

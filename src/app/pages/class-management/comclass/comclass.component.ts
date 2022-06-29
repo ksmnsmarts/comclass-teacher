@@ -18,6 +18,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ClassService } from 'src/app/0.shared/services/class/class.service';
 import { ClassInfoService } from 'src/app/0.shared/store/class-info';
 import { faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons';
+import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
 
 
 
@@ -65,6 +66,7 @@ export class ComclassComponent implements OnInit {
         private zoomService: ZoomService,
         private socketService: SocketService,
         private route: ActivatedRoute,
+        private editInfoService: EditInfoService
     ) {
         this.socket = this.socketService.socket;
     }
@@ -141,9 +143,10 @@ export class ComclassComponent implements OnInit {
             if (data.tool.type != 'pointer') {
                 this.drawStorageService.setDrawEvent(pageInfo.currentDocNum, pageInfo.currentPage, data);
             }
+            data.mode = this.editInfoService.state.syncMode;
 
             const newDataEvent = {
-                mod:'syncMod',
+
                 participantName: 'teacher',
                 drawingEvent: data,
                 docId: pageInfo.currentDocId,

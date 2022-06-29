@@ -155,7 +155,7 @@ export class ComclassNavComponent implements OnInit {
         });
 
 
-        
+
 
 
     }
@@ -259,16 +259,17 @@ export class ComclassNavComponent implements OnInit {
      * Move 선택
      *
      * @param mode : 현재는 'move'만 있음 (향후 sync?)
-     *
+     * @param mode : nonSysn
      */
     changeSyncMode(mode) {
         const editInfo = Object.assign({}, this.editInfoService.state);
-        editInfo.syncMode = mode;
+        (this.syncMode == mode) ? this.syncMode = 'sync' : this.syncMode = 'nonSync'
+        editInfo.syncMode = this.syncMode;
         this.editInfoService.setEditInfo(editInfo);
     }
 
 
-    // student list 
+    // student list
     studentList() {
         this.eventBusService.emit(new EventData('studentList', 'studentListMode'));
     }
