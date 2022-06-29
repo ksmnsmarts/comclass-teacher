@@ -8,6 +8,7 @@ import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.
 import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
 import { ClassInfoService } from 'src/app/0.shared/store/class-info';
+import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
 import { StudentInfoService } from 'src/app/0.shared/store/student-info.service';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 import { CANVAS_CONFIG } from '../../../0.shared/config/config';
@@ -42,6 +43,7 @@ export class ComclassStudentComponent implements OnInit {
         private viewInfoService: ViewInfoService,
         private canvasService: CanvasService,
         private pdfStorageService: PdfStorageService,
+        private editInfoService: EditInfoService,
         private drawingService: DrawingService
     ) {
         this.socket = this.socketService.socket;
@@ -153,7 +155,7 @@ export class ComclassStudentComponent implements OnInit {
                     this.drawingService.drawThumb(data.drawingEvent, canvas, scale);
                 }
             }
-        
+
         });
     }
 
@@ -204,6 +206,12 @@ export class ComclassStudentComponent implements OnInit {
         this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
     }
 
+    startOneOnOneMode(data) {
+        console.log(data.studentName)
+        const editInfo = Object.assign({}, this.editInfoService.state);
+        this.eventBusService
+        this.editInfoService.setEditInfo(editInfo);
 
+    }
 
 }
