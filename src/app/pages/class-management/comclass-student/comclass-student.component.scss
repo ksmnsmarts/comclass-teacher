@@ -77,6 +77,11 @@
         //left: 0;
         overflow-y: auto;
         padding: 20px;
+
+
+        .studentList {
+            flex-wrap: wrap;
+        }
     }
 
     .monitoringPage>div {

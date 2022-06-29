@@ -22,7 +22,7 @@
                     현재 접속한 학생이 없습니다.
                 </span>
             </div>
-            <div *ngIf="studentCount > 0">
+            <div class="studentList" *ngIf="studentCount > 0" fxLayout="row" fxLayoutGap="30px">
                 <div *ngFor="let student of thumbArray let i = index">
                     <div #studentScreen class="studentScreen">
                         <img #studentBg id="studentBg{{student.studentName}}" class="studentBg" width="{{student.width}}" height="{{student.height}}">

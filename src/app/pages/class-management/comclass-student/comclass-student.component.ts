@@ -94,14 +94,14 @@ export class ComclassStudentComponent implements OnInit {
          ************************************************************/
         this.socket.emit('begin:monitoring', '');
 
-        this.socket.on('send:monitoringCanvas', (data) => {
+        this.socket.on('send:monitoringCanvas', async (data) => {
 
             for (let i = 0; i < this.studentList.length; i++) {
                 if (this.studentList[i].studentName == data.studentName)
                     this.studentList[i].pageInfo = data.pageInfo
             }
 
-
+            await new Promise(res => setTimeout(res, 0));
             const canvas = (document.getElementById('student_monitoring' + data.studentName) as HTMLInputElement);
             const studentImgBg = (document.getElementById('studentBg' + data.studentName) as HTMLInputElement);
 
