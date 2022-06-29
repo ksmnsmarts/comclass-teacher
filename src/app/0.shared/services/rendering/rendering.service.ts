@@ -74,6 +74,7 @@ export class RenderingService {
      * @param {Object} data drawing data (tool, timediff, points)
      */
     renderThumbBoard(thumbCanvas, docNum, pageNum) {
+        console.log(thumbCanvas, docNum, pageNum)
         let drawingEvents = this.drawStorageService.getDrawingEvents(docNum, pageNum);
         // 해당 page의 drawing 정보가 있는 경우
         if (drawingEvents?.drawingEvent && drawingEvents?.drawingEvent.length > 0) {

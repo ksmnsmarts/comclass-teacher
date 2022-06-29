@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { distinctUntilChanged, pairwise, Subject, takeUntil } from 'rxjs';
 import { CanvasService } from 'src/app/0.shared/services/canvas/canvas.service';
+import { DrawingService } from 'src/app/0.shared/services/drawing/drawing.service';
 import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.service';
@@ -40,7 +41,8 @@ export class ComclassStudentComponent implements OnInit {
         private renderingService: RenderingService,
         private viewInfoService: ViewInfoService,
         private canvasService: CanvasService,
-        private pdfStorageService: PdfStorageService
+        private pdfStorageService: PdfStorageService,
+        private drawingService: DrawingService
     ) {
         this.socket = this.socketService.socket;
     }
@@ -99,14 +101,14 @@ export class ComclassStudentComponent implements OnInit {
                     this.studentList[i].pageInfo = data.pageInfo
             }
 
-            
+
             const canvas = (document.getElementById('student_monitoring' + data.studentName) as HTMLInputElement);
             const studentImgBg = (document.getElementById('studentBg' + data.studentName) as HTMLInputElement);
 
             const viewport = this.pdfStorageService.getViewportSize(data.pageInfo.currentDocNum, data.pageInfo.currentPage);
 
-            
-            // landscape 문서 : 가로를 150px(thumbnailMaxSize)로 설정
+
+            // landscape 문서 : 가로를 300px(studentListMaxSize)로 설정
             if (viewport.width > viewport.height) {
                 canvas.width = CANVAS_CONFIG.studentListMaxSize;
                 canvas.height = canvas.width * viewport.height / viewport.width;
@@ -114,7 +116,7 @@ export class ComclassStudentComponent implements OnInit {
                 studentImgBg.width = CANVAS_CONFIG.studentListMaxSize;
                 studentImgBg.height = studentImgBg.width * viewport.height / viewport.width;
             }
-            // portrait 문서 : 세로를 150px(thumbnailMaxSize)로 설정
+            // portrait 문서 : 세로를 300px(studentListMaxSize)로 설정
             else {
                 canvas.height = CANVAS_CONFIG.studentListMaxSize;
                 canvas.width = canvas.height * viewport.width / viewport.height;
@@ -122,12 +124,37 @@ export class ComclassStudentComponent implements OnInit {
                 studentImgBg.height = CANVAS_CONFIG.studentListMaxSize;
                 studentImgBg.width = studentImgBg.height * viewport.width / viewport.height;
             }
-    
-    
-            this.renderingService.renderThumbBackground(studentImgBg, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
 
-            
+
+            this.renderingService.renderThumbBackground(studentImgBg, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
+            this.renderingService.renderThumbBoard(canvas, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
+
         })
+
+
+        /*-------------------------------------
+            monitoring canvas open 상태에서
+            학생이 draw 하는 내용에 대한 update.
+        ---------------------------------------*/
+        this.socket.on('send:monitoringCanvasDrawEvent', (data) => {
+            console.log('<--- receive : monitoringCanvas One drawing Event from student.', data);
+
+            const canvas = (document.getElementById('student_monitoring' + data.studentName) as HTMLInputElement);
+
+            if (!canvas) {
+                console.log("------------> ERROR:  Check STUDENT LIST... ", data.studentName);
+                return;
+            }
+
+            // 학생의 drawing event를 그리기
+            for (let i = 0; i < this.thumbArray.length; i++) {
+                if (this.thumbArray[i].studentName == data.studentName) {
+                    const scale = this.thumbArray[i].scale;
+                    this.drawingService.drawThumb(data.drawingEvent, canvas, scale);
+                }
+            }
+        
+        });
     }
 
 
