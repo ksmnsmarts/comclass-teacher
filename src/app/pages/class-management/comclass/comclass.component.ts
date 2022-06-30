@@ -181,6 +181,7 @@ export class ComclassComponent implements OnInit {
       }
       const classInfo: any = await lastValueFrom(this.comclassService.getClassInfo(data))
       console.log(classInfo)
+      classInfo.role = 'teacher';
       this.socket.emit('join:class', classInfo);
       this.socket.on('update:classInfo', (classInfo) => {
         console.log('classInfo', classInfo)
@@ -423,7 +424,7 @@ export class ComclassComponent implements OnInit {
             }
         }
 
-    
+
 
 
         // viewInfoService 현재 바라보는 문서가 있을경우 함수 실행
