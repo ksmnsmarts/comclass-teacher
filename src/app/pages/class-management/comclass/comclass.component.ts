@@ -128,13 +128,8 @@ export class ComclassComponent implements OnInit {
             });
         ///////////////////////////////////////////////////////
 
-        // 현재 접속 중인 참여자 수 구하기
-        this.eventBusService.on("currentMembersCount", this.unsubscribe$, (data) => {
-            console.log(data)
-            this.currentMembersCount = data;
-        })
 
-        /////////////////////////////////////////////////////////
+
         // 새로운 판서 Event local 저장 + 서버 전송
         this.eventBusService.on('gen:newDrawEvent', this.unsubscribe$, async (data) => {
             console.log(data)
@@ -418,16 +413,17 @@ export class ComclassComponent implements OnInit {
             documentInfo: documentInfo
         }
 
-
         // 최초 load인 경우 document ID는 처음 것으로 설정
         if (!this.viewInfoService.state.pageInfo.currentDocId) {
             obj.pageInfo = {
                 currentDocId: documentInfo[0]._id,
                 currentDocNum: 1,
                 currentPage: 1,
-                zoomScale: this.zoomService.setInitZoomScale()
+                zoomScale: this.zoomService.setInitZoomScale(1, 1)
             }
         }
+
+    
 
 
         // viewInfoService 현재 바라보는 문서가 있을경우 함수 실행
@@ -436,12 +432,13 @@ export class ComclassComponent implements OnInit {
             // 현재 바라보는 문서 ID와 DB에서 받아온 문서 ID가 일치하는게 없으면 첫 페이지로 돌아오고 문서가 삭제됐다고 알림
             const res = this.pdfStorageService.pdfVarArray.filter((x) => x._id == this.viewInfoService.state.pageInfo.currentDocId);
             console.log(res)
+
             if (res.length == 0) {
                 obj.pageInfo = {
                     currentDocId: documentInfo[0]._id,
                     currentDocNum: 1,
                     currentPage: 1,
-                    zoomScale: this.zoomService.setInitZoomScale()
+                    zoomScale: this.zoomService.setInitZoomScale(1, 1)
                 }
                 obj.leftSideView = 'fileList';
                 alert('The pdf file has been deleted');
