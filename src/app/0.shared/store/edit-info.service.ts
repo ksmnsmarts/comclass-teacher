@@ -55,4 +55,25 @@ export class EditInfoService extends Store<any> {
             ...this.state, ...editInfo
         });
     }
+
+    memoryRelease() {
+        this.state.mode = 'draw'; //'fileList', 'thumbnail';
+        this.state.tool = 'pen'; // {_id: '',  currentPage: 1,  numPages: 1}
+        this.state.toolsConfig = {
+            pointer: { width: 20, color: 'black' },
+            pen: { width: 4, color: 'black' },
+            highlighter: { width: 20, color: 'ff0' },
+            eraser: { width: 60, color: '#ffffff' },
+            line: { width: 4, color: 'black' },
+            circle: { width: 4, color: 'black' },
+            rectangle: { width: 4, color: 'black' },
+            roundedRectangle: { width: 4, color: 'black' },
+            textarea: { width: 20, color: 'black' },
+            text: { width: 20, color: 'black' },
+        }
+
+        this.state.toolDisabled = false; // move인 경우
+        this.state.editDisabled = false; // Edit 자체 동작을 모두 방지(권한 관련)
+        this.state.syncMode = 'sync';
+    }
 }
