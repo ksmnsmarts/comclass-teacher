@@ -30,9 +30,7 @@ export class RenderingService {
      * @param {element} canvas <canvas>
      */
     async renderThumbBackground(imgElement, pdfNum, pageNum) {
-        console.log(this.pdfStorageService.pdfVarArray)
         const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
-        console.log(pdfPage)
         // 배경 처리를 위한 임시 canvas
         const tmpCanvas = document.createElement('canvas');
         const tmpCtx = tmpCanvas.getContext("2d");
@@ -74,13 +72,10 @@ export class RenderingService {
      * @param {Object} data drawing data (tool, timediff, points)
      */
     renderThumbBoard(thumbCanvas, docNum, pageNum) {
-        console.log(thumbCanvas, docNum, pageNum)
         let drawingEvents = this.drawStorageService.getDrawingEvents(docNum, pageNum);
         // 해당 page의 drawing 정보가 있는 경우
         if (drawingEvents?.drawingEvent && drawingEvents?.drawingEvent.length > 0) {
             const viewport = this.pdfStorageService.getViewportSize(docNum, pageNum);
-            console.log(viewport.width)
-            console.log(thumbCanvas.width)
             const scale = thumbCanvas.width / (viewport.width * CANVAS_CONFIG.CSS_UNIT);
             // const scale = 0.3;
 

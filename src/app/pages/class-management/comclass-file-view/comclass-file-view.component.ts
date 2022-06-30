@@ -13,6 +13,7 @@ import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 
 import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.service';
 import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
+import { ZoomService } from 'src/app/0.shared/services/zoom/zoom.service';
 import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 
@@ -40,6 +41,7 @@ export class ComclassFileViewComponent implements OnInit {
         private editInfoService: EditInfoService,
         private dialogService: DialogService,
         public dialog: MatDialog,
+        private zoomService: ZoomService,
     ) {
         this.socket = this.socketService.socket;
     }
@@ -58,6 +60,7 @@ export class ComclassFileViewComponent implements OnInit {
     myRole: any = 'Presenter'; // 나의 역할(권한)
 
     documentInfo = [];
+    documentPageInfo;
 
     ngOnInit(): void {
 
@@ -70,15 +73,18 @@ export class ComclassFileViewComponent implements OnInit {
                 this.documentInfo = documentInfo;
                 console.log(this.documentInfo)
                 await new Promise(res => setTimeout(res, 0));
-                if (this.documentInfo){
-                  this.renderFileList();
-                }
 
-                if(this.documentInfo) {
-                    this.renderFileList();
-                }
-
+                this.renderFileList();
             });
+
+            
+        this.viewInfoService.state$
+        .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'))
+        .subscribe((pageInfo) => {
+            this.documentPageInfo = pageInfo;
+
+            console.log('[info] documentInfo: ', this.documentPageInfo);
+        });
 
 
 
@@ -155,6 +161,24 @@ export class ComclassFileViewComponent implements OnInit {
         if (this.editInfoService.state.syncMode != 'nonSync') {
             this.socket.emit('sync:doc', data)
         }
+
+
+
+        /**********************************************
+        * 다른 가로문서, 세로문서를 바라볼 때마다 
+        * zoomScale이 첫번째 doc의 documentInfo[0]._id로 설정되어
+        * zoomScale이 첫번째 문서에 고정 돼 화면에 꽉 차게 나오지 않는 문제를 해결
+        **********************************************/
+        const obj = this.documentPageInfo;
+
+        obj.pageInfo = {
+            currentDocId: obj.currentDocId,
+            currentDocNum: obj.currentDocNum,
+            currentPage: obj.currentPage,
+            zoomScale: this.zoomService.setInitZoomScale(obj.currentDocNum, obj.currentPage)
+        }       
+        this.viewInfoService.setViewInfo(obj);
+        
         //////////////////////////////////////////////////////////
     }
 
