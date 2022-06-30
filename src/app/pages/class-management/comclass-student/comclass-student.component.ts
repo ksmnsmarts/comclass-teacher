@@ -206,8 +206,15 @@ export class ComclassStudentComponent implements OnInit {
         const editInfo = Object.assign({}, this.editInfoService.state);
         editInfo.syncMode = 'oneOnOneMode'
         this.editInfoService.setEditInfo(editInfo);
-
-        this.socket.emit('begin:guidance', data.studentName, this.currentDocNum, this.currentPageNum);
+        this.socket.emit('begin:guidance', data.studentName);
+		    this.socket.on('teacher:studentViewInfo',((data: any)=>{
+            console.log(data)
+            const viewInfo = Object.assign({}, this.viewInfoService.state);
+            viewInfo.pageInfo.currentDocNum = data.currentDocNum
+            viewInfo.pageInfo.currentPage = data.currentPage
+            this.viewInfoService.setViewInfo(viewInfo);
+		    }))
+        this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
     }
 
 }

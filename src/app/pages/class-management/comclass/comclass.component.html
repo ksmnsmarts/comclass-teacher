@@ -1,16 +1,23 @@
+<!-----------------------------------------------------------------------
+        Student List
+--------------------------------------------------------------------- -->
+<div>
+  <app-comclass-student *ngIf="mode == 'studentListMode'"></app-comclass-student>
+</div>
+
 <div class="comclass-container">
 
   <!----------------------------------------------------------------
 		comclass-nav
 	--------------------------------------------------------------- -->
-  <div class="navbar_container" *ngIf="mode != 'studentListMode'">
+  <div class="navbar_container" [hidden]="mode == 'studentListMode'">
     <app-comclass-nav></app-comclass-nav>
   </div>
 
   <!----------------------------------------------------------------
 		comclass-slide-view
 	--------------------------------------------------------------- -->
-  <div class="sidebar_container" *ngIf="mode != 'studentListMode'">
+  <div class="sidebar_container" [hidden]="mode == 'studentListMode'">
     <app-comclass-file-view [hidden]="leftSideView != 'fileList'" (newLocalDocumentFile)="onDocumentOpened($event)">
     </app-comclass-file-view>
 
@@ -21,7 +28,7 @@
   <!----------------------------------------------------------------
 		comclass-canvas
 	--------------------------------------------------------------- -->
-  <div class="comclass_container" *ngIf="mode != 'studentListMode'">
+  <div class="comclass_container" [hidden]="mode == 'studentListMode'" >
     <div class="comclass-main">
       <app-comclass-canvas class="app-comclass-canvas"></app-comclass-canvas>
 
@@ -35,18 +42,8 @@
 				- replay
 			------------------------------------------ -->
       <div class="fabs_container">
-        <app-comclass-fabs *ngIf="mode != 'studentListMode'"></app-comclass-fabs>
+        <app-comclass-fabs [hidden]="mode == 'studentListMode'"></app-comclass-fabs>
       </div>
     </div>
   </div>
-
-  <!-----------------------------------------------------------------------
-        Student List
-    --------------------------------------------------------------------- -->
-  <div>
-    <app-comclass-student *ngIf="mode == 'studentListMode'"></app-comclass-student>
-  </div>
-
-
-
 </div>
