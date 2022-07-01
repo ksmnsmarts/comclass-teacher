@@ -17,6 +17,9 @@ import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
 import eraserIcon from '@iconify/icons-mdi/eraser';
 import markerIcon from '@iconify/icons-mdi/marker';
 import shapeOutlineIcon from '@iconify/icons-mdi/shape-outline';
+import highlighterF from '@iconify/icons-jam/highlighter-f';
+
+
 import { ClassInfoService } from 'src/app/0.shared/store/class-info';
 import { StudentInfoService } from 'src/app/0.shared/store/student-info.service';
 
@@ -51,6 +54,7 @@ export class ComclassNavComponent implements OnInit {
     eraserIcon = eraserIcon;
     shapeOutlineIcon = shapeOutlineIcon;
     markerIcon = markerIcon;
+    highlighterF = highlighterF;
     //////////////////////////////////////
 
     // Width: 3단계 설정
@@ -110,7 +114,8 @@ export class ComclassNavComponent implements OnInit {
         this.editInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged())
             .subscribe((editInfo) => {
-                // console.log(editInfo);
+                console.log(editInfo);
+                this.syncMode = editInfo.syncMode;
                 this.mode = editInfo.mode;
                 this.currentTool = editInfo.tool;
                 this.currentColor = editInfo.toolsConfig.pen.color;
@@ -126,6 +131,11 @@ export class ComclassNavComponent implements OnInit {
                     text: editInfo.toolsConfig.text.width,
                     textarea: editInfo.toolsConfig.textarea.width,
                 }
+
+
+                // if(this.syncMode == 'oneOnOneMode') {
+                //     this.syncMode = 'oneOnOneMode'
+                // }
             });
 
         /*-------------------------------------------

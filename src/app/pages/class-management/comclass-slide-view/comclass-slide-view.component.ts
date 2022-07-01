@@ -101,24 +101,6 @@ export class ComclassSlideViewComponent implements OnInit {
             });
 
 
-        this.editInfoService.state$
-            .pipe(takeUntil(this.unsubscribe$), pluck('syncMode'))
-            .subscribe((syncMode) => {
-                console.log(syncMode);
-
-                if (syncMode == 'oneOnOneMode') {
-                    this.eventBusService.emit(new EventData('oneOnOneMode:showWindow', ''))
-                 
-                }
-            })
-
-
-
-
-
-
-
-
         // if (this.editInfoService.state.syncMode != 'nonSync') {
         //     this.socket.emit('sync:page', data)
         // }
@@ -252,22 +234,6 @@ export class ComclassSlideViewComponent implements OnInit {
             // console.log('<---[BUS] change:containerSize ::  this.thumbWindowSize : ', this.thumbWindowSize)
         });
 
-
-
-
-
-        this.eventBusService.on('show:window', this.unsubscribe$, async (data) => {
-            console.log('oneOnOneMode:showWindow444444444444444444', data)
-
-            this.thumbWindowSize = {
-                width: this.thumbArray[this.currentPageNum - 1].width * data.ratio.w + 'px',
-                height: this.thumbArray[this.currentPageNum - 1].height * data.ratio.h + 'px'
-            };
-
-            this.thumbWindow = this.thumbWindowRef.last.nativeElement;
-            this.thumbWindow.style.left = data.left * this.scrollRatio + 'px';
-            this.thumbWindow.style.top = data.top * this.scrollRatio + 'px';
-        });
     }
 
     /////////////////////////////////////////////////////////////////////////////////////////
