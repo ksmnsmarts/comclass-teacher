@@ -57,6 +57,8 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
     @ViewChild('canvasCover', { static: true }) public coverCanvasRef: ElementRef;
     @ViewChild('teacherCanvas', { static: true }) public teacherCanvasRef: ElementRef;
     @ViewChild('rxCanvasCover', { static: true }) public rxCoverCanvasRef: ElementRef;
+    @ViewChild('studentGuideCanvas', { static: true }) public studentGuideCanvasRef: ElementRef;
+    @ViewChild('teacherGuideCanvas', { static: true }) public teacherGuideCanvasRef: ElementRef;
     @ViewChild('bg', { static: true }) public bgCanvasRef: ElementRef;
     @ViewChild('tmp', { static: true }) public tmpCanvasRef: ElementRef;
 
@@ -108,7 +110,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
         ////////////////////////////////////////////////
         // Document가 Update 된 경우
         this.viewInfoService.state$
-            .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'), distinctUntilChanged())
+            .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'))
             .subscribe((pageInfo) => {
                 console.log(pageInfo)
                 this.currentDocNum = pageInfo.currentDocNum;
@@ -116,6 +118,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                 // 초기 load 포함 변경사항에 대해 수행
                 // (doc change, page change, zoom change 등)
                 if (pageInfo.currentDocId) {
+                    console.log('onChangePage and rendering')
                     this.onChangePage();
                 }
             });
@@ -129,13 +132,13 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged(), pairwise())
             .subscribe(([prevViewInfo, viewInfo]) => {
 
-               console.log(prevViewInfo.leftSideView)
+                console.log(prevViewInfo.leftSideView)
 
-               // 현재 sideBar doc. view 정보 받아서 저장.
-               this.prevViewInfo = prevViewInfo.leftSideView
+                // 현재 sideBar doc. view 정보 받아서 저장.
+                this.prevViewInfo = prevViewInfo.leftSideView
 
 
-        });
+            });
 
         ///////////////////////////////////////////////
 
@@ -163,10 +166,10 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
 
                 // text모드에서 갑작스럽게 다른 모드로 전환할경우
                 // textarea 삭제
-                if(editInfo.tool != 'text'){
+                if (editInfo.tool != 'text') {
                     var textInput = (<HTMLInputElement>document.getElementById('textarea'));
-                    if(textInput){
-                      textInput.parentNode.removeChild(textInput);
+                    if (textInput) {
+                        textInput.parentNode.removeChild(textInput);
                     }
                 }
 
@@ -346,7 +349,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
         * document.getElementById('thumb_' + pageNum) (이미지)가 정의되지 않아 오류가 난다.
         * 그래서 doc을 클릭하여 thumbnail view 일 경우에만 실행하도록 설정함.
         ****************************************************/
-        if(this.prevViewInfo === 'thumbnail'){
+        if (this.prevViewInfo === 'thumbnail') {
             ctx.drawImage(imgElement, 0, 0, targetCanvas.width, targetCanvas.height);
         }
     }
@@ -406,7 +409,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
     onChangePage() {
 
         const pageInfo = this.viewInfoService.state.pageInfo;
-
+        console.log(pageInfo)
         //document Number -> 1부터 시작.
         const docNum = pageInfo.currentDocNum;
         const pageNum = pageInfo.currentPage;

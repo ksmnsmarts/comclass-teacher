@@ -1,6 +1,6 @@
 <div #canvasContainer id="canvas" class="canvas-container" [dragScroll]="dragOn">
     <!-- 안쓸수도.. -->
-    <div class="tmp"> 
+    <div class="tmp">
         <canvas #tmp></canvas>
     </div>
 
@@ -12,12 +12,18 @@
     <div class="canvasTeacher">
         <canvas #teacherCanvas></canvas>
     </div>
-    
+
+    <!------------------------[ 선생님 판서 Guidance. ] ------------------------- -->
+    <div class="guidance" ng-show="vm.isGuideMode">
+        <canvas #studentGuideCanvas id="studentGuideCanvas"></canvas>
+        <canvas #teacherGuideCanvas id="teacherGuideCanvas"></canvas>
+    </div>
+
     <!-- 안씀.. -->
     <div class="coverRx">
         <canvas #rxCanvasCover></canvas>
     </div>
-  
+
     <!-- 본인판서 -->
     <div class="cover" [hidden] = "editDisabled">
         <canvas #canvasCover></canvas>

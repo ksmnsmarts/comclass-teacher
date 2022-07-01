@@ -88,13 +88,17 @@ export class ComclassStudentComponent implements OnInit {
 
         this.socket.on('teacher:studentViewInfo', ((data: any) => {
             console.log('teacher:studentViewInfo')
+            console.log(this.viewInfoService.state)
             const viewInfo = Object.assign({}, this.viewInfoService.state);
+            viewInfo.pageInfo.currentDocId = data.currentDocId
             viewInfo.pageInfo.currentDocNum = data.currentDocNum
             viewInfo.pageInfo.currentPage = data.currentPage
+            viewInfo.pageInfo.zoomScale = data.zoomScale
             viewInfo.leftSideView = 'thumbnail';
             console.log(viewInfo)
             this.viewInfoService.setViewInfo(viewInfo);
-
+            console.log(this.viewInfoService.state)
+            this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
         }))
 
         /************************************************************
@@ -218,7 +222,7 @@ export class ComclassStudentComponent implements OnInit {
         editInfo.syncMode = 'oneOnOneMode'
         this.editInfoService.setEditInfo(editInfo);
         this.socket.emit('begin:guidance', data.studentName);
-        this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
+
     }
 
 }
