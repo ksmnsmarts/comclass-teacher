@@ -86,6 +86,7 @@ export class ComclassStudentComponent implements OnInit {
             }
         );
 
+
         this.socket.on('teacher:studentViewInfo', ((data: any) => {
             console.log('teacher:studentViewInfo')
             console.log(this.viewInfoService.state)
@@ -100,6 +101,7 @@ export class ComclassStudentComponent implements OnInit {
             console.log(this.viewInfoService.state)
             this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
         }))
+
 
         /************************************************************
          * 모니터링

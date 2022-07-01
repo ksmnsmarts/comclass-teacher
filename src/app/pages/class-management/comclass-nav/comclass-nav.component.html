@@ -54,7 +54,7 @@
                     <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
                         <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' "
                             (click)="changeTool('highlighter');" mat-icon-button>
-                            <ic-icon [icon]="markerIcon" [width]="30" [height]="30" [ngClass]="(currentTool == 'highlighter') && (mode == 'draw')?'active':''" ></ic-icon>
+                            <ic-icon [icon]="highlighterF" [width]="30" [height]="30" [ngClass]="(currentTool == 'highlighter') && (mode == 'draw')?'active':''" ></ic-icon>
                             <span class="iconify" data-icon="mdi:marker"></span>
                         </button>
                     </div>
@@ -91,6 +91,9 @@
                         <mat-icon *ngIf="syncMode == 'sync'" [ngClass]="(syncMode == 'sync') ? 'syncActive': '' ">
                           link
                         </mat-icon>
+                        <mat-icon *ngIf="syncMode == 'oneOnOneMode'" [ngClass]="(syncMode == 'oneOnOneMode') ? 'nonSyncActive': '' ">
+                            link
+                          </mat-icon>
                         <mat-icon *ngIf="syncMode == 'nonSync'">
                           link_off
                         </mat-icon>

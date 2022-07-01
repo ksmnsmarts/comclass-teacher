@@ -53,6 +53,9 @@ export class ComclassComponent implements OnInit {
     // Left Side Bar
     leftSideView;
 
+    syncMode = 'sync';
+    studentName;
+
     mode = 'defaultMode';
 
     constructor(
@@ -154,6 +157,21 @@ export class ComclassComponent implements OnInit {
         });
         //////////////////////////////////////////////////////////////////
 
+        this.socket.on('teacher:studentViewInfo', ((data: any) => {
+            this.studentName = data.studentName
+        }))
+
+
+        ////////////////////////////////////////////////////////
+        // sync 모드 시 버튼 처리
+        this.editInfoService.state$
+            .pipe(takeUntil(this.unsubscribe$), pluck('syncMode'))
+            .subscribe((syncMode) => {
+                this.syncMode = syncMode;
+                console.log(this.syncMode)               
+            });
+        ///////////////////////////////////////////////////////
+
 
         this.eventBusService.on("studentList", this.unsubscribe$, (data) => {
             console.log(data)
@@ -173,12 +191,22 @@ export class ComclassComponent implements OnInit {
         this.socket.close()
     }
 
+    // 모니터링 취소
+    cancelMonitoring() {
+        const editInfo = Object.assign({}, this.editInfoService.state);
+        editInfo.syncMode = 'sync'
+        this.editInfoService.setEditInfo(editInfo);
+
+        this.socket.emit('cancel:monitoring', '')
+    }
+
     async getMeetingInfo(){
       const data = {
         _id: this.classId
       }
       const classInfo: any = await lastValueFrom(this.comclassService.getClassInfo(data))
       console.log(classInfo)
+
       classInfo.role = 'teacher';
       this.socket.emit('join:class', classInfo);
       this.socket.on('update:classInfo', (classInfo) => {

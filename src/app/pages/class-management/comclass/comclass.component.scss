@@ -99,51 +99,24 @@ $navbar-height: 70px;
   width: 0 !important;
 }
 
-.videoOverlay_wrap {
-
-    .videoOverlay_button {
-        position: relative;
-        /* bottom: 55px; */
-        /* right: 25px; */
-        transform: scale(1);
-        border-radius: 50%;
-        background-color: #b2b2b2;
-        line-height: 0;
-        color: white;
-        margin-right: 20px;
-    }
-    
-    .videoOverlay_button:hover {
-        cursor: pointer;
-        background-color: #3f51b5;
-    }
-    
-    
-}
 
 
-.visibleVideo_button {
-    background-color: #b2b2b2;
-    color: white;
-    border-radius: 50%;
-    // position: fixed;
-    // bottom: 50px;
-    // right: 315px;
-    transform: scale(1);     
-
-}
-
-
-.visibleVideo_button:hover {
-    cursor: pointer;
-    background-color: #3f51b5;
+.syncMode_container {
+    position: fixed;
+    top: 100px;
+    right: 0px;
+    display: flex;
+    justify-content: center;
+    width: 120px;
 }
 
 
 
-.hiddenVideoMode {
-    display: none;
-}
+
+
+
+
+
 
 
 @media screen and (max-width: 780px) {

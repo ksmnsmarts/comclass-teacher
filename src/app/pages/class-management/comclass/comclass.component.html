@@ -2,48 +2,65 @@
         Student List
 --------------------------------------------------------------------- -->
 <div>
-  <app-comclass-student *ngIf="mode == 'studentListMode'"></app-comclass-student>
+    <app-comclass-student *ngIf="mode == 'studentListMode'"></app-comclass-student>
 </div>
 
 <div class="comclass-container">
 
-  <!----------------------------------------------------------------
+    <!----------------------------------------------------------------
 		comclass-nav
 	--------------------------------------------------------------- -->
-  <div class="navbar_container" [hidden]="mode == 'studentListMode'">
-    <app-comclass-nav></app-comclass-nav>
-  </div>
+    <div class="navbar_container" [hidden]="mode == 'studentListMode'">
+        <app-comclass-nav></app-comclass-nav>
+    </div>
 
-  <!----------------------------------------------------------------
+    <!----------------------------------------------------------------
 		comclass-slide-view
 	--------------------------------------------------------------- -->
-  <div class="sidebar_container" [hidden]="mode == 'studentListMode'">
-    <app-comclass-file-view [hidden]="leftSideView != 'fileList'" (newLocalDocumentFile)="onDocumentOpened($event)">
-    </app-comclass-file-view>
+    <div class="sidebar_container" [hidden]="mode == 'studentListMode'">
+        <app-comclass-file-view [hidden]="leftSideView != 'fileList'" (newLocalDocumentFile)="onDocumentOpened($event)">
+        </app-comclass-file-view>
 
-    <app-comclass-slide-view [hidden]="leftSideView !='thumbnail'"></app-comclass-slide-view>
+        <app-comclass-slide-view [hidden]="leftSideView !='thumbnail'"></app-comclass-slide-view>
 
-  </div>
+    </div>
 
-  <!----------------------------------------------------------------
+    <!----------------------------------------------------------------
 		comclass-canvas
 	--------------------------------------------------------------- -->
-  <div class="comclass_container" [hidden]="mode == 'studentListMode'" >
-    <div class="comclass-main">
-      <app-comclass-canvas class="app-comclass-canvas"></app-comclass-canvas>
+    <div class="comclass_container" [hidden]="mode == 'studentListMode'">
+        <div class="comclass-main">
+            <app-comclass-canvas class="app-comclass-canvas"></app-comclass-canvas>
 
-      <!----------------------------------------------------------------
-            comclass-fabs
-        --------------------------------------------------------------- -->
-      <!------------------------------------------
+            <!----------------------------------------------------------------
+                comclass-fabs
+            --------------------------------------------------------------- -->
+            <!------------------------------------------
 				Floating Fab buttons
 				- zoom
 				- blind
 				- replay
 			------------------------------------------ -->
-      <div class="fabs_container">
-        <app-comclass-fabs [hidden]="mode == 'studentListMode'"></app-comclass-fabs>
-      </div>
+            <div class="fabs_container">
+                <app-comclass-fabs [hidden]="mode == 'studentListMode'"></app-comclass-fabs>
+            </div>
+
+        </div>
     </div>
-  </div>
+
+        <!------------------------------------
+            1:1 Guidance Fab Button
+            - 학생 이름 표시
+            - 닫기 버튼. 		
+		-------------------------------------- -->
+    <div [matMenuTriggerFor]="menu" class="syncMode_container" *ngIf="syncMode == 'oneOnOneMode'">
+        <button mat-fab color="primary" aria-label="Example icon button with a delete icon">
+            {{studentName}}
+        </button>
+    </div>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="cancelMonitoring()">
+          <span>X</span>
+        </button>
+    </mat-menu>
 </div>

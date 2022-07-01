@@ -41,6 +41,8 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
         width: '',
     };
 
+    syncMode;
+
     private currentDocNum: any;
     private currentPage: any;
 
@@ -152,6 +154,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                 console.log('[Editor Setting]: ', editInfo);
 
                 this.editDisabled = editInfo.toolDisabled || editInfo.editDisabled;
+                this.syncMode = editInfo.syncMode
 
                 // drag Enable
                 this.dragOn = false;
@@ -248,6 +251,8 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
             this.onScroll();
         });
         ////////////////////////////////////////////////
+
+
 
         /////////////////////////////////////////////////////////////
         //~~~ 판서 전체 삭제 루틴:  추가 변경 해야함
@@ -399,13 +404,14 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
      * Scroll 발생 시
      */
     onScroll() {
-        if (this.viewInfoService.state.leftSideView != 'thumbnail') return;
 
+        if (this.viewInfoService.state.leftSideView != 'thumbnail') return;
+        
         this.eventBusService.emit(new EventData('change:containerScroll', {
             left: this.canvasContainer.scrollLeft,
             top: this.canvasContainer.scrollTop
-        }))
-    }
+        }))        
+    }  
 
 
     /**
