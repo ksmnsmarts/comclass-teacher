@@ -181,6 +181,8 @@ export class ComclassComponent implements OnInit {
       }
       const classInfo: any = await lastValueFrom(this.comclassService.getClassInfo(data))
       console.log(classInfo)
+      // DB에 계정 별 역할 구분이 안돼서 일단 임시조치
+      classInfo.role = 'teacher'
       this.socket.emit('join:class', classInfo);
       this.socket.on('update:classInfo', (classInfo) => {
         console.log('classInfo', classInfo)

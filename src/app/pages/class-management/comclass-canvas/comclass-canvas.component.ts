@@ -41,6 +41,8 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
         width: '',
     };
 
+    syncMode;
+
     private currentDocNum: any;
     private currentPage: any;
 
@@ -147,6 +149,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                 console.log('[Editor Setting]: ', editInfo);
 
                 this.editDisabled = editInfo.toolDisabled || editInfo.editDisabled;
+                this.syncMode = editInfo.syncMode
 
                 // drag Enable
                 this.dragOn = false;
@@ -239,6 +242,15 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
             this.onScroll();
         });
         ////////////////////////////////////////////////
+
+
+        this.eventBusService.on('oneOnOneMode:showWindow', this.unsubscribe$, ()=> {
+            console.log('oneOnOneMode:showWindow222222222222222222')
+            this.oneOnOneWindowResize();
+        })
+
+
+
 
         /////////////////////////////////////////////////////////////
         //~~~ 판서 전체 삭제 루틴:  추가 변경 해야함
@@ -383,17 +395,46 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
 
     }
 
+
+    // show window 함수 리팩토링 할 것!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    oneOnOneWindowResize() {
+        console.log('oneOnOneMode:showWindow33333333333333333333')
+
+        const newWidth = window.innerWidth - CANVAS_CONFIG.sidebarWidth;
+        const newHeight = window.innerHeight - CANVAS_CONFIG.navbarHeight;
+        // sidenav 열릴때 resize event 발생... 방지용도.
+        // if (CANVAS_CONFIG.maxContainerWidth === newWidth && CANVAS_CONFIG.maxContainerHeight === newHeight) {
+        //     return;
+        // }
+        CANVAS_CONFIG.maxContainerWidth = newWidth;
+        CANVAS_CONFIG.maxContainerHeight = newHeight;
+
+        const ratio = this.canvasService.setContainerSize(this.coverCanvas, this.canvasContainer);
+
+        console.log(CANVAS_CONFIG, ratio, this.coverCanvas.width)
+
+
+        // thumbnail window 크기 변경을 위한 처리.
+        this.eventBusService.emit(new EventData("show:window", {
+            ratio,
+            coverWidth: this.coverCanvas.width,
+            left: this.canvasContainer.scrollLeft,
+            top: this.canvasContainer.scrollTop
+        }));
+    }
+
     /**
      * Scroll 발생 시
      */
     onScroll() {
-        if (this.viewInfoService.state.leftSideView != 'thumbnail') return;
 
+        if (this.viewInfoService.state.leftSideView != 'thumbnail') return;
+        
         this.eventBusService.emit(new EventData('change:containerScroll', {
             left: this.canvasContainer.scrollLeft,
             top: this.canvasContainer.scrollTop
-        }))
-    }
+        }))        
+    }  
 
 
     /**
