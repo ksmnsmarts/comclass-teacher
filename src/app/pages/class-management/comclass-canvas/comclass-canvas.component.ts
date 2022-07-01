@@ -66,6 +66,8 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
     canvasContainer: HTMLDivElement;
     coverCanvas: HTMLCanvasElement;
     teacherCanvas: HTMLCanvasElement;
+    studentGuideCanvas: HTMLCanvasElement;
+    teacherGuideCanvas: HTMLCanvasElement;
     rxCoverCanvas: HTMLCanvasElement;
     bgCanvas: HTMLCanvasElement;
     tmpCanvas: HTMLCanvasElement;
@@ -172,8 +174,11 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                         textInput.parentNode.removeChild(textInput);
                     }
                 }
-
-                this.canvasService.addEventHandler(this.coverCanvas, this.teacherCanvas, this.currentToolInfo, zoomScale);
+                if (editInfo.syncMode != 'oneOnOneMode'){
+                    this.canvasService.addEventHandler(this.coverCanvas, this.teacherCanvas, this.currentToolInfo, zoomScale);
+                } else {
+                    this.canvasService.addEventHandler(this.coverCanvas, this.teacherGuideCanvas, this.currentToolInfo, zoomScale);
+                }
             });
 
         //////////////////////////////////////////////////
@@ -198,8 +203,9 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                     context.shadowColor = "";
                     context.shadowBlur = 0;
                     context.clearRect(0, 0, this.rxCoverCanvas.width / zoomScale, this.rxCoverCanvas.height / zoomScale);
-                }
-                else {
+                } else if (data.drawingEvent.mode == 'oneOnOne'){
+                  this.drawingService.rxDrawing(data.drawingEvent, this.studentGuideCanvas, this.teacherGuideCanvas, zoomScale, docNum, pageNum);
+                } else {
                     this.drawingService.rxDrawing(data.drawingEvent, this.rxCoverCanvas, this.teacherCanvas, zoomScale, docNum, pageNum);
                 }
             }
@@ -293,6 +299,9 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
 
         this.teacherCanvas = this.teacherCanvasRef.nativeElement;
         this.bgCanvas = this.bgCanvasRef.nativeElement;
+
+        this.studentGuideCanvas = this.studentGuideCanvasRef.nativeElement;
+        this.teacherGuideCanvas = this.teacherGuideCanvasRef.nativeElement;
 
         this.tmpCanvas = this.tmpCanvasRef.nativeElement;
         this.canvasContainer = this.canvasContainerRef.nativeElement;

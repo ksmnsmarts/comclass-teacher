@@ -219,7 +219,7 @@ export class ComclassStudentComponent implements OnInit {
     startOneOnOneMode(data) {
         console.log(data.studentName)
         const editInfo = Object.assign({}, this.editInfoService.state);
-        editInfo.syncMode = 'oneOnOneMode'
+        editInfo.syncMode = 'oneOnOneMode';
         this.editInfoService.setEditInfo(editInfo);
         this.socket.emit('begin:guidance', data.studentName);
 

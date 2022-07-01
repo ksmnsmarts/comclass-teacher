@@ -239,7 +239,7 @@ export class ComclassSlideViewComponent implements OnInit {
   * @returns
   */
   clickThumb(pageNum) {
-    if (pageNum == this.currentPageNum) return; // 동일 page click은 무시
+    if (pageNum == this.currentPageNum && this.editInfoService.state.syncMode != 'oneOnOneMode') return; // 동일 page click은 무시
 
     console.log('>> [clickThumb] change Page to : ', pageNum);
     this.viewInfoService.updateCurrentPageNum(pageNum);
