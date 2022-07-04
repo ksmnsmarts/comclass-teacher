@@ -6,6 +6,7 @@ import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.se
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.service';
 import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
+import { ZoomService } from 'src/app/0.shared/services/zoom/zoom.service';
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
 import { ClassInfoService } from 'src/app/0.shared/store/class-info';
 import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
@@ -31,6 +32,8 @@ export class ComclassStudentComponent implements OnInit {
     studentCount;
     toggle = false;
     thumbArray = [];
+    studentDocInfo = [];
+
 
     @ViewChildren('student_monitoring') student_monitoringRef: QueryList<ElementRef>
     @ViewChildren('studentBg') studentBgRef: QueryList<ElementRef>
@@ -44,13 +47,14 @@ export class ComclassStudentComponent implements OnInit {
         private canvasService: CanvasService,
         private pdfStorageService: PdfStorageService,
         private editInfoService: EditInfoService,
-        private drawingService: DrawingService
+        private drawingService: DrawingService,
+        private zoomService: ZoomService,
     ) {
         this.socket = this.socketService.socket;
     }
 
     ngOnInit(): void {
-
+        
 
 
         this.classInfoService.state$
@@ -101,6 +105,25 @@ export class ComclassStudentComponent implements OnInit {
             console.log(this.viewInfoService.state)
             this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
         }))
+
+
+        /************************************************************
+        * 학생들이 현재 바라보고 있는 문서 정보
+        ************************************************************/
+        this.socket.emit('studentList:docInfo');
+
+        this.socket.on('studentList:sendDocInfo', async (data) => {
+
+            for (let i = 0; i < this.thumbArray.length; i++) {
+                if(this.thumbArray[i]?.studentName == data[i].studentName) {
+                    this.thumbArray[i].currentDocId = data[i].currentDocId
+                    this.thumbArray[i].currentDocNum = data[i].currentDocNum;
+                    this.thumbArray[i].currentPage = data[i].currentPage
+                }
+            }
+        })
+        
+       
 
 
         /************************************************************
@@ -186,18 +209,41 @@ export class ComclassStudentComponent implements OnInit {
         // const numPages = this.viewInfoService.state.documentInfo[this.currentDocNum - 1].numPages;
         this.thumbArray = [];
         let thumbSize;
+
         for (let i = 0; i < this.studentList.length; i++) {
             thumbSize = this.canvasService.getStudentCanvasSize(1, 1);
             thumbSize.studentName = this.studentList[i]?.studentName
+           
             this.thumbArray.push(thumbSize);
         };
+
+        console.log(this.thumbArray)
 
         await new Promise(res => setTimeout(res, 300));
         // for (let i = 0; i < this.student_monitoringRef.toArray().length; i++) {
         for (let i = 0; i < this.studentList.length; i++) {
-            console.log(this.student_monitoringRef.toArray()[i].nativeElement)
-            await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, 1, 1);
-            this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, 1, 1);
+     
+            // /**********************************************
+            // * 다른 가로문서, 세로문서를 바라볼 때마다 
+            // * zoomScale이 첫번째 doc의 documentInfo[0]._id로 설정되어
+            // * zoomScale이 첫번째 문서에 고정 돼 화면에 꽉 차게 나오지 않는 문제를 해결
+            // **********************************************/
+            //     const obj = this.thumbArray[i];
+
+            //     obj.pageInfo = {
+            //         currentDocId: this.thumbArray[i].currentDocId,
+            //         currentDocNum: this.thumbArray[i].currentDocNum,
+            //         currentPage: this.thumbArray[i].currentPage,
+            //         zoomScale: this.zoomService.setInitZoomScale(this.thumbArray[i].currentDocNum, this.thumbArray[i].currentPage)
+            //     }       
+            //     this.viewInfoService.setViewInfo(obj);
+         
+            // console.log(obj)
+            //////////////////////////////////////////////////////////
+
+
+            await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, this.thumbArray[i].currentDocNum, this.thumbArray[i].currentPage);
+            this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, this.thumbArray[i].currentDocNum, this.thumbArray[i].currentPage);
 
         };
 

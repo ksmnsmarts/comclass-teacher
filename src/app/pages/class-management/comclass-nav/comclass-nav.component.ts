@@ -95,8 +95,6 @@ export class ComclassNavComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((classInfo) => {
                 if (classInfo) {
-
-                    console.log(this.classInfo)
                     this.classInfo = classInfo
                 }
             });
@@ -114,7 +112,6 @@ export class ComclassNavComponent implements OnInit {
         this.editInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged())
             .subscribe((editInfo) => {
-                console.log(editInfo);
                 this.syncMode = editInfo.syncMode;
                 this.mode = editInfo.mode;
                 this.currentTool = editInfo.tool;
@@ -152,7 +149,6 @@ export class ComclassNavComponent implements OnInit {
 
         this.studentInfoService.currentStudent.pipe(takeUntil(this.unsubscribe$)).subscribe(
             (res: any) => {
-                console.log(res)
                 this.studentCount = res;
             }
         );

@@ -29,7 +29,7 @@
                         <canvas #student_monitoring id="student_monitoring{{student.studentName}}" class="student_monitoring" width="{{student.width}}" height="{{student.height}}" (click)="startOneOnOneMode(student)"></canvas>
                     </div>
                     <div class="studentId">
-                        <span> {{student.studentName}} ( page: {{i+1}} )</span>
+                        <span> {{student.studentName}} ( Doc: {{student?.currentDocNum}} / page: {{student?.currentPage}} )</span>
                     </div>
                 </div>
 

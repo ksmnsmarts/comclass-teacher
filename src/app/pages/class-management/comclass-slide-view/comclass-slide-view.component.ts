@@ -85,8 +85,6 @@ export class ComclassSlideViewComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged(), pairwise())
             .subscribe(([prevViewInfo, viewInfo]) => {
 
-                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>', viewInfo)
-
                 // 현재 Current Page Info 저장
                 this.currentDocId = viewInfo.pageInfo.currentDocId;
                 this.currentDocNum = viewInfo.pageInfo.currentDocNum;
@@ -183,9 +181,6 @@ export class ComclassSlideViewComponent implements OnInit {
 
         // 다른 사람이 그린 Event thumbnail에 그리기
         this.eventBusService.on('receive:drawEvent', this.unsubscribe$, async (data) => {
-            // data = (data || '');
-            // console.log(data)
-            // console.log(data.drawingEvent);
             this.drawThumbRx(data);
         });
 

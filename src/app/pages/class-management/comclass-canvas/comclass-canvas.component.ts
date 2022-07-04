@@ -114,7 +114,6 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
         this.viewInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'))
             .subscribe((pageInfo) => {
-                console.log(pageInfo)
                 this.currentDocNum = pageInfo.currentDocNum;
                 this.currentPage = pageInfo.currentPage;
                 // 초기 load 포함 변경사항에 대해 수행
@@ -134,12 +133,8 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
             .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged(), pairwise())
             .subscribe(([prevViewInfo, viewInfo]) => {
 
-                console.log(prevViewInfo.leftSideView)
-
                 // 현재 sideBar doc. view 정보 받아서 저장.
                 this.prevViewInfo = prevViewInfo.leftSideView
-
-
             });
 
         ///////////////////////////////////////////////
@@ -330,7 +325,6 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
 
         // board rendering
         const drawingEvents = this.drawStorageService.getDrawingEvents(currentDocNum, currentPage);
-        // console.log(drawingEvents)
         this.renderingService.renderBoard(this.teacherCanvas, zoomScale, drawingEvents);
 
         // PDF Rendering
@@ -415,7 +409,6 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
     onChangePage() {
 
         const pageInfo = this.viewInfoService.state.pageInfo;
-        console.log(pageInfo)
         //document Number -> 1부터 시작.
         const docNum = pageInfo.currentDocNum;
         const pageNum = pageInfo.currentPage;
