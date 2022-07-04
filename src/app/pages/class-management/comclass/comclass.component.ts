@@ -102,7 +102,7 @@ export class ComclassComponent implements OnInit {
             console.log('<---[SOCKET] rx drawEvent :', data);
             // console.log(data.drawingEvent, data.docNum, data.pageNum)
             // if (data.drawingEvent.tool.type != 'pointer' && data.participantName == 'teacher' && data.mode == 'syncMode') {
-            if (data.drawingEvent.tool.type != 'pointer' && data.participantName == 'teacher') {
+            if (data.drawingEvent.tool.type != 'pointer' && data.participantName == 'teacher' && data.mode == 'syncMode') {
                 this.drawStorageService.setDrawEvent(data.docNum, data.pageNum, data.drawingEvent);
             }
             this.eventBusService.emit(new EventData('receive:drawEvent', data));
@@ -139,7 +139,7 @@ export class ComclassComponent implements OnInit {
             const pageInfo = this.viewInfoService.state.pageInfo;
             data.mode = this.editInfoService.state.syncMode;
             // local Store 저장
-            if (data.tool.type != 'pointer') {
+            if (data.tool.type != 'pointer' && data.mode != 'oneOnOneMode') {
                 this.drawStorageService.setDrawEvent(pageInfo.currentDocNum, pageInfo.currentPage, data);
             }
             const newDataEvent = {
@@ -168,7 +168,7 @@ export class ComclassComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe$), pluck('syncMode'))
             .subscribe((syncMode) => {
                 this.syncMode = syncMode;
-                console.log(this.syncMode)               
+                console.log(this.syncMode)
             });
         ///////////////////////////////////////////////////////
 

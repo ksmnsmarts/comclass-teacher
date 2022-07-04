@@ -77,7 +77,7 @@ export class ComclassFileViewComponent implements OnInit {
                 this.renderFileList();
             });
 
-            
+
         this.viewInfoService.state$
         .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'))
         .subscribe((pageInfo) => {
@@ -165,7 +165,7 @@ export class ComclassFileViewComponent implements OnInit {
 
 
         /**********************************************
-        * 다른 가로문서, 세로문서를 바라볼 때마다 
+        * 다른 가로문서, 세로문서를 바라볼 때마다
         * zoomScale이 첫번째 doc의 documentInfo[0]._id로 설정되어
         * zoomScale이 첫번째 문서에 고정 돼 화면에 꽉 차게 나오지 않는 문제를 해결
         **********************************************/
@@ -176,9 +176,9 @@ export class ComclassFileViewComponent implements OnInit {
             currentDocNum: obj.currentDocNum,
             currentPage: obj.currentPage,
             zoomScale: this.zoomService.setInitZoomScale(obj.currentDocNum, obj.currentPage)
-        }       
+        }
         this.viewInfoService.setViewInfo(obj);
-        
+
         //////////////////////////////////////////////////////////
     }
 

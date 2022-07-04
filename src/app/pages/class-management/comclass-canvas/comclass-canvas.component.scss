@@ -78,7 +78,20 @@ $navbar-height: 134px;
       top: 0;
       left: 0;
       width: 100%;
-   }
+    }
+
+    div.guidance {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+    #teacherGuideCanvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
 
     div.cover {
         position: absolute;

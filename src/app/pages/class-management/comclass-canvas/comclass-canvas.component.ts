@@ -177,10 +177,11 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                         textInput.parentNode.removeChild(textInput);
                     }
                 }
-                if (editInfo.syncMode != 'oneOnOneMode'){
-                    this.canvasService.addEventHandler(this.coverCanvas, this.teacherCanvas, this.currentToolInfo, zoomScale);
-                } else {
+                if (editInfo.syncMode == 'oneOnOneMode') {
                     this.canvasService.addEventHandler(this.coverCanvas, this.teacherGuideCanvas, this.currentToolInfo, zoomScale);
+
+                } else {
+                    this.canvasService.addEventHandler(this.coverCanvas, this.teacherCanvas, this.currentToolInfo, zoomScale);
                 }
             });
 
@@ -206,8 +207,8 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                     context.shadowColor = "";
                     context.shadowBlur = 0;
                     context.clearRect(0, 0, this.rxCoverCanvas.width / zoomScale, this.rxCoverCanvas.height / zoomScale);
-                } else if (data.drawingEvent.mode == 'oneOnOne'){
-                  this.drawingService.rxDrawing(data.drawingEvent, this.studentGuideCanvas, this.teacherGuideCanvas, zoomScale, docNum, pageNum);
+                } else if (data.drawingEvent.mode == 'oneOnOneMode') {
+                    this.drawingService.rxDrawing(data.drawingEvent, this.rxCoverCanvas, this.studentGuideCanvas, zoomScale, docNum, pageNum);
                 } else {
                     this.drawingService.rxDrawing(data.drawingEvent, this.rxCoverCanvas, this.teacherCanvas, zoomScale, docNum, pageNum);
                 }
@@ -379,7 +380,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
      * @returns
      */
     setCanvasSize(currentDocNum, currentPage, zoomScale) {
-        return this.canvasService.setCanvasSize(currentDocNum, currentPage, zoomScale, this.canvasContainer, this.coverCanvas, this.rxCoverCanvas, this.teacherCanvas, this.bgCanvas);
+        return this.canvasService.setCanvasSize(currentDocNum, currentPage, zoomScale, this.canvasContainer, this.coverCanvas, this.rxCoverCanvas, this.teacherCanvas, this.bgCanvas, this.studentGuideCanvas, this.teacherGuideCanvas);
     }
 
     /**
@@ -406,12 +407,12 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
     onScroll() {
 
         if (this.viewInfoService.state.leftSideView != 'thumbnail') return;
-        
+
         this.eventBusService.emit(new EventData('change:containerScroll', {
             left: this.canvasContainer.scrollLeft,
             top: this.canvasContainer.scrollTop
-        }))        
-    }  
+        }))
+    }
 
 
     /**
@@ -443,7 +444,11 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
 
 
         // Canvas Event Set
-        this.canvasService.addEventHandler(this.coverCanvas, this.teacherCanvas, this.currentToolInfo, zoomScale);
+        if(this.syncMode == 'oneOnOneMode'){
+          this.canvasService.addEventHandler(this.coverCanvas, this.teacherGuideCanvas, this.currentToolInfo, zoomScale);
+        } else {
+          this.canvasService.addEventHandler(this.coverCanvas, this.teacherCanvas, this.currentToolInfo, zoomScale);
+        }
 
         // Thumbnail window 조정
         if (this.viewInfoService.state.leftSideView === 'thumbnail') {

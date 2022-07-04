@@ -113,7 +113,7 @@ export class CanvasService {
 	 * Main container관련 canvas Size 설정
 	 *
 	 */
-	setCanvasSize(pdfNum, pageNum, zoomScale, canvasContainer, coverCanvas, rxCoverCanvas, teacherCanvas, bgCanvas) {
+  setCanvasSize(pdfNum, pageNum, zoomScale, canvasContainer, coverCanvas, rxCoverCanvas, teacherCanvas, bgCanvas, studentGuideCanvas, teacherGuideCanvas) {
 		console.log(`>>> set Canvas Size: pdfNum:${pdfNum}, pageNum:${pageNum}`)
 
 		const pdfPage = this.pdfStorageService.getPdfPage(pdfNum, pageNum);
@@ -135,8 +135,8 @@ export class CanvasService {
 		canvasContainer.style.height = containerSize.height + 'px';
 
 		// Cover Canvas 조절
-		rxCoverCanvas.width = coverCanvas.width = canvasFullSize.width;
-		rxCoverCanvas.height = coverCanvas.height = canvasFullSize.height;
+    	studentGuideCanvas.width = teacherGuideCanvas.width = rxCoverCanvas.width = coverCanvas.width = canvasFullSize.width;
+    	studentGuideCanvas.height = teacherGuideCanvas.height = rxCoverCanvas.height = coverCanvas.height = canvasFullSize.height;
 
 
 
@@ -157,7 +157,6 @@ export class CanvasService {
 		teacherCanvas.width = canvasFullSize.width;
 		teacherCanvas.height = canvasFullSize.height;
 
-
 		// minipaint 참조: canvas scale 조절
 		const ctx = coverCanvas.getContext("2d");
 		ctx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
@@ -165,8 +164,14 @@ export class CanvasService {
 		const rxCtx = rxCoverCanvas.getContext("2d");
 		rxCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
 
-		const teacherCtx = teacherCanvas.getContext("2d");
-		teacherCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
+	  const studentGuideCtx = studentGuideCanvas.getContext("2d");
+	  studentGuideCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
+
+	  const teacherGuideCtx = teacherGuideCanvas.getContext("2d");
+	  teacherGuideCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
+
+	  const teacherCtx = teacherCanvas.getContext("2d");
+	  teacherCtx.setTransform(zoomScale, 0, 0, zoomScale, 0, 0);
 
 		return ratio;
 	}
@@ -208,6 +213,7 @@ export class CanvasService {
 	 */
 	addEventHandler(sourceCanvas, targetCanvas, tool, zoomScale) {
 		console.log(">>>> Add Event handler:", tool, zoomScale);
+    console.log(">>>> targetCanvas", targetCanvas)
 		const drawingService = this.drawingService;
 		const eventBusService = this.eventBusService;
 		const editInfoService = this.editInfoService;
@@ -332,11 +338,13 @@ export class CanvasService {
 			isTouch = false;
 			sourceCtx.globalAlpha = 1
 			// 레이저 포인트일경우
-
+      console.log(editInfoService.state)
 			// textareaPoints는 textarea를 만들때 사용
 			if (tool.type == 'textarea') {
 				textareaPoints.push(event.clientX, event.clientY)
 			}
+
+      console.log('---------------- targetCtx :', targetCanvas)
 
 			drawingService.end(targetCtx, points, tool, '', scale, textareaPoints);
 			event.preventDefault();
