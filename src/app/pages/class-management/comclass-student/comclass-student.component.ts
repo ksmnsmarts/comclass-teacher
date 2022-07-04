@@ -32,7 +32,7 @@ export class ComclassStudentComponent implements OnInit {
     studentCount;
     toggle = false;
     thumbArray = [];
-    studentDocInfo = [];
+    studentDocInfo;
 
 
     @ViewChildren('student_monitoring') student_monitoringRef: QueryList<ElementRef>
@@ -60,8 +60,8 @@ export class ComclassStudentComponent implements OnInit {
         this.classInfoService.state$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(async (classInfo) => {
-                await new Promise(res => setTimeout(res, 0));
-                if (classInfo) {
+                await new Promise(res => setTimeout(res, 100));
+                if (classInfo) {    
                     this.studentList = classInfo.currentMembers
                     this.renderFileList();
                 }
@@ -113,16 +113,11 @@ export class ComclassStudentComponent implements OnInit {
         this.socket.emit('studentList:docInfo');
 
         this.socket.on('studentList:sendDocInfo', async (data) => {
-
-            for (let i = 0; i < this.thumbArray?.length; i++) {
-                    this.thumbArray[i].currentDocId = data[i].currentDocId
-                    this.thumbArray[i].currentDocNum = data[i].currentDocNum;
-                    this.thumbArray[i].currentPage = data[i].currentPage
-
-                    await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, this.thumbArray[i].currentDocNum, this.thumbArray[i].currentPage);
-                    await this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, this.thumbArray[i].currentDocNum, this.thumbArray[i].currentPage);
-            }
-        
+            console.log('111111111111111111111111111111111')
+           
+            console.log(data)
+            await new Promise(res => setTimeout(res, 300));
+            this.studentDocInfo = data;
         })
 
 
@@ -140,7 +135,6 @@ export class ComclassStudentComponent implements OnInit {
                     this.studentList[i].pageInfo = data.pageInfo
             }
 
-            await new Promise(res => setTimeout(res, 0));
             const canvas = (document.getElementById('student_monitoring' + data.studentName) as HTMLInputElement);
             const studentImgBg = (document.getElementById('studentBg' + data.studentName) as HTMLInputElement);
 
@@ -206,6 +200,7 @@ export class ComclassStudentComponent implements OnInit {
      * @returns
      */
     async renderFileList() {
+        console.log('222222222222222222222222222222')
         // File List Background 그리기 : 각 문서의 1page만 그림
 
         // const numPages = this.viewInfoService.state.documentInfo[this.currentDocNum - 1].numPages;
@@ -214,7 +209,7 @@ export class ComclassStudentComponent implements OnInit {
 
         for (let i = 0; i < this.studentList.length; i++) {
             thumbSize = this.canvasService.getStudentCanvasSize(1, 1);
-            thumbSize.studentName = this.studentList[i]?.studentName
+            thumbSize.studentName = this.studentList[i]?.studentName;
 
             this.thumbArray.push(thumbSize);
         };
@@ -225,9 +220,17 @@ export class ComclassStudentComponent implements OnInit {
         // for (let i = 0; i < this.student_monitoringRef.toArray().length; i++) {
         for (let i = 0; i < this.studentList.length; i++) {
 
-            await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, this.thumbArray[i].currentDocNum, this.thumbArray[i].currentPage);
-            await this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, this.thumbArray[i].currentDocNum, this.thumbArray[i].currentPage);
+            await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, 1, 1);
+            await this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, 1, 1);
 
+        };
+
+        for (let i = 0; i < this.studentList.length; i++) {
+            const canvas = (document.getElementById('student_monitoring' + this.studentDocInfo[i].studentName) as HTMLInputElement);
+            const studentImgBg = (document.getElementById('studentBg' + this.studentDocInfo[i].studentName) as HTMLInputElement);
+
+            await this.renderingService.renderThumbBackground(studentImgBg, this.studentDocInfo[i]?.currentDocNum,  this.studentDocInfo[i]?.currentPage);
+            await this.renderingService.renderThumbBoard(canvas, this.studentDocInfo[i]?.currentDocNum,  this.studentDocInfo[i]?.currentPage);
         };
 
         // 아래와 같은 방식도 사용가능(참고용)
