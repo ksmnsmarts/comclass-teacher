@@ -54,7 +54,7 @@ export class ComclassStudentComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        
+
 
 
         this.classInfoService.state$
@@ -114,16 +114,18 @@ export class ComclassStudentComponent implements OnInit {
 
         this.socket.on('studentList:sendDocInfo', async (data) => {
 
-            for (let i = 0; i < this.thumbArray.length; i++) {
-                if(this.thumbArray[i]?.studentName == data[i].studentName) {
+            for (let i = 0; i < this.thumbArray?.length; i++) {
                     this.thumbArray[i].currentDocId = data[i].currentDocId
                     this.thumbArray[i].currentDocNum = data[i].currentDocNum;
                     this.thumbArray[i].currentPage = data[i].currentPage
-                }
+
+                    await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, this.thumbArray[i].currentDocNum, this.thumbArray[i].currentPage);
+                    await this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, this.thumbArray[i].currentDocNum, this.thumbArray[i].currentPage);
             }
-        })
         
-       
+        })
+
+
 
 
         /************************************************************
@@ -213,7 +215,7 @@ export class ComclassStudentComponent implements OnInit {
         for (let i = 0; i < this.studentList.length; i++) {
             thumbSize = this.canvasService.getStudentCanvasSize(1, 1);
             thumbSize.studentName = this.studentList[i]?.studentName
-           
+
             this.thumbArray.push(thumbSize);
         };
 
@@ -222,28 +224,9 @@ export class ComclassStudentComponent implements OnInit {
         await new Promise(res => setTimeout(res, 300));
         // for (let i = 0; i < this.student_monitoringRef.toArray().length; i++) {
         for (let i = 0; i < this.studentList.length; i++) {
-     
-            // /**********************************************
-            // * 다른 가로문서, 세로문서를 바라볼 때마다 
-            // * zoomScale이 첫번째 doc의 documentInfo[0]._id로 설정되어
-            // * zoomScale이 첫번째 문서에 고정 돼 화면에 꽉 차게 나오지 않는 문제를 해결
-            // **********************************************/
-            //     const obj = this.thumbArray[i];
-
-            //     obj.pageInfo = {
-            //         currentDocId: this.thumbArray[i].currentDocId,
-            //         currentDocNum: this.thumbArray[i].currentDocNum,
-            //         currentPage: this.thumbArray[i].currentPage,
-            //         zoomScale: this.zoomService.setInitZoomScale(this.thumbArray[i].currentDocNum, this.thumbArray[i].currentPage)
-            //     }       
-            //     this.viewInfoService.setViewInfo(obj);
-         
-            // console.log(obj)
-            //////////////////////////////////////////////////////////
-
 
             await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, this.thumbArray[i].currentDocNum, this.thumbArray[i].currentPage);
-            this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, this.thumbArray[i].currentDocNum, this.thumbArray[i].currentPage);
+            await this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, this.thumbArray[i].currentDocNum, this.thumbArray[i].currentPage);
 
         };
 
