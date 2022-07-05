@@ -137,7 +137,6 @@ export class ComclassStudentComponent implements OnInit {
                     this.thumbArray[i].currentPage = data.currentPage;
                 }
             }
-            await new Promise(res => setTimeout(res, 500));
             await this.renderingService.renderThumbBackground(studentImgBg, data.currentDocNum, data.currentPage);
             await this.renderingService.renderThumbBoard(canvas, data.currentDocNum, data.currentPage);
         })
