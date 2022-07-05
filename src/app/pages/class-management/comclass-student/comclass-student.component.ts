@@ -132,14 +132,11 @@ export class ComclassStudentComponent implements OnInit {
 
             for (let i = 0; i < this.thumbArray.length; i++) {
                 if (this.thumbArray[i].studentName == data.studentName) {
-                    console.log('맞아요')
                     this.thumbArray[i].currentDocId = data.currentDocId;
                     this.thumbArray[i].currentDocNum = data.currentDocNum;
                     this.thumbArray[i].currentPage = data.currentPage;
                 }
             }
-
-            console.log(this.thumbArray)
             await new Promise(res => setTimeout(res, 500));
             await this.renderingService.renderThumbBackground(studentImgBg, data.currentDocNum, data.currentPage);
             await this.renderingService.renderThumbBoard(canvas, data.currentDocNum, data.currentPage);
@@ -153,15 +150,16 @@ export class ComclassStudentComponent implements OnInit {
          ************************************************************/
         this.socket.on('send:monitoringCanvas', async (data) => {
             for (let i = 0; i < this.studentList.length; i++) {
-                if (this.studentList[i].studentName == data.studentName)
+                if (this.studentList[i].studentName == data.studentName){
                     this.studentList[i].pageInfo = data.pageInfo
+                }
             }
 
             const canvas = (document.getElementById('student_monitoring' + data.studentName) as HTMLInputElement);
             const studentImgBg = (document.getElementById('studentBg' + data.studentName) as HTMLInputElement);
             const viewport = this.pdfStorageService.getViewportSize(data.pageInfo.currentDocNum, data.pageInfo.currentPage);
 
-            await new Promise(res => setTimeout(res, 0));
+            await new Promise(res => setTimeout(res, 500));
             // landscape 문서 : 가로를 300px(studentListMaxSize)로 설정
             if (viewport.width > viewport.height) {
                 canvas.width = CANVAS_CONFIG.studentListMaxSize;
@@ -171,13 +169,15 @@ export class ComclassStudentComponent implements OnInit {
                 studentImgBg.height = studentImgBg.width * viewport.height / viewport.width;
             }
             // portrait 문서 : 세로를 300px(studentListMaxSize)로 설정
-            else {
+            else if (viewport.width < viewport.height) { 
                 canvas.height = CANVAS_CONFIG.studentListMaxSize;
                 canvas.width = canvas.height * viewport.width / viewport.height;
 
                 studentImgBg.height = CANVAS_CONFIG.studentListMaxSize;
                 studentImgBg.width = studentImgBg.height * viewport.width / viewport.height;
             }
+
+            console.log()
 
             this.renderingService.renderThumbBackground(studentImgBg, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
             this.renderingService.renderThumbBoard(canvas, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
