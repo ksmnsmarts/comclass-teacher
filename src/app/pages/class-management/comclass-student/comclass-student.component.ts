@@ -54,17 +54,12 @@ export class ComclassStudentComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
-
-
+        
         this.classInfoService.state$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(async (classInfo) => {
-                await new Promise(res => setTimeout(res, 100));
-                if (classInfo) {    
-                    this.studentList = classInfo.currentMembers
-                    this.renderFileList();
-                }
+                this.studentList = classInfo.currentMembers
+                this.renderFileList();
             });
 
 
@@ -113,22 +108,9 @@ export class ComclassStudentComponent implements OnInit {
 
         this.socket.on('studentList:sendDocInfo', async (data) => {
 
-            await new Promise(res => setTimeout(res, 500));
-            for (let i = 0; i < this.thumbArray.length; i++) {
-                if (this.thumbArray[i].studentName == data.studentName) {
-                    this.thumbArray[i].currentDocId = data.currentDocId;
-                    this.thumbArray[i].currentDocNum = data.currentDocNum;
-                    this.thumbArray[i].currentPage = data.currentPage;
-                }
-            }
-
             const canvas = (document.getElementById('student_monitoring' + data.studentName) as HTMLInputElement);
             const studentImgBg = (document.getElementById('studentBg' + data.studentName) as HTMLInputElement);
-
             const viewport = this.pdfStorageService.getViewportSize(data.currentDocNum, data.currentPage);
-
-
-            console.log(this.thumbArray)
 
             await new Promise(res => setTimeout(res, 500));
             // landscape 문서 : 가로를 300px(studentListMaxSize)로 설정
@@ -148,7 +130,17 @@ export class ComclassStudentComponent implements OnInit {
                 studentImgBg.width = studentImgBg.height * viewport.width / viewport.height;
             }
 
+            for (let i = 0; i < this.thumbArray.length; i++) {
+                if (this.thumbArray[i].studentName == data.studentName) {
+                    console.log('맞아요')
+                    this.thumbArray[i].currentDocId = data.currentDocId;
+                    this.thumbArray[i].currentDocNum = data.currentDocNum;
+                    this.thumbArray[i].currentPage = data.currentPage;
+                }
+            }
 
+            console.log(this.thumbArray)
+            await new Promise(res => setTimeout(res, 500));
             await this.renderingService.renderThumbBackground(studentImgBg, data.currentDocNum, data.currentPage);
             await this.renderingService.renderThumbBoard(canvas, data.currentDocNum, data.currentPage);
         })
@@ -240,12 +232,11 @@ export class ComclassStudentComponent implements OnInit {
             this.thumbArray.push(thumbSize);
         };
 
-        console.log(this.thumbArray)
         await new Promise(res => setTimeout(res, 0));
         // for (let i = 0; i < this.student_monitoringRef.toArray().length; i++) {
         for (let i = 0; i < this.studentList.length; i++) {
-            this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, 1, 1);
-            this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, 1, 1);
+            await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, 1, 1);
+            await this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, 1, 1);
         };
 
         // 아래와 같은 방식도 사용가능(참고용)
