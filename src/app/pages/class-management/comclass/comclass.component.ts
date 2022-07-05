@@ -154,6 +154,7 @@ export class ComclassComponent implements OnInit {
         //////////////////////////////////////////////////////////////////
 
         this.socket.on('teacher:studentViewInfo', ((data: any) => {
+            console.log('현재 학생 이름', data)
             this.studentName = data.studentName
         }))
 

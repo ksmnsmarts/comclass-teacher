@@ -67,10 +67,10 @@ export class ComclassStudentComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((viewInfo) => {
                 // 현재 Current Page Info 저장
-                // this.currentDocId = viewInfo.pageInfo.currentDocId;
+                this.currentDocId = viewInfo.pageInfo.currentDocId;
                 this.currentDocNum = viewInfo.pageInfo.currentDocNum;
                 this.currentPageNum = viewInfo.pageInfo.currentPage;
-
+                
             });
 
         this.socket.on('studentCount', (data) => {
@@ -84,21 +84,23 @@ export class ComclassStudentComponent implements OnInit {
             }
         );
 
-
+        /*------------------------------------------        
+        * 1:1 모드 
+        * 학생에게 받은 현재 페이지정보를 이용하여 해당 페이지로 이동   
+        -------------------------------------------*/
         this.socket.on('teacher:studentViewInfo', ((data: any) => {
-            console.log('teacher:studentViewInfo')
-            console.log(this.viewInfoService.state)
+            console.log('>>>>>>>>>>>>>>> ', data)
+            // this.viewInfoService.changeToThumbnailView(data.currentDocId);
             const viewInfo = Object.assign({}, this.viewInfoService.state);
             viewInfo.pageInfo.currentDocId = data.currentDocId
             viewInfo.pageInfo.currentDocNum = data.currentDocNum
             viewInfo.pageInfo.currentPage = data.currentPage
             viewInfo.pageInfo.zoomScale = data.zoomScale
             viewInfo.leftSideView = 'thumbnail';
-            console.log(viewInfo)
             this.viewInfoService.setViewInfo(viewInfo);
-            console.log(this.viewInfoService.state)
             this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
         }))
+
 
 
         /************************************************************
@@ -107,7 +109,7 @@ export class ComclassStudentComponent implements OnInit {
         this.socket.emit('studentList:docInfo');
 
         this.socket.on('studentList:sendDocInfo', async (data) => {
-
+            
             const canvas = (document.getElementById('student_monitoring' + data.studentName) as HTMLInputElement);
             const studentImgBg = (document.getElementById('studentBg' + data.studentName) as HTMLInputElement);
             const viewport = this.pdfStorageService.getViewportSize(data.currentDocNum, data.currentPage);
@@ -122,7 +124,7 @@ export class ComclassStudentComponent implements OnInit {
                 studentImgBg.height = studentImgBg.width * viewport.height / viewport.width;
             }
             // portrait 문서 : 세로를 300px(studentListMaxSize)로 설정
-            else {
+            else if (viewport.width < viewport.height) { 
                 canvas.height = CANVAS_CONFIG.studentListMaxSize;
                 canvas.width = canvas.height * viewport.width / viewport.height;
 
@@ -176,8 +178,6 @@ export class ComclassStudentComponent implements OnInit {
                 studentImgBg.width = studentImgBg.height * viewport.width / viewport.height;
             }
 
-            console.log()
-
             this.renderingService.renderThumbBackground(studentImgBg, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
             this.renderingService.renderThumbBoard(canvas, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
 
@@ -206,6 +206,7 @@ export class ComclassStudentComponent implements OnInit {
                 }
             }
         });
+
     }
 
 
@@ -247,16 +248,16 @@ export class ComclassStudentComponent implements OnInit {
 
 
 
-
-
     clearBtn() {
         // this.toggle = true;
         this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
+        this.viewInfoService.changeToThumbnailView(this.currentDocId);
     }
 
     startOneOnOneMode(data) {
         console.log(data.studentName)
         const editInfo = Object.assign({}, this.editInfoService.state);
+        console.log(editInfo)
         editInfo.syncMode = 'oneOnOneMode'
         this.editInfoService.setEditInfo(editInfo);
         this.socket.emit('begin:guidance', data.studentName);

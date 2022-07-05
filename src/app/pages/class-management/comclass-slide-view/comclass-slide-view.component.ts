@@ -90,6 +90,8 @@ export class ComclassSlideViewComponent implements OnInit {
                 this.currentDocNum = viewInfo.pageInfo.currentDocNum;
                 this.currentPageNum = viewInfo.pageInfo.currentPage;
 
+                console.log(viewInfo)
+
                 // Thumbnail Mode로 전환된 경우 Thumbnail Rendering
                 if (prevViewInfo.leftSideView != 'thumbnail' && viewInfo.leftSideView == 'thumbnail') {
                     this.stopRendering = false;
