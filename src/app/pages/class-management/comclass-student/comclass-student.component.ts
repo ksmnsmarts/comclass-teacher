@@ -111,7 +111,6 @@ export class ComclassStudentComponent implements OnInit {
         this.socket.emit('studentList:docInfo');
 
         this.socket.on('studentList:sendDocInfo', async (docData, drawingEvent) => {
-            console.log(docData.zoomScale)
 
             const canvas = (document.getElementById('student_monitoring' + docData.studentName) as HTMLInputElement);
             const studentImgBg = (document.getElementById('studentBg' + docData.studentName) as HTMLInputElement);
@@ -245,11 +244,11 @@ export class ComclassStudentComponent implements OnInit {
             this.thumbArray.push(thumbSize);
         };
 
-        await new Promise(res => setTimeout(res, 0));
-        for (let i = 0; i < this.studentList.length; i++) {
-            await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, 1, 1);
-            await this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, 1, 1);
-        };
+        // await new Promise(res => setTimeout(res, 0));
+        // for (let i = 0; i < this.studentList.length; i++) {
+        //     await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, 1, 1);
+        //     await this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, 1, 1);
+        // };
 
         // 아래와 같은 방식도 사용가능(참고용)
         // https://stackoverflow.com/questions/55737546/access-nth-child-of-viewchildren-querylist-angular
