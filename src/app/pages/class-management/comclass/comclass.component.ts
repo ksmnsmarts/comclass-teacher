@@ -99,8 +99,11 @@ export class ComclassComponent implements OnInit {
         ////////////////////////////////////////////////
         // 새로운 판서 Event 수신
         this.socket.on('draw:teacher', ((data: any) => {
+            console.log('<---[SOCKET] rx drawEvent :', data);
+            // console.log(data.drawingEvent, data.docNum, data.pageNum)
+
             // if (data.drawingEvent.tool.type != 'pointer' && data.participantName == 'teacher' && data.mode == 'syncMode') {
-            if (data.drawingEvent.tool.type != 'pointer' && data.participantName == 'teacher') {
+            if (data.drawingEvent.tool.type != 'pointer' && data.participantName == 'teacher' && data.mode == 'syncMode') {
                 this.drawStorageService.setDrawEvent(data.docNum, data.pageNum, data.drawingEvent);
             }
             this.eventBusService.emit(new EventData('receive:drawEvent', data));
@@ -134,14 +137,12 @@ export class ComclassComponent implements OnInit {
         // 새로운 판서 Event local 저장 + 서버 전송
         this.eventBusService.on('gen:newDrawEvent', this.unsubscribe$, async (data) => {
             const pageInfo = this.viewInfoService.state.pageInfo;
+            data.mode = this.editInfoService.state.syncMode;
             // local Store 저장
-            if (data.tool.type != 'pointer') {
+            if (data.tool.type != 'pointer' && data.mode != 'oneOnOneMode') {
                 this.drawStorageService.setDrawEvent(pageInfo.currentDocNum, pageInfo.currentPage, data);
             }
-            data.mode = this.editInfoService.state.syncMode;
-
             const newDataEvent = {
-
                 participantName: 'teacher',
                 drawingEvent: data,
                 docId: pageInfo.currentDocId,

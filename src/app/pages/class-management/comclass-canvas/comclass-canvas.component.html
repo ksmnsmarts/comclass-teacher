@@ -1,5 +1,5 @@
 <div #canvasContainer id="canvas" class="canvas-container" [dragScroll]="dragOn">
-    <!-- 안쓸수도.. -->
+    <!-- 깜빡이는거 없앨때 사용.. -->
     <div class="tmp">
         <canvas #tmp></canvas>
     </div>
@@ -8,23 +8,23 @@
     <div class="canvasBackground">
         <canvas #bg></canvas>
     </div>
-    <!-- 상대방 판서 받아오기 -->
+    <!-- 본인or 상대방이 그린 낙서 최종적으로 그려지는 판서 -->
     <div class="canvasTeacher">
-        <canvas #teacherCanvas></canvas>
+        <canvas #teacherCanvas id="teacherCanvas"></canvas>
     </div>
 
     <!------------------------[ 선생님 판서 Guidance. ] ------------------------- -->
-    <div class="guidance" ng-show="vm.isGuideMode">
+    <div class="guidance" [hidden]="syncMode!='oneOnOneMode'">
         <canvas #studentGuideCanvas id="studentGuideCanvas"></canvas>
         <canvas #teacherGuideCanvas id="teacherGuideCanvas"></canvas>
     </div>
 
-    <!-- 안씀.. -->
+    <!-- 상대방 그린 낙서를 그릴 때 잠시 사용되는 판서 -->
     <div class="coverRx">
         <canvas #rxCanvasCover></canvas>
     </div>
 
-    <!-- 본인판서 -->
+    <!-- 본인이 그릴때 인식하는 판서 -->
     <div class="cover" [hidden] = "editDisabled">
         <canvas #canvasCover></canvas>
     </div>

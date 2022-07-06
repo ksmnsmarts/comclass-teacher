@@ -217,7 +217,7 @@ export class ComclassSlideViewComponent implements OnInit {
 
         /*-------------------------------------------
           zoom, page 전환등을 하는 경우
-    
+
           1. scroll에 필요한 ratio 계산(thumbnail과 canvas의 크기비율)은 여기서 수행
           2. thumbnail의 window size 계산 수행
         ---------------------------------------------*/
