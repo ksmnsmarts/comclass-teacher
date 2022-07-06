@@ -110,7 +110,8 @@ export class ComclassStudentComponent implements OnInit {
         ************************************************************/
         this.socket.emit('studentList:docInfo');
 
-        this.socket.on('studentList:sendDocInfo', async (docData, drawingEvent) => {
+        this.socket.on('studentList:sendDocInfo', async (docData) => {
+            console.log(docData)
 
             const canvas = (document.getElementById('student_monitoring' + docData.studentName) as HTMLInputElement);
             const studentImgBg = (document.getElementById('studentBg' + docData.studentName) as HTMLInputElement);
@@ -139,21 +140,28 @@ export class ComclassStudentComponent implements OnInit {
                     this.thumbArray[i].currentDocId = docData.currentDocId;
                     this.thumbArray[i].currentDocNum = docData.currentDocNum;
                     this.thumbArray[i].currentPage = docData.currentPage;
-                    this.thumbArray[i].drawingEvent = drawingEvent;
+                    this.thumbArray[i].drawingEvent = docData.drawingEvent;
                 }
             }
+            console.log(docData)
 
-            await this.renderingService.renderThumbBackground(studentImgBg, docData.currentDocNum, docData.currentPage);
-            // await this.renderingService.renderThumbBoard(canvas, docData.currentDocNum, drawingEvent.pageNum);
-
+            // 학생이 학생의 로컬에 그린 판서 데이터를 받아와서 해당 페이지에 그려주기
             for (let i = 0; i < this.thumbArray.length; i++) {
                 const scale = this.thumbArray[i].scale;
-                if (this.thumbArray[i].studentName == docData.studentName) {
-                    for (let j = 0; j < drawingEvent.length; j++) {
-                        await this.drawingService.drawThumb(drawingEvent[j], canvas, scale);
+                if ((this.thumbArray[i].studentName == docData.studentName) && docData.drawingEvent) {
+                    for (let j = 0; j < docData.drawingEvent.length; j++) {
+                        await this.drawingService.drawThumb(docData.drawingEvent[j], canvas, scale);
                     }
                 }
             }
+
+
+            await new Promise(res => setTimeout(res, 0));
+            await this.renderingService.renderThumbBackground(studentImgBg, docData.currentDocNum, docData.currentPage);
+            // await this.renderingService.renderThumbBoard(canvas, docData.currentDocNum, drawingEvent.pageNum);
+
+
+            
         })
 
 
@@ -163,6 +171,7 @@ export class ComclassStudentComponent implements OnInit {
          * 학생이 보고 있는 문서 페이지가 업데이트 됐을 때 업데이트 된 페이지 보여주기
          ************************************************************/
         this.socket.on('send:monitoringCanvas', async (data) => {
+
             for (let i = 0; i < this.studentList.length; i++) {
                 if (this.studentList[i].studentName == data.studentName) {
                     this.studentList[i].pageInfo = data.pageInfo
@@ -193,8 +202,19 @@ export class ComclassStudentComponent implements OnInit {
 
             this.renderingService.renderThumbBackground(studentImgBg, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
             // this.renderingService.renderThumbBoard(canvas, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
+            
 
-
+            // 학생이 학생의 로컬에 그린 판서 데이터를 받아와서 해당 페이지에 그려주기
+            for (let i = 0; i < this.thumbArray.length; i++) {
+                const scale = this.thumbArray[i].scale;
+                if (this.thumbArray[i].studentName == data.studentName) {
+                    for (let j = 0; j < data.drawingEvent.drawingEvent.length; j++) {
+                        if(data.drawingEvent.pageNum == data.pageInfo.currentPage) {
+                            await this.drawingService.drawThumb(data.drawingEvent.drawingEvent[j], canvas, scale);
+                        }
+                    }
+                }
+            }
         })
 
 
@@ -211,7 +231,6 @@ export class ComclassStudentComponent implements OnInit {
                 console.log("------------> ERROR:  Check STUDENT LIST... ", data.studentName);
                 return;
             }
-
 
             // 학생의 drawing event를 그리기
             for (let i = 0; i < this.thumbArray.length; i++) {
