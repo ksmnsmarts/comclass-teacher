@@ -83,18 +83,18 @@
                     </div>
                     <div>
                     <!-- sync button -->
-                      <button type="button" (click)="changeSyncMode('nonSync');" aria-label="link">
+                      <button type="button" (click)="changeSyncMode();" aria-label="link">
                         <!-- <i class="fas fa-2x fa-link" style="color:#8bc34a" >
                       						</i> -->
                         <!-- 수연 -->
 
-                        <mat-icon *ngIf="syncMode == 'sync'" [ngClass]="(syncMode == 'sync') ? 'syncActive': '' ">
+                        <mat-icon *ngIf="syncMode" [ngClass]="syncMode ? 'syncActive': '' ">
                           link
                         </mat-icon>
-                        <mat-icon *ngIf="syncMode == 'oneOnOneMode'" [ngClass]="(syncMode == 'oneOnOneMode') ? 'nonSyncActive': '' ">
+                        <mat-icon *ngIf="oneOnOneMode" [ngClass]="oneOnOneMode ? 'nonSyncActive': '' ">
                             link
                           </mat-icon>
-                        <mat-icon *ngIf="syncMode == 'nonSync'">
+                        <mat-icon *ngIf="!syncMode">
                           link_off
                         </mat-icon>
                         <!-- <i class="fas fa-2x fa-unlink" style="color:#9E9E9E" >

@@ -48,14 +48,15 @@ export class ComclassStudentComponent implements OnInit {
         private canvasService: CanvasService,
         private pdfStorageService: PdfStorageService,
         private editInfoService: EditInfoService,
-        private drawingService: DrawingService,
-        private zoomService: ZoomService,
-        private drawStorageService: DrawStorageService
+        private drawStorageService: DrawStorageService,
+        private drawingService: DrawingService
     ) {
         this.socket = this.socketService.socket;
     }
 
     ngOnInit(): void {
+
+        this.startStudentListMode()
 
         this.classInfoService.state$
             .pipe(takeUntil(this.unsubscribe$))
@@ -92,7 +93,9 @@ export class ComclassStudentComponent implements OnInit {
         * 학생에게 받은 현재 페이지정보를 이용하여 해당 페이지로 이동   
         -------------------------------------------*/
         this.socket.on('teacher:studentViewInfo', ((data: any) => {
-            // this.viewInfoService.changeToThumbnailView(data.currentDocId);
+            for (let i = 0; i < data.drawData.length; i++) {
+              this.drawStorageService.setDrawEvent(data.currentDocNum, data.currentPage, data.drawData[i])
+            }
             const viewInfo = Object.assign({}, this.viewInfoService.state);
             viewInfo.pageInfo.currentDocId = data.currentDocId
             viewInfo.pageInfo.currentDocNum = data.currentDocNum
@@ -160,7 +163,9 @@ export class ComclassStudentComponent implements OnInit {
             await this.renderingService.renderThumbBackground(studentImgBg, docData.currentDocNum, docData.currentPage);
             // await this.renderingService.renderThumbBoard(canvas, docData.currentDocNum, drawingEvent.pageNum);
 
-
+            // 이정운 작업
+            // this.renderingService.renderThumbBackground(studentImgBg, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
+            // this.renderingService.renderThumbBoard(canvas, data.pageInfo.currentDocNum, data.pageInfo.currentPage, false, data.studentName);
             
         })
 
@@ -284,10 +289,18 @@ export class ComclassStudentComponent implements OnInit {
         this.viewInfoService.changeToThumbnailView(this.currentDocId);
     }
 
-    startOneOnOneMode(data) {
-        console.log(data.studentName)
+    startStudentListMode(){
+        this.socket.emit('cancel:monitoring', '')
         const editInfo = Object.assign({}, this.editInfoService.state);
-        editInfo.syncMode = 'oneOnOneMode';
+        editInfo.oneOnOneMode = false;
+        this.editInfoService.setEditInfo(editInfo);
+    }
+
+    startOneOnOneMode(data) {
+        const editInfo = Object.assign({}, this.editInfoService.state);
+        editInfo.syncMode = false;
+        editInfo.oneOnOneMode = true;
+        editInfo.studentName = data.studentName;
         this.editInfoService.setEditInfo(editInfo);
         this.socket.emit('begin:guidance', data.studentName);
 

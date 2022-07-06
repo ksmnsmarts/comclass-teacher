@@ -17,6 +17,7 @@ import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.servic
 
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
+import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
 
 
 
@@ -41,11 +42,11 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
         width: '',
     };
 
-    syncMode;
-
+    syncMode:Boolean;
+    oneOnOneMode: Boolean = false;
     private currentDocNum: any;
     private currentPage: any;
-
+    studentName:any;
     // preRendering을 위한 변수
     prevViewInfo; //'fileList', 'thumbnail';
 
@@ -74,13 +75,11 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
     bgCanvas: HTMLCanvasElement;
     tmpCanvas: HTMLCanvasElement;
 
-
     rendererEvent1: any;
 
     constructor(
         private viewInfoService: ViewInfoService,
         private editInfoService: EditInfoService,
-
         private canvasService: CanvasService,
         private pdfStorageService: PdfStorageService,
         private renderingService: RenderingService,
@@ -91,7 +90,6 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
 
     ) {
         this.canvasClearBoardA$ = this.canvasService.getClearBoardA$();
-
     }
 
     // Resize Event Listener
@@ -126,7 +124,6 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                 }
             });
 
-
         ///////////////////////////////////////////////
 
         ////////////////////////////////////////////////
@@ -150,6 +147,14 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
 
                 this.editDisabled = editInfo.toolDisabled || editInfo.editDisabled;
                 this.syncMode = editInfo.syncMode
+                if (this.oneOnOneMode != editInfo.oneOnOneMode){
+                  this.oneOnOneMode = editInfo.oneOnOneMode
+                  this.onChangePage();
+                }
+                this.studentName = editInfo.studentName
+
+
+
 
                 // drag Enable
                 this.dragOn = false;
@@ -172,7 +177,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                         textInput.parentNode.removeChild(textInput);
                     }
                 }
-                if (editInfo.syncMode == 'oneOnOneMode') {
+                if (editInfo.oneOnOneMode == true) {
                     this.canvasService.addEventHandler(this.coverCanvas, this.teacherGuideCanvas, this.currentToolInfo, zoomScale);
 
                 } else {
@@ -202,7 +207,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                     context.shadowColor = "";
                     context.shadowBlur = 0;
                     context.clearRect(0, 0, this.rxCoverCanvas.width / zoomScale, this.rxCoverCanvas.height / zoomScale);
-                } else if (data.drawingEvent.mode == 'oneOnOneMode') {
+                } else if (data.drawingEvent.oneOnOneMode == true) {
                     this.drawingService.rxDrawing(data.drawingEvent, this.rxCoverCanvas, this.studentGuideCanvas, zoomScale, docNum, pageNum);
                 } else {
                     this.drawingService.rxDrawing(data.drawingEvent, this.rxCoverCanvas, this.teacherCanvas, zoomScale, docNum, pageNum);
@@ -280,7 +285,6 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
 
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
-
         // render listener 해제
         this.rendererEvent1();
 
@@ -333,9 +337,19 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
 
         console.log('>>> page Render! [background and board] + addEventHandler');
 
-        // board rendering
-        const drawingEvents = this.drawStorageService.getDrawingEvents(currentDocNum, currentPage);
-        this.renderingService.renderBoard(this.teacherCanvas, zoomScale, drawingEvents);
+        let teacherDrawingEvents;
+        let teacherOneOnOneDrawingEvents;
+        let studentDrawingEvents;
+        if (this.oneOnOneMode) {
+          teacherDrawingEvents = this.drawStorageService.getTeacherDrawingEvents(currentDocNum, currentPage);
+          teacherOneOnOneDrawingEvents = this.drawStorageService.getOneOnOneTeacherDrawingEvents(currentDocNum, currentPage);
+          this.renderingService.renderBoard(this.teacherCanvas, this.teacherGuideCanvas, zoomScale, teacherDrawingEvents, teacherOneOnOneDrawingEvents);
+          studentDrawingEvents = this.drawStorageService.getStudentDrawingEvents(currentDocNum, currentPage);
+          this.renderingService.renderBoard(this.teacherCanvas, this.studentGuideCanvas, zoomScale, teacherDrawingEvents, studentDrawingEvents);
+        } else {
+          teacherDrawingEvents = this.drawStorageService.getTeacherDrawingEvents(currentDocNum, currentPage);
+          this.renderingService.renderBoard(this.teacherCanvas, this.teacherGuideCanvas, zoomScale, teacherDrawingEvents, '');
+        }
 
         // PDF Rendering
         await this.renderingService.renderBackground(this.tmpCanvas, this.bgCanvas, currentDocNum, currentPage);
@@ -437,7 +451,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
 
 
         // Canvas Event Set
-        if(this.syncMode == 'oneOnOneMode'){
+        if (this.oneOnOneMode){
           this.canvasService.addEventHandler(this.coverCanvas, this.teacherGuideCanvas, this.currentToolInfo, zoomScale);
         } else {
           this.canvasService.addEventHandler(this.coverCanvas, this.teacherCanvas, this.currentToolInfo, zoomScale);

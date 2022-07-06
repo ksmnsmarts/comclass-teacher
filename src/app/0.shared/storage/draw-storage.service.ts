@@ -10,6 +10,7 @@ export class DrawStorageService {
           Draw 관련 변수
         ---------------------------------*/
   drawVarArray: any = [];
+  oneOnOneDrawVarArray: any = [];
   pageDrawingEvent = {};
   // 스트림. 스트림은 업로드된 정보를 저장하는곳.
   private drawDataSubject = new BehaviorSubject({});
@@ -25,11 +26,62 @@ export class DrawStorageService {
    * @param pageNum 페이지 번호
    * @returns
    */
+  getTeacherDrawingEvents(docNum, pageNum) {
+    const drawingEventSet = this.drawVarArray[docNum - 1]?.drawingEventSet;
+    //페이지랑 일치하는 애들만 모은 후
+    const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
+    console.log(result)
+    //한번 더 oneOnOneMode와 참가자가 일치하는 애들을 가져온다
+    const res = result?.drawingEvent?.filter((item) => item.oneOnOneMode === false && item.participantName === 'teacher')
+    const drawEvent = {
+      pageNum: pageNum,
+      drawingEvent: res
+    }
+    // 없으면 undefined.
+    return drawEvent;
+
+  }
+
+  getOneOnOneTeacherDrawingEvents(docNum, pageNum) {
+    const drawingEventSet = this.drawVarArray[docNum - 1]?.drawingEventSet;
+    //페이지랑 일치하는 애들만 모은 후
+    const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
+    console.log(result)
+    //한번 더 oneOnOneMode와 참가자가 일치하는 애들을 가져온다
+    const res = result?.drawingEvent?.filter((item) => item.oneOnOneMode === true &&item.participantName === 'teacher')
+    const drawEvent = {
+      pageNum: pageNum,
+      drawingEvent: res
+    }
+    // 없으면 undefined.
+    return drawEvent;
+
+  }
+
+  getStudentDrawingEvents(docNum, pageNum) {
+    const drawingEventSet = this.drawVarArray[docNum - 1]?.drawingEventSet;
+    //페이지랑 일치하는 애들만 모은 후
+    const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
+    console.log(result)
+    //한번 더 oneOnOneMode와 참가자가 일치하는 애들을 가져온다
+    const res = result?.drawingEvent?.filter((item) => item.participantName !== 'teacher')
+    const drawEvent = {
+      pageNum: pageNum,
+      drawingEvent: res
+    }
+    // 없으면 undefined.
+    return drawEvent;
+
+  }
+
   getDrawingEvents(docNum, pageNum) {
     const drawingEventSet = this.drawVarArray[docNum - 1]?.drawingEventSet;
+    //페이지랑 일치하는 애들만 모은 후
+    const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
 
     // 없으면 undefined.
-    return drawingEventSet?.find((item) => item.pageNum === pageNum);
+    return result;
+
   }
 
   /**
@@ -113,16 +165,93 @@ export class DrawStorageService {
     }
   }
 
+  getOneOnOneDrawData(docNum, pageNum) {
+    const drawingEventSet = this.oneOnOneDrawVarArray[docNum - 1]?.drawingEventSet;
+
+    // 없으면 undefined.
+    return drawingEventSet?.find((item) => item.pageNum === pageNum);
+  }
+
+
+  setStudentDrawArry(data:Array<String>){
+    console.log(data)
+    console.log(this.drawVarArray)
+    this.drawVarArray.concat(data)
+    console.log(this.drawVarArray)
+  }
+
   /**
    * 특정 page의 draw event 모두 삭제
    * @param {number} pageNum 페이지 번호
    */
-  clearDrawingEvents(pdfnum, pageNum) {
-    const res = this.drawVarArray[pdfnum - 1].drawingEventSet.filter(
-      (x) => x.pageNum !== pageNum
-    );
-    this.drawVarArray[pdfnum - 1].drawingEventSet = res;
+  clearDrawingEvents(pdfnum, pageNum, oneOnOneMode, participantName) {
+    const drawingEventSet = this.drawVarArray[pdfnum - 1]?.drawingEventSet;
+    console.log(drawingEventSet)
+    //페이지랑 일치하는 애들만 모은 후
+    const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
+    //한번 더 oneOnOneMode와 참가자가 일치하지 않은 애들을 가져온다
+    console.log(result)
+    const res = result?.drawingEvent?.filter((item) => !(item.oneOnOneMode === false && item.participantName == participantName))
+    const drawEvent = [{
+        pageNum: pageNum,
+        drawingEvent: res
+    }]
+    this.drawVarArray[pdfnum - 1].drawingEventSet = drawEvent;
+    // this.drawVarArray[pdfnum - 1].drawingEventSet = res;
+    console.log(this.drawVarArray[pdfnum - 1].drawingEventSet)
   }
+
+  /**
+   * 특정 page의 draw event 모두 삭제
+   * @param {number} pageNum 페이지 번호
+   */
+  clearTeacherDrawingEvents(pdfnum, pageNum, participantName) {
+    const drawingEventSet = this.drawVarArray[pdfnum - 1]?.drawingEventSet;
+    console.log(drawingEventSet)
+    //페이지랑 일치하는 애들만 모은 후
+    const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
+    //한번 더 oneOnOneMode와 참가자가 일치하지 않은 애들을 가져온다
+    console.log(result)
+    const res = result?.drawingEvent?.filter((item) => !(item.oneOnOneMode === false && item.participantName == participantName))
+    const drawEvent = [{
+      pageNum: pageNum,
+      drawingEvent: res
+    }]
+    this.drawVarArray[pdfnum - 1].drawingEventSet = drawEvent;
+    // this.drawVarArray[pdfnum - 1].drawingEventSet = res;
+    console.log(this.drawVarArray[pdfnum - 1].drawingEventSet)
+  }
+
+  clearOneOnOneDrawingEvents(pdfnum, pageNum, participantName) {
+    const drawingEventSet = this.drawVarArray[pdfnum - 1]?.drawingEventSet;
+    console.log(drawingEventSet)
+    //페이지랑 일치하는 애들만 모은 후
+    const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
+    //한번 더 oneOnOneMode와 참가자가 일치하지 않은 애들을 가져온다
+    const res = result?.drawingEvent?.filter((item) => !(item.oneOnOneMode === true && item.participantName == participantName))
+    const drawEvent = [{
+      pageNum: pageNum,
+      drawingEvent: res
+    }]
+    this.drawVarArray[pdfnum - 1].drawingEventSet = drawEvent;
+
+    console.log(this.drawVarArray[pdfnum - 1].drawingEventSet)
+  }
+
+  clearStudentDrawingEvents(pdfnum, pageNum) {
+    const drawingEventSet = this.drawVarArray[pdfnum - 1]?.drawingEventSet;
+    console.log(drawingEventSet)
+    //페이지랑 일치하는 애들만 모은 후
+    const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
+    //한번 더 oneOnOneMode와 참가자가 일치하지 않은 애들을 가져온다
+    const res = result?.drawingEvent?.filter((item) => (item.participantName === 'teacher'))
+    const drawEvent = [{
+      pageNum: pageNum,
+      drawingEvent: res
+    }]
+    this.drawVarArray[pdfnum - 1].drawingEventSet = drawEvent;
+  }
+
 
   /**
    * draw event 정보 모두 제거
@@ -133,6 +262,20 @@ export class DrawStorageService {
     }
   }
 
+
+
+
+  clearOneOnOneDrawingEventsAll() {
+    for (let i = 0; i < this.oneOnOneDrawVarArray.length; i++) {
+      this.oneOnOneDrawVarArray[i].drawingEventSet = {};
+    }
+  }
+
+  memoryRelease(){
+    this.drawVarArray = [];
+    this.oneOnOneDrawVarArray = [];
+    this.pageDrawingEvent= {};
+  }
   // onNavUpdate(updateEvent) {
   //   // 스트림을 마지막 곳에 업데이트
   //   // next는 스트림의 마지막 곳에 넣는다.

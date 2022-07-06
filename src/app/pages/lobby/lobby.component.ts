@@ -11,6 +11,7 @@ import { MeetingInfoService } from 'src/app/0.shared/store/meeting-info.service'
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
+import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.service';
 
 @Component({
     selector: 'app-lobby',
@@ -31,6 +32,7 @@ export class LobbyComponent implements OnInit {
         private pdfStorageService: PdfStorageService,
         private viewInfoService: ViewInfoService,
         private editInfoService: EditInfoService,
+        private drawStorageService: DrawStorageService,
         private sockService: SocketService,
     ) {
         this.socket = socketService.socket;
@@ -44,6 +46,7 @@ export class LobbyComponent implements OnInit {
         this.viewInfoService.memoryRelease();
         this.classInfoService.memoryRelease();
         this.editInfoService.memoryRelease();
+        this.drawStorageService.memoryRelease();
     }
 
 

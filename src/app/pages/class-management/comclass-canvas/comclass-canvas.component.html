@@ -14,7 +14,7 @@
     </div>
 
     <!------------------------[ 선생님 판서 Guidance. ] ------------------------- -->
-    <div class="guidance" [hidden]="syncMode!='oneOnOneMode'">
+    <div class="guidance" [hidden]="!oneOnOneMode">
         <canvas #studentGuideCanvas id="studentGuideCanvas"></canvas>
         <canvas #teacherGuideCanvas id="teacherGuideCanvas"></canvas>
     </div>

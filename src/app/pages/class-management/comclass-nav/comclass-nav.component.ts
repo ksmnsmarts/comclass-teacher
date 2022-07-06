@@ -48,7 +48,8 @@ export class ComclassNavComponent implements OnInit {
     currentDocId: string;
     studentCount: any;
     private socket;
-    syncMode: String = 'sync';
+    syncMode: Boolean = true;
+    oneOnOneMode: Boolean = false;
     classInfo: any;
     // iconify TEST //////////////////////
     eraserIcon = eraserIcon;
@@ -76,27 +77,27 @@ export class ComclassNavComponent implements OnInit {
 
     private unsubscribe$ = new Subject<void>();
 
-	constructor(
-		private editInfoService: EditInfoService,
-		private eventBusService: EventBusService,
-		private drawStorageService: DrawStorageService,
-		private viewInfoService: ViewInfoService,
-		private apiService: ApiService,
-		private socketService: SocketService,
-		private classInfoService: ClassInfoService,
+    constructor(
+        private editInfoService: EditInfoService,
+        private eventBusService: EventBusService,
+        private drawStorageService: DrawStorageService,
+        private viewInfoService: ViewInfoService,
+        private apiService: ApiService,
+        private socketService: SocketService,
+        private classInfoService: ClassInfoService,
         private studentInfoService: StudentInfoService
-	) {
-		this.socket = this.socketService.socket;
-	}
+    ) {
+        this.socket = this.socketService.socket;
+    }
+
+
 
 
     ngOnInit(): void {
         this.classInfoService.state$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((classInfo) => {
-                if (classInfo) {
-                    this.classInfo = classInfo
-                }
+                this.classInfo = classInfo
             });
 
         // 현재 Page 변경
@@ -106,13 +107,14 @@ export class ComclassNavComponent implements OnInit {
                 this.currentDocNum = pageInfo.currentDocNum;
                 this.currentPage = pageInfo.currentPage;
                 this.currentDocId = pageInfo.currentDocId;
-
             });
 
         this.editInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged())
             .subscribe((editInfo) => {
+                console.log(editInfo);
                 this.syncMode = editInfo.syncMode;
+                this.oneOnOneMode = editInfo.onOnOneMode;
                 this.mode = editInfo.mode;
                 this.currentTool = editInfo.tool;
                 this.currentColor = editInfo.toolsConfig.pen.color;
@@ -128,6 +130,7 @@ export class ComclassNavComponent implements OnInit {
                     text: editInfo.toolsConfig.text.width,
                     textarea: editInfo.toolsConfig.textarea.width,
                 }
+
 
 
                 // if(this.syncMode == 'oneOnOneMode') {
@@ -153,16 +156,13 @@ export class ComclassNavComponent implements OnInit {
             }
         );
 
+
         this.socket.on('studentCount', (data) => {
             // console.log('<--- [SOCKET] 현재 참가자 수', data);
             this.studentCount = data - 1;
 
             this.studentInfoService.setStudentInfo(this.studentCount)
         });
-
-
-
-
 
     }
 
@@ -213,41 +213,7 @@ export class ComclassNavComponent implements OnInit {
     }
 
 
-    /**
-     * Pen, Eraser 선택
-     *
-     * @param tool : 'pen', 'eraser'
-     *
-     */
-    async changeTool(tool) {
-        // console.log(tool)
-        const editInfo = Object.assign({}, this.editInfoService.state);
 
-
-        if (editInfo.tool == 'eraser' && editInfo.mode == 'draw' && tool == 'eraser') {
-            if (confirm("Do you want to delete all drawings on the current page?")) {
-                const data = {
-                    docId: this.currentDocId,
-                    currentDocNum: this.currentDocNum,
-                    currentPage: this.currentPage
-                }
-                // 다른 사람들에게 드로우 이벤트 제거
-                this.socket.emit('clearDrawingEvents', data)
-                // 자기자신한테 있는 드로우 이벤트 제거
-                this.drawStorageService.clearDrawingEvents(this.currentDocNum, this.currentPage);
-                this.eventBusService.emit(new EventData('rmoveDrawEventPageRendering', ''));
-                this.eventBusService.emit(new EventData('rmoveDrawEventThumRendering', ''));
-            } else {
-                return;
-            }
-        }
-        editInfo.mode = 'draw';
-        editInfo.tool = tool;
-        this.editInfoService.setEditInfo(editInfo);
-
-        // 지우개 2번 Click은 여기서 check 하는 것이 좋을 듯?
-
-    }
 
     /**
      * Move 선택
@@ -267,12 +233,56 @@ export class ComclassNavComponent implements OnInit {
      * @param mode : 현재는 'move'만 있음 (향후 sync?)
      * @param mode : nonSysn
      */
-    changeSyncMode(mode) {
+    changeSyncMode() {
         const editInfo = Object.assign({}, this.editInfoService.state);
-        (this.syncMode == mode) ? this.syncMode = 'sync' : this.syncMode = 'nonSync'
-        editInfo.syncMode = this.syncMode;
+        editInfo.syncMode ? editInfo.syncMode = false : editInfo.syncMode = true
         this.editInfoService.setEditInfo(editInfo);
     }
+
+
+
+    /**
+         * Pen, Eraser 선택
+         *
+         * @param tool : 'pen', 'eraser'
+         *
+         */
+    async changeTool(tool) {
+        // console.log(tool)
+        const editInfo = Object.assign({}, this.editInfoService.state);
+
+
+        if (editInfo.tool == 'eraser' && editInfo.mode == 'draw' && tool == 'eraser') {
+            if (confirm("Do you want to delete all drawings on the current page?")) {
+                const data = {
+                    participantName: 'teacher',
+                    docId: this.currentDocId,
+                    currentDocNum: this.currentDocNum,
+                    currentPage: this.currentPage,
+                    oneOnOneMode: editInfo.oneOnOneMode
+                }
+                // 다른 사람들에게 드로우 이벤트 제거
+                this.socket.emit('clearDrawingEvents', data)
+                // 자기자신한테 있는 드로우 이벤트 제거
+                if (editInfo.oneOnOneMode) {
+                    this.drawStorageService.clearOneOnOneDrawingEvents(this.currentDocNum, this.currentPage, 'teacher');
+                } else {
+                    this.drawStorageService.clearTeacherDrawingEvents(this.currentDocNum, this.currentPage, 'teacher');
+                }
+                this.eventBusService.emit(new EventData('rmoveDrawEventPageRendering', ''));
+                this.eventBusService.emit(new EventData('rmoveDrawEventThumRendering', ''));
+            } else {
+                return;
+            }
+        }
+        editInfo.mode = 'draw';
+        editInfo.tool = tool;
+        this.editInfoService.setEditInfo(editInfo);
+
+        // 지우개 2번 Click은 여기서 check 하는 것이 좋을 듯?
+
+    }
+
 
 
     // student list

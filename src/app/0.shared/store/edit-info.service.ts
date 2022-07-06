@@ -26,7 +26,9 @@ class InitEditInfo {
 
     toolDisabled = false; // move인 경우
     editDisabled = false; // Edit 자체 동작을 모두 방지(권한 관련)
-    syncMode = 'sync';
+    syncMode = true;
+    oneOnOneMode = false;
+    studentName = ''; // 1 대 1 모드시 대상 선정
     // syncMode, ....
 }
 
@@ -74,6 +76,8 @@ export class EditInfoService extends Store<any> {
 
         this.state.toolDisabled = false; // move인 경우
         this.state.editDisabled = false; // Edit 자체 동작을 모두 방지(권한 관련)
-        this.state.syncMode = 'sync';
+        this.state.syncMode = true;
+        this.state.oneOnOneMode = false;
+        this.state.studentName='';
     }
 }
