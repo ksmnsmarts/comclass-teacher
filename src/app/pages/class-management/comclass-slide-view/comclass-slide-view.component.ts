@@ -259,11 +259,12 @@ export class ComclassSlideViewComponent implements OnInit {
         const data = {
             meetingId: this.meetingId,
             docId: this.viewInfoService.state.pageInfo.currentDocId,
-            pageNum: pageNum
+            pageNum: pageNum,
+
         }
 
         // Participant 모드 일 경우 sync 기능 적용 제외
-        if (this.editInfoService.state.syncMode != 'nonSync') {
+        if (this.editInfoService.state.syncMode == true) {
             this.socket.emit('sync:page', data)
         }
 
@@ -283,7 +284,7 @@ export class ComclassSlideViewComponent implements OnInit {
         }
 
         // Participant 모드 일 경우 sync 기능 적용 제외
-        if (this.editInfoService.state.syncMode != 'nonSync') {
+        if (this.editInfoService.state.syncMode == true) {
             this.socket.emit('sync:FileList', data)
         }
     }
@@ -314,7 +315,7 @@ export class ComclassSlideViewComponent implements OnInit {
         // Render Background & Board
         for (let i = 0; i < numPages; i++) {
             await this.renderingService.renderThumbBackground(this.thumRef.toArray()[i].nativeElement, this.currentDocNum, i + 1);
-            this.renderingService.renderThumbBoard(this.thumbCanvasRef.toArray()[i].nativeElement, this.currentDocNum, i + 1);
+            this.renderingService.renderThumbBoard(this.thumbCanvasRef.toArray()[i].nativeElement, this.currentDocNum, i + 1, false, 'teacher');
 
             // 그리는 중 docList로 변경된 경우
             if (this.stopRendering) {

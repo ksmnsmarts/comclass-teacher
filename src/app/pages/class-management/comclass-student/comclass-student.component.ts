@@ -6,6 +6,7 @@ import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.se
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.service';
 import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
+import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.service';
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
 import { ClassInfoService } from 'src/app/0.shared/store/class-info';
 import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
@@ -44,6 +45,7 @@ export class ComclassStudentComponent implements OnInit {
         private canvasService: CanvasService,
         private pdfStorageService: PdfStorageService,
         private editInfoService: EditInfoService,
+        private drawStorageService: DrawStorageService,
         private drawingService: DrawingService
     ) {
         this.socket = this.socketService.socket;
@@ -51,7 +53,7 @@ export class ComclassStudentComponent implements OnInit {
 
     ngOnInit(): void {
 
-
+        this.startStudentListMode()
 
         this.classInfoService.state$
             .pipe(takeUntil(this.unsubscribe$))
@@ -88,17 +90,16 @@ export class ComclassStudentComponent implements OnInit {
 
 
         this.socket.on('teacher:studentViewInfo', ((data: any) => {
-            console.log('teacher:studentViewInfo')
-            console.log(this.viewInfoService.state)
+            for (let i = 0; i < data.drawData.length; i++) {
+              this.drawStorageService.setDrawEvent(data.currentDocNum, data.currentPage, data.drawData[i])
+            }
             const viewInfo = Object.assign({}, this.viewInfoService.state);
             viewInfo.pageInfo.currentDocId = data.currentDocId
             viewInfo.pageInfo.currentDocNum = data.currentDocNum
             viewInfo.pageInfo.currentPage = data.currentPage
             viewInfo.pageInfo.zoomScale = data.zoomScale
             viewInfo.leftSideView = 'thumbnail';
-            console.log(viewInfo)
             this.viewInfoService.setViewInfo(viewInfo);
-            console.log(this.viewInfoService.state)
             this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
         }))
 
@@ -141,7 +142,7 @@ export class ComclassStudentComponent implements OnInit {
 
 
             this.renderingService.renderThumbBackground(studentImgBg, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
-            this.renderingService.renderThumbBoard(canvas, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
+            this.renderingService.renderThumbBoard(canvas, data.pageInfo.currentDocNum, data.pageInfo.currentPage, false, data.studentName);
 
         })
 
@@ -197,7 +198,7 @@ export class ComclassStudentComponent implements OnInit {
         for (let i = 0; i < this.studentList.length; i++) {
             console.log(this.student_monitoringRef.toArray()[i].nativeElement)
             await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, 1, 1);
-            this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, 1, 1);
+            this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, 1, 1, false, this.studentList[i]?.studentName);
 
         };
 
@@ -218,10 +219,18 @@ export class ComclassStudentComponent implements OnInit {
         this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
     }
 
-    startOneOnOneMode(data) {
-        console.log(data.studentName)
+    startStudentListMode(){
+        this.socket.emit('cancel:monitoring', '')
         const editInfo = Object.assign({}, this.editInfoService.state);
-        editInfo.syncMode = 'oneOnOneMode';
+        editInfo.oneOnOneMode = false;
+        this.editInfoService.setEditInfo(editInfo);
+    }
+
+    startOneOnOneMode(data) {
+        const editInfo = Object.assign({}, this.editInfoService.state);
+        editInfo.syncMode = false;
+        editInfo.oneOnOneMode = true;
+        editInfo.studentName = data.studentName;
         this.editInfoService.setEditInfo(editInfo);
         this.socket.emit('begin:guidance', data.studentName);
 

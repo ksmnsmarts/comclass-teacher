@@ -51,9 +51,9 @@
         <!------------------------------------
             1:1 Guidance Fab Button
             - 학생 이름 표시
-            - 닫기 버튼. 		
+            - 닫기 버튼.
 		-------------------------------------- -->
-    <div [matMenuTriggerFor]="menu" class="syncMode_container" *ngIf="syncMode == 'oneOnOneMode'">
+    <div [matMenuTriggerFor]="menu" class="syncMode_container" *ngIf="oneOnOneMode == true">
         <button mat-fab color="primary" aria-label="Example icon button with a delete icon">
             {{studentName}}
         </button>

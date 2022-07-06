@@ -53,7 +53,8 @@ export class ComclassComponent implements OnInit {
     // Left Side Bar
     leftSideView;
 
-    syncMode = 'sync';
+    syncMode:Boolean = true;
+    oneOnOneMode: Boolean = false;
     studentName;
 
     mode = 'defaultMode';
@@ -102,7 +103,7 @@ export class ComclassComponent implements OnInit {
             console.log('<---[SOCKET] rx drawEvent :', data);
             // console.log(data.drawingEvent, data.docNum, data.pageNum)
             // if (data.drawingEvent.tool.type != 'pointer' && data.participantName == 'teacher' && data.mode == 'syncMode') {
-            if (data.drawingEvent.tool.type != 'pointer' && data.participantName == 'teacher' && data.mode == 'syncMode') {
+            if (data.drawingEvent.tool.type != 'pointer') {
                 this.drawStorageService.setDrawEvent(data.docNum, data.pageNum, data.drawingEvent);
             }
             this.eventBusService.emit(new EventData('receive:drawEvent', data));
@@ -113,7 +114,15 @@ export class ComclassComponent implements OnInit {
         ////////////////////////////////////////////////
         // 새로운 판서 Event 수신
         this.socket.on('clearDrawingEvents', ((data: any) => {
-            this.drawStorageService.clearDrawingEvents(data.currentDocNum, data.currentPage);
+            if (data.oneOnOneMode == false && data.participantName == 'teacher'){
+              this.drawStorageService.clearTeacherDrawingEvents(data.currentDocNum, data.currentPage,  data.participantName);
+            }
+            else if (data.oneOnOneMode == true && data.participantName == 'teacher'){
+              this.drawStorageService.clearOneOnOneDrawingEvents(data.currentDocNum, data.currentPage, data.participantName);
+            }
+            else if (data.participantName !== 'teacher'){
+              this.drawStorageService.clearStudentDrawingEvents(data.currentDocNum, data.currentPage);
+            }
             this.eventBusService.emit(new EventData('receive:clearDrawEvent', data));
         }))
 
@@ -137,13 +146,13 @@ export class ComclassComponent implements OnInit {
         this.eventBusService.on('gen:newDrawEvent', this.unsubscribe$, async (data) => {
             console.log(data)
             const pageInfo = this.viewInfoService.state.pageInfo;
-            data.mode = this.editInfoService.state.syncMode;
+            data.oneOnOneMode = this.editInfoService.state.oneOnOneMode;
+            data.participantName = 'teacher';
             // local Store 저장
-            if (data.tool.type != 'pointer' && data.mode != 'oneOnOneMode') {
+            if (data.tool.type != 'pointer') {
                 this.drawStorageService.setDrawEvent(pageInfo.currentDocNum, pageInfo.currentPage, data);
             }
             const newDataEvent = {
-                participantName: 'teacher',
                 drawingEvent: data,
                 docId: pageInfo.currentDocId,
                 docNum: pageInfo.currentDocNum,
@@ -151,14 +160,14 @@ export class ComclassComponent implements OnInit {
             }
 
             console.log(newDataEvent);
-
-            this.socket.emit('draw:teacher', newDataEvent);
-
+            if (!data.oneOnOneMode){
+              this.socket.emit('draw:teacher', newDataEvent);
+            }
         });
         //////////////////////////////////////////////////////////////////
 
         this.socket.on('teacher:studentViewInfo', ((data: any) => {
-            this.studentName = data.studentName
+            this.studentName = data.studentName;
         }))
 
 
@@ -168,13 +177,17 @@ export class ComclassComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe$), pluck('syncMode'))
             .subscribe((syncMode) => {
                 this.syncMode = syncMode;
-                console.log(this.syncMode)
             });
+
+        this.editInfoService.state$
+          .pipe(takeUntil(this.unsubscribe$), pluck('oneOnOneMode') )
+          .subscribe((oneOnOneMode) => {
+            this.oneOnOneMode = oneOnOneMode;
+          });
         ///////////////////////////////////////////////////////
 
 
         this.eventBusService.on("studentList", this.unsubscribe$, (data) => {
-            console.log(data)
             this.mode = data;
         })
     }
@@ -194,7 +207,8 @@ export class ComclassComponent implements OnInit {
     // 모니터링 취소
     cancelMonitoring() {
         const editInfo = Object.assign({}, this.editInfoService.state);
-        editInfo.syncMode = 'sync'
+        editInfo.syncMode = true;
+        editInfo.oneOnOneMode = false;
         this.editInfoService.setEditInfo(editInfo);
 
         this.socket.emit('cancel:monitoring', '')

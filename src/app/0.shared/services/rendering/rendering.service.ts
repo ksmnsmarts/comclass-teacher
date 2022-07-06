@@ -71,8 +71,8 @@ export class RenderingService {
      * @param {number} pageNum 페이지 번호
      * @param {Object} data drawing data (tool, timediff, points)
      */
-    renderThumbBoard(thumbCanvas, docNum, pageNum) {
-        let drawingEvents = this.drawStorageService.getDrawingEvents(docNum, pageNum);
+    renderThumbBoard(thumbCanvas, docNum, pageNum, oneOnOneMode, participantName) {
+      let drawingEvents = this.drawStorageService.getTeacherDrawingEvents(docNum, pageNum);
         // 해당 page의 drawing 정보가 있는 경우
         if (drawingEvents?.drawingEvent && drawingEvents?.drawingEvent.length > 0) {
             const viewport = this.pdfStorageService.getViewportSize(docNum, pageNum);
@@ -127,20 +127,30 @@ export class RenderingService {
      * @param {number} zoomScale zoomScale
      * @param {Object} drawingEvents 판서 event (tool, points, timeDiff)
      */
-    renderBoard(targetCanvas, zoomScale, drawingEvents) {
-        console.log('>> render Board: ', drawingEvents?.drawingEvent)
+  renderBoard(targetCanvas, guideCanvas, zoomScale, teacherDrawingEvents, studentDrawingEvents) {
+        console.log('>> render Board: ', teacherDrawingEvents?.drawingEvent)
         const targetCtx = targetCanvas.getContext('2d');
         const scale = zoomScale || 1;
         targetCtx.clearRect(0, 0, targetCanvas.width / scale, targetCanvas.height / scale);
+
+        const guideCtx = guideCanvas.getContext('2d');
+        guideCtx.clearRect(0, 0, guideCanvas.width / scale, guideCanvas.height / scale);
+
         /*----------------------------------------
           해당 page의 drawing 정보가 있는 경우
           drawing Service의 'end'관련 event 이용.
         -----------------------------------------*/
 
-        if (drawingEvents?.drawingEvent && drawingEvents?.drawingEvent.length > 0) {
-            for (const item of drawingEvents?.drawingEvent) {
+        if (teacherDrawingEvents?.drawingEvent && teacherDrawingEvents?.drawingEvent.length > 0) {
+            for (const item of teacherDrawingEvents?.drawingEvent) {
                 this.drawingService.end(targetCtx, item.points, item.tool, item.txt, scale);
             }
+        }
+
+        if (studentDrawingEvents?.drawingEvent && studentDrawingEvents?.drawingEvent.length > 0) {
+          for (const item of studentDrawingEvents?.drawingEvent) {
+            this.drawingService.end(guideCtx, item.points, item.tool, item.txt, scale);
+          }
         }
     }
 
