@@ -7,6 +7,7 @@ import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 import { RenderingService } from 'src/app/0.shared/services/rendering/rendering.service';
 import { SocketService } from 'src/app/0.shared/services/socket/socket.service';
 import { ZoomService } from 'src/app/0.shared/services/zoom/zoom.service';
+import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.service';
 import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service';
 import { ClassInfoService } from 'src/app/0.shared/store/class-info';
 import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
@@ -49,12 +50,13 @@ export class ComclassStudentComponent implements OnInit {
         private editInfoService: EditInfoService,
         private drawingService: DrawingService,
         private zoomService: ZoomService,
+        private drawStorageService: DrawStorageService
     ) {
         this.socket = this.socketService.socket;
     }
 
     ngOnInit(): void {
-        
+
         this.classInfoService.state$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(async (classInfo) => {
@@ -70,7 +72,7 @@ export class ComclassStudentComponent implements OnInit {
                 this.currentDocId = viewInfo.pageInfo.currentDocId;
                 this.currentDocNum = viewInfo.pageInfo.currentDocNum;
                 this.currentPageNum = viewInfo.pageInfo.currentPage;
-                
+
             });
 
         this.socket.on('studentCount', (data) => {
@@ -78,6 +80,7 @@ export class ComclassStudentComponent implements OnInit {
             this.studentCount = data - 1;
         });
 
+        // 학생 리스트에 갔다가 다시 돌아왔을 때 학생 수가 초기화 되는 문제를 해결하기 위해 store 저장
         this.studentInfoService.currentStudent.pipe(takeUntil(this.unsubscribe$)).subscribe(
             (res: any) => {
                 this.studentCount = res;
@@ -89,7 +92,6 @@ export class ComclassStudentComponent implements OnInit {
         * 학생에게 받은 현재 페이지정보를 이용하여 해당 페이지로 이동   
         -------------------------------------------*/
         this.socket.on('teacher:studentViewInfo', ((data: any) => {
-            console.log('>>>>>>>>>>>>>>> ', data)
             // this.viewInfoService.changeToThumbnailView(data.currentDocId);
             const viewInfo = Object.assign({}, this.viewInfoService.state);
             viewInfo.pageInfo.currentDocId = data.currentDocId
@@ -108,11 +110,12 @@ export class ComclassStudentComponent implements OnInit {
         ************************************************************/
         this.socket.emit('studentList:docInfo');
 
-        this.socket.on('studentList:sendDocInfo', async (data) => {
-            
-            const canvas = (document.getElementById('student_monitoring' + data.studentName) as HTMLInputElement);
-            const studentImgBg = (document.getElementById('studentBg' + data.studentName) as HTMLInputElement);
-            const viewport = this.pdfStorageService.getViewportSize(data.currentDocNum, data.currentPage);
+        this.socket.on('studentList:sendDocInfo', async (docData, drawingEvent) => {
+            console.log(docData.zoomScale)
+
+            const canvas = (document.getElementById('student_monitoring' + docData.studentName) as HTMLInputElement);
+            const studentImgBg = (document.getElementById('studentBg' + docData.studentName) as HTMLInputElement);
+            const viewport = this.pdfStorageService.getViewportSize(docData.currentDocNum, docData.currentPage);
 
             await new Promise(res => setTimeout(res, 500));
             // landscape 문서 : 가로를 300px(studentListMaxSize)로 설정
@@ -124,7 +127,7 @@ export class ComclassStudentComponent implements OnInit {
                 studentImgBg.height = studentImgBg.width * viewport.height / viewport.width;
             }
             // portrait 문서 : 세로를 300px(studentListMaxSize)로 설정
-            else if (viewport.width < viewport.height) { 
+            else if (viewport.width < viewport.height) {
                 canvas.height = CANVAS_CONFIG.studentListMaxSize;
                 canvas.width = canvas.height * viewport.width / viewport.height;
 
@@ -133,14 +136,25 @@ export class ComclassStudentComponent implements OnInit {
             }
 
             for (let i = 0; i < this.thumbArray.length; i++) {
-                if (this.thumbArray[i].studentName == data.studentName) {
-                    this.thumbArray[i].currentDocId = data.currentDocId;
-                    this.thumbArray[i].currentDocNum = data.currentDocNum;
-                    this.thumbArray[i].currentPage = data.currentPage;
+                if (this.thumbArray[i].studentName == docData.studentName) {
+                    this.thumbArray[i].currentDocId = docData.currentDocId;
+                    this.thumbArray[i].currentDocNum = docData.currentDocNum;
+                    this.thumbArray[i].currentPage = docData.currentPage;
+                    this.thumbArray[i].drawingEvent = drawingEvent;
                 }
             }
-            await this.renderingService.renderThumbBackground(studentImgBg, data.currentDocNum, data.currentPage);
-            await this.renderingService.renderThumbBoard(canvas, data.currentDocNum, data.currentPage);
+
+            await this.renderingService.renderThumbBackground(studentImgBg, docData.currentDocNum, docData.currentPage);
+            // await this.renderingService.renderThumbBoard(canvas, docData.currentDocNum, drawingEvent.pageNum);
+
+            for (let i = 0; i < this.thumbArray.length; i++) {
+                const scale = this.thumbArray[i].scale;
+                if (this.thumbArray[i].studentName == docData.studentName) {
+                    for (let j = 0; j < drawingEvent.length; j++) {
+                        await this.drawingService.drawThumb(drawingEvent[j], canvas, scale);
+                    }
+                }
+            }
         })
 
 
@@ -151,7 +165,7 @@ export class ComclassStudentComponent implements OnInit {
          ************************************************************/
         this.socket.on('send:monitoringCanvas', async (data) => {
             for (let i = 0; i < this.studentList.length; i++) {
-                if (this.studentList[i].studentName == data.studentName){
+                if (this.studentList[i].studentName == data.studentName) {
                     this.studentList[i].pageInfo = data.pageInfo
                 }
             }
@@ -170,7 +184,7 @@ export class ComclassStudentComponent implements OnInit {
                 studentImgBg.height = studentImgBg.width * viewport.height / viewport.width;
             }
             // portrait 문서 : 세로를 300px(studentListMaxSize)로 설정
-            else if (viewport.width < viewport.height) { 
+            else if (viewport.width < viewport.height) {
                 canvas.height = CANVAS_CONFIG.studentListMaxSize;
                 canvas.width = canvas.height * viewport.width / viewport.height;
 
@@ -179,7 +193,8 @@ export class ComclassStudentComponent implements OnInit {
             }
 
             this.renderingService.renderThumbBackground(studentImgBg, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
-            this.renderingService.renderThumbBoard(canvas, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
+            // this.renderingService.renderThumbBoard(canvas, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
+
 
         })
 
@@ -197,6 +212,7 @@ export class ComclassStudentComponent implements OnInit {
                 console.log("------------> ERROR:  Check STUDENT LIST... ", data.studentName);
                 return;
             }
+
 
             // 학생의 drawing event를 그리기
             for (let i = 0; i < this.thumbArray.length; i++) {
@@ -219,9 +235,6 @@ export class ComclassStudentComponent implements OnInit {
      * @returns
      */
     async renderFileList() {
-        // File List Background 그리기 : 각 문서의 1page만 그림
-        // const numPages = this.viewInfoService.state.documentInfo[this.currentDocNum - 1].numPages;
-
         this.thumbArray = [];
         let thumbSize;
 
@@ -233,7 +246,6 @@ export class ComclassStudentComponent implements OnInit {
         };
 
         await new Promise(res => setTimeout(res, 0));
-        // for (let i = 0; i < this.student_monitoringRef.toArray().length; i++) {
         for (let i = 0; i < this.studentList.length; i++) {
             await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, 1, 1);
             await this.renderingService.renderThumbBoard(this.student_monitoringRef.toArray()[i].nativeElement, 1, 1);
