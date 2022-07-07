@@ -155,7 +155,7 @@ export class ComclassFileViewComponent implements OnInit {
         }
 
         // Participant 모드 일 경우 sync 기능 적용 제외
-        if (this.editInfoService.state.syncMode != 'nonSync') {
+        if (this.editInfoService.state.syncMode == true) {
             this.socket.emit('sync:doc', data)
         }
 

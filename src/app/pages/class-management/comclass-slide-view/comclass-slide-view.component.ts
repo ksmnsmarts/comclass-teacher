@@ -312,7 +312,7 @@ export class ComclassSlideViewComponent implements OnInit {
         // Render Background & Board
         for (let i = 0; i < numPages; i++) {
             await this.renderingService.renderThumbBackground(this.thumRef.toArray()[i].nativeElement, this.currentDocNum, i + 1);
-            this.renderingService.renderThumbBoard(this.thumbCanvasRef.toArray()[i].nativeElement, this.currentDocNum, i + 1, false, 'teacher');
+            this.renderingService.renderThumbBoard(this.thumbCanvasRef.toArray()[i].nativeElement, this.currentDocNum, i + 1);
 
             // 그리는 중 docList로 변경된 경우
             if (this.stopRendering) {

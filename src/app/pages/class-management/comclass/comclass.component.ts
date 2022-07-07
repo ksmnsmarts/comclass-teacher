@@ -187,7 +187,7 @@ export class ComclassComponent implements OnInit {
         ///////////////////////////////////////////////////////
 
 
-        this.eventBusService.on("studentList", this.unsubscribe$, (data) => {
+        this.eventBusService.on('studentList', this.unsubscribe$, (data) => {
             this.mode = data;
         })
     }
@@ -443,6 +443,7 @@ export class ComclassComponent implements OnInit {
 
         // 최초 load인 경우 document ID는 처음 것으로 설정
         if (!this.viewInfoService.state.pageInfo.currentDocId) {
+            console.log('여기```````````11111111111111111111111')
             obj.pageInfo = {
                 currentDocId: documentInfo[0]._id,
                 currentDocNum: 1,
@@ -461,6 +462,7 @@ export class ComclassComponent implements OnInit {
             const res = this.pdfStorageService.pdfVarArray.filter((x) => x._id == this.viewInfoService.state.pageInfo.currentDocId);
 
             if (res.length == 0) {
+                console.log('여기```````````222222222222222')
                 obj.pageInfo = {
                     currentDocId: documentInfo[0]._id,
                     currentDocNum: 1,

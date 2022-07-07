@@ -290,6 +290,7 @@ export class ComclassNavComponent implements OnInit {
         this.eventBusService.emit(new EventData('studentList', 'studentListMode'));
         console.log(this.currentDocId)
         this.viewInfoService.setViewInfo({ leftSideView: 'fileList' });
+        // this.socket.emit('studentList:docInfo');
     }
 
 }

@@ -35,6 +35,7 @@ export class ComclassStudentComponent implements OnInit {
     thumbArray = [];
     studentDocInfo;
 
+    docData= [];
 
     @ViewChildren('student_monitoring') student_monitoringRef: QueryList<ElementRef>
     @ViewChildren('studentBg') studentBgRef: QueryList<ElementRef>
@@ -62,10 +63,10 @@ export class ComclassStudentComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(async (classInfo) => {
                 this.studentList = classInfo.currentMembers
-                this.renderFileList();
+                this.renderFileList();    
             });
-
-
+                                    
+            
         this.viewInfoService.state$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((viewInfo) => {
@@ -73,11 +74,9 @@ export class ComclassStudentComponent implements OnInit {
                 this.currentDocId = viewInfo.pageInfo.currentDocId;
                 this.currentDocNum = viewInfo.pageInfo.currentDocNum;
                 this.currentPageNum = viewInfo.pageInfo.currentPage;
-
             });
 
         this.socket.on('studentCount', (data) => {
-            console.log('<--- [SOCKET] 현재 참가자 수', data - 1);
             this.studentCount = data - 1;
         });
 
@@ -92,17 +91,24 @@ export class ComclassStudentComponent implements OnInit {
         * 1:1 모드 
         * 학생에게 받은 현재 페이지정보를 이용하여 해당 페이지로 이동   
         -------------------------------------------*/
-        this.socket.on('teacher:studentViewInfo', ((data: any) => {
-            for (let i = 0; i < data.drawData.length; i++) {
-              this.drawStorageService.setDrawEvent(data.currentDocNum, data.currentPage, data.drawData[i])
+        this.socket.on('teacher:studentViewInfo', (async (data: any) => {
+
+            for (let i = 0; i < data?.drawData?.length; i++) {
+                this.drawStorageService.setDrawEvent(data.currentDocNum, data.currentPage, data.drawData[i])
             }
             const viewInfo = Object.assign({}, this.viewInfoService.state);
+            console.log(data)
+            
             viewInfo.pageInfo.currentDocId = data.currentDocId
             viewInfo.pageInfo.currentDocNum = data.currentDocNum
             viewInfo.pageInfo.currentPage = data.currentPage
             viewInfo.pageInfo.zoomScale = data.zoomScale
             viewInfo.leftSideView = 'thumbnail';
-            this.viewInfoService.setViewInfo(viewInfo);
+            
+            await this.viewInfoService.setViewInfo(viewInfo);
+            await this.viewInfoService.changeToThumbnailView(data.currentDocId);
+            await this.viewInfoService.updateCurrentPageNum(data.currentPage);
+            console.log(this.viewInfoService.state)
             this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
         }))
 
@@ -111,16 +117,20 @@ export class ComclassStudentComponent implements OnInit {
         /************************************************************
         * 학생 리스트에 들어왔을 때 학생들이 현재 바라보고 있는 문서 페이지 보여주기
         ************************************************************/
+        // this.eventBusService.on('studentList:docInfo', this.unsubscribe$, ()=> {
+        //     console.log('이벤트 버스')
+        //     this.socket.emit('studentList:docInfo');
+        // });
         this.socket.emit('studentList:docInfo');
 
-        this.socket.on('studentList:sendDocInfo', async (docData) => {
-            console.log(docData)
+        this.socket.on('studentList:sendDocInfo', async (docData) => {     
+            console.log(docData) 
 
             const canvas = (document.getElementById('student_monitoring' + docData.studentName) as HTMLInputElement);
             const studentImgBg = (document.getElementById('studentBg' + docData.studentName) as HTMLInputElement);
-            const viewport = this.pdfStorageService.getViewportSize(docData.currentDocNum, docData.currentPage);
+            const viewport = await this.pdfStorageService.getViewportSize(docData.currentDocNum, docData.currentPage);
 
-            await new Promise(res => setTimeout(res, 500));
+            await new Promise(res => setTimeout(res, 300));
             // landscape 문서 : 가로를 300px(studentListMaxSize)로 설정
             if (viewport.width > viewport.height) {
                 canvas.width = CANVAS_CONFIG.studentListMaxSize;
@@ -145,8 +155,12 @@ export class ComclassStudentComponent implements OnInit {
                     this.thumbArray[i].currentPage = docData.currentPage;
                     this.thumbArray[i].drawingEvent = docData.drawingEvent;
                 }
+
             }
-            console.log(docData)
+            await new Promise(res => setTimeout(res, 300));
+            await this.renderingService.renderThumbBackground(studentImgBg, docData.currentDocNum, docData.currentPage);
+            // await this.renderingService.renderThumbBoard(canvas, docData.currentDocNum, drawingEvent.pageNum);
+
 
             // 학생이 학생의 로컬에 그린 판서 데이터를 받아와서 해당 페이지에 그려주기
             for (let i = 0; i < this.thumbArray.length; i++) {
@@ -156,17 +170,7 @@ export class ComclassStudentComponent implements OnInit {
                         await this.drawingService.drawThumb(docData.drawingEvent[j], canvas, scale);
                     }
                 }
-            }
-
-
-            await new Promise(res => setTimeout(res, 0));
-            await this.renderingService.renderThumbBackground(studentImgBg, docData.currentDocNum, docData.currentPage);
-            // await this.renderingService.renderThumbBoard(canvas, docData.currentDocNum, drawingEvent.pageNum);
-
-            // 이정운 작업
-            // this.renderingService.renderThumbBackground(studentImgBg, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
-            // this.renderingService.renderThumbBoard(canvas, data.pageInfo.currentDocNum, data.pageInfo.currentPage, false, data.studentName);
-            
+            }            
         })
 
 
@@ -176,7 +180,7 @@ export class ComclassStudentComponent implements OnInit {
          * 학생이 보고 있는 문서 페이지가 업데이트 됐을 때 업데이트 된 페이지 보여주기
          ************************************************************/
         this.socket.on('send:monitoringCanvas', async (data) => {
-
+            
             for (let i = 0; i < this.studentList.length; i++) {
                 if (this.studentList[i].studentName == data.studentName) {
                     this.studentList[i].pageInfo = data.pageInfo
@@ -185,7 +189,7 @@ export class ComclassStudentComponent implements OnInit {
 
             const canvas = (document.getElementById('student_monitoring' + data.studentName) as HTMLInputElement);
             const studentImgBg = (document.getElementById('studentBg' + data.studentName) as HTMLInputElement);
-            const viewport = this.pdfStorageService.getViewportSize(data.pageInfo.currentDocNum, data.pageInfo.currentPage);
+            const viewport = await this.pdfStorageService.getViewportSize(data.pageInfo.currentDocNum, data.pageInfo.currentPage);
 
             await new Promise(res => setTimeout(res, 500));
             // landscape 문서 : 가로를 300px(studentListMaxSize)로 설정
@@ -205,16 +209,27 @@ export class ComclassStudentComponent implements OnInit {
                 studentImgBg.width = studentImgBg.height * viewport.width / viewport.height;
             }
 
-            this.renderingService.renderThumbBackground(studentImgBg, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
+
+            for (let i = 0; i < this.thumbArray.length; i++) {
+                if (this.thumbArray[i].studentName == data.studentName) {
+                    this.thumbArray[i].currentDocId = data.currentDocId;
+                    this.thumbArray[i].currentDocNum = data.pageInfo.currentDocNum;
+                    this.thumbArray[i].currentPage = data.pageInfo.currentPage;
+                }
+
+            }
+
+            await new Promise(res => setTimeout(res, 0));
+            await this.renderingService.renderThumbBackground(studentImgBg, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
             // this.renderingService.renderThumbBoard(canvas, data.pageInfo.currentDocNum, data.pageInfo.currentPage);
-            
+
 
             // 학생이 학생의 로컬에 그린 판서 데이터를 받아와서 해당 페이지에 그려주기
             for (let i = 0; i < this.thumbArray.length; i++) {
                 const scale = this.thumbArray[i].scale;
                 if (this.thumbArray[i].studentName == data.studentName) {
-                    for (let j = 0; j < data.drawingEvent.drawingEvent.length; j++) {
-                        if(data.drawingEvent.pageNum == data.pageInfo.currentPage) {
+                    for (let j = 0; j < data.drawingEvent?.drawingEvent.length; j++) {
+                        if (data.drawingEvent.pageNum == data.pageInfo.currentPage) {
                             await this.drawingService.drawThumb(data.drawingEvent.drawingEvent[j], canvas, scale);
                         }
                     }
@@ -258,6 +273,7 @@ export class ComclassStudentComponent implements OnInit {
      * @returns
      */
     async renderFileList() {
+        
         this.thumbArray = [];
         let thumbSize;
 
@@ -268,6 +284,9 @@ export class ComclassStudentComponent implements OnInit {
             this.thumbArray.push(thumbSize);
         };
 
+        // this.eventBusService.emit(new EventData('studentList:docInfo', ''));
+
+        
         // await new Promise(res => setTimeout(res, 0));
         // for (let i = 0; i < this.studentList.length; i++) {
         //     await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, 1, 1);
@@ -289,7 +308,7 @@ export class ComclassStudentComponent implements OnInit {
         this.viewInfoService.changeToThumbnailView(this.currentDocId);
     }
 
-    startStudentListMode(){
+    startStudentListMode() {
         this.socket.emit('cancel:monitoring', '')
         const editInfo = Object.assign({}, this.editInfoService.state);
         editInfo.oneOnOneMode = false;

@@ -118,10 +118,10 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                 this.currentPage = pageInfo.currentPage;
                 // 초기 load 포함 변경사항에 대해 수행
                 // (doc change, page change, zoom change 등)
-                if (pageInfo.currentDocId) {
-                    console.log('onChangePage and rendering')
-                    this.onChangePage();
-                }
+  
+                console.log('onChangePage and rendering')
+                this.onChangePage();
+                
             });
 
         ///////////////////////////////////////////////
@@ -149,7 +149,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                 this.syncMode = editInfo.syncMode
                 if (this.oneOnOneMode != editInfo.oneOnOneMode){
                   this.oneOnOneMode = editInfo.oneOnOneMode
-                  this.onChangePage();
+                //   this.onChangePage();
                 }
                 this.studentName = editInfo.studentName
 
@@ -337,22 +337,25 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
 
         console.log('>>> page Render! [background and board] + addEventHandler');
 
-        let teacherDrawingEvents;
-        let teacherOneOnOneDrawingEvents;
-        let studentDrawingEvents;
-        if (this.oneOnOneMode) {
-          teacherDrawingEvents = this.drawStorageService.getTeacherDrawingEvents(currentDocNum, currentPage);
-          teacherOneOnOneDrawingEvents = this.drawStorageService.getOneOnOneTeacherDrawingEvents(currentDocNum, currentPage);
-          this.renderingService.renderBoard(this.teacherCanvas, this.teacherGuideCanvas, zoomScale, teacherDrawingEvents, teacherOneOnOneDrawingEvents);
-          studentDrawingEvents = this.drawStorageService.getStudentDrawingEvents(currentDocNum, currentPage);
-          this.renderingService.renderBoard(this.teacherCanvas, this.studentGuideCanvas, zoomScale, teacherDrawingEvents, studentDrawingEvents);
-        } else {
-          teacherDrawingEvents = this.drawStorageService.getTeacherDrawingEvents(currentDocNum, currentPage);
-          this.renderingService.renderBoard(this.teacherCanvas, this.teacherGuideCanvas, zoomScale, teacherDrawingEvents, '');
-        }
+        console.log(currentDocNum, currentPage)
 
         // PDF Rendering
         await this.renderingService.renderBackground(this.tmpCanvas, this.bgCanvas, currentDocNum, currentPage);
+
+        let teacherDrawingEvents;
+        let teacherOneOnOneDrawingEvents;
+        let studentDrawingEvents;
+
+        if (this.oneOnOneMode) {
+            teacherDrawingEvents = this.drawStorageService.getTeacherDrawingEvents(currentDocNum, currentPage);
+            teacherOneOnOneDrawingEvents = this.drawStorageService.getOneOnOneTeacherDrawingEvents(currentDocNum, currentPage);
+            this.renderingService.renderBoard(this.teacherCanvas, this.teacherGuideCanvas, zoomScale, teacherDrawingEvents, teacherOneOnOneDrawingEvents);
+            studentDrawingEvents = this.drawStorageService.getStudentDrawingEvents(currentDocNum, currentPage);
+            this.renderingService.renderBoard(this.teacherCanvas, this.studentGuideCanvas, zoomScale, teacherDrawingEvents, studentDrawingEvents);
+          } else {
+            teacherDrawingEvents = this.drawStorageService.getTeacherDrawingEvents(currentDocNum, currentPage);
+            this.renderingService.renderBoard(this.teacherCanvas, this.teacherGuideCanvas, zoomScale, teacherDrawingEvents, '');
+          }
     }
 
 
@@ -372,6 +375,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
         * document.getElementById('thumb_' + pageNum) (이미지)가 정의되지 않아 오류가 난다.
         * 그래서 doc을 클릭하여 thumbnail view 일 경우에만 실행하도록 설정함.
         ****************************************************/
+       console.log(this.prevViewInfo)
         if (this.prevViewInfo === 'thumbnail') {
             ctx.drawImage(imgElement, 0, 0, targetCanvas.width, targetCanvas.height);
         }
