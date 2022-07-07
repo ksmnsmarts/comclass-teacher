@@ -71,7 +71,6 @@ export class ComclassFileViewComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe$), pluck('documentInfo'), distinctUntilChanged())
             .subscribe(async (documentInfo) => {
                 this.documentInfo = documentInfo;
-                console.log(this.documentInfo)
                 await new Promise(res => setTimeout(res, 0));
 
                 this.renderFileList();
@@ -82,8 +81,6 @@ export class ComclassFileViewComponent implements OnInit {
         .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'))
         .subscribe((pageInfo) => {
             this.documentPageInfo = pageInfo;
-
-            console.log('[info] documentInfo: ', this.documentPageInfo);
         });
 
 
@@ -158,7 +155,7 @@ export class ComclassFileViewComponent implements OnInit {
         }
 
         // Participant 모드 일 경우 sync 기능 적용 제외
-        if (this.editInfoService.state.syncMode != 'nonSync') {
+        if (this.editInfoService.state.syncMode == true) {
             this.socket.emit('sync:doc', data)
         }
 
@@ -239,8 +236,6 @@ export class ComclassFileViewComponent implements OnInit {
 
         this.dialogService.openDialogConfirm('Are you sure you want to delete it?').subscribe(result => {
             if (result) {
-
-                console.log(_id)
                 console.log('>> click PDF : delete');
                 this.apiService.deleteMeetingPdfFile({ _id }).subscribe(async (data: any) => {
 

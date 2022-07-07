@@ -698,11 +698,13 @@ export class DrawingService {
 
   // Thumbnail에 그리기
   drawThumb(data, thumbCanvas, thumbScale) {
-    // console.log(data)
     const thumbCtx = thumbCanvas.getContext('2d');
+    
     // prepare scale
     thumbCtx.save();
+    // thumbCtx.clearRect(0, 0, thumbCanvas.width/thumbScale, thumbCanvas.height/thumbScale);
     thumbCtx.scale(thumbScale, thumbScale);
+
     this.end(thumbCtx, data.points, data.tool, data.txt , 1);
     thumbCtx.restore();
   }

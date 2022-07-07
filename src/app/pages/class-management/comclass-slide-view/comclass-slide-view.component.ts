@@ -85,12 +85,12 @@ export class ComclassSlideViewComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged(), pairwise())
             .subscribe(([prevViewInfo, viewInfo]) => {
 
-                console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>', viewInfo)
-
                 // 현재 Current Page Info 저장
                 this.currentDocId = viewInfo.pageInfo.currentDocId;
                 this.currentDocNum = viewInfo.pageInfo.currentDocNum;
                 this.currentPageNum = viewInfo.pageInfo.currentPage;
+
+                console.log(viewInfo)
 
                 // Thumbnail Mode로 전환된 경우 Thumbnail Rendering
                 if (prevViewInfo.leftSideView != 'thumbnail' && viewInfo.leftSideView == 'thumbnail') {
@@ -183,9 +183,6 @@ export class ComclassSlideViewComponent implements OnInit {
 
         // 다른 사람이 그린 Event thumbnail에 그리기
         this.eventBusService.on('receive:drawEvent', this.unsubscribe$, async (data) => {
-            // data = (data || '');
-            // console.log(data)
-            // console.log(data.drawingEvent);
             this.drawThumbRx(data);
         });
 
@@ -315,7 +312,7 @@ export class ComclassSlideViewComponent implements OnInit {
         // Render Background & Board
         for (let i = 0; i < numPages; i++) {
             await this.renderingService.renderThumbBackground(this.thumRef.toArray()[i].nativeElement, this.currentDocNum, i + 1);
-            this.renderingService.renderThumbBoard(this.thumbCanvasRef.toArray()[i].nativeElement, this.currentDocNum, i + 1, false, 'teacher');
+            this.renderingService.renderThumbBoard(this.thumbCanvasRef.toArray()[i].nativeElement, this.currentDocNum, i + 1);
 
             // 그리는 중 docList로 변경된 경우
             if (this.stopRendering) {

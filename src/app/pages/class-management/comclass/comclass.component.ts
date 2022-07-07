@@ -102,6 +102,7 @@ export class ComclassComponent implements OnInit {
         this.socket.on('draw:teacher', ((data: any) => {
             console.log('<---[SOCKET] rx drawEvent :', data);
             // console.log(data.drawingEvent, data.docNum, data.pageNum)
+
             // if (data.drawingEvent.tool.type != 'pointer' && data.participantName == 'teacher' && data.mode == 'syncMode') {
             if (data.drawingEvent.tool.type != 'pointer') {
                 this.drawStorageService.setDrawEvent(data.docNum, data.pageNum, data.drawingEvent);
@@ -152,7 +153,6 @@ export class ComclassComponent implements OnInit {
 
         // 새로운 판서 Event local 저장 + 서버 전송
         this.eventBusService.on('gen:newDrawEvent', this.unsubscribe$, async (data) => {
-            console.log(data)
             const pageInfo = this.viewInfoService.state.pageInfo;
             data.oneOnOneMode = this.editInfoService.state.oneOnOneMode;
             data.participantName = 'teacher';
@@ -195,7 +195,7 @@ export class ComclassComponent implements OnInit {
         ///////////////////////////////////////////////////////
 
 
-        this.eventBusService.on("studentList", this.unsubscribe$, (data) => {
+        this.eventBusService.on('studentList', this.unsubscribe$, (data) => {
             this.mode = data;
         })
     }
@@ -226,19 +226,17 @@ export class ComclassComponent implements OnInit {
         this.socket.emit('cancel:monitoring', '')
     }
 
-    async getMeetingInfo(){
-      const data = {
-        _id: this.classId
-      }
-      const classInfo: any = await lastValueFrom(this.comclassService.getClassInfo(data))
-      console.log(classInfo)
+    async getMeetingInfo() {
+        const data = {
+            _id: this.classId
+        }
+        const classInfo: any = await lastValueFrom(this.comclassService.getClassInfo(data))
 
-      classInfo.role = 'teacher';
-      this.socket.emit('join:class', classInfo);
-      this.socket.on('update:classInfo', (classInfo) => {
-        console.log('classInfo', classInfo)
-        this.classInfoService.setClassInfo(classInfo);
-      })
+        classInfo.role = 'teacher';
+        this.socket.emit('join:class', classInfo);
+        this.socket.on('update:classInfo', (classInfo) => {
+            this.classInfoService.setClassInfo(classInfo);
+        })
     }
     /**
      * Open Local PDF File
@@ -330,15 +328,12 @@ export class ComclassComponent implements OnInit {
         for (let i = 0; i < result.docResult.length; i++) {
             // this._docIdList.push(result.docResult[i]._id);
             const updatedTime = result.docResult[i].updatedAt;
-            console.log("[[[ result length ]]]", result.docResult.length);
-            console.log("[[[ result i ]]]", i);
             ////////////////////////////////////////////////////////////////////////
             // PDF File Buffer update
             // pdf가 load된 시간을 비교하여 변경된 경우에만 file 요청)
             // https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Operators/Optional_chaining
             if (pdfArrayVar[i]?.updatedAt !== updatedTime) {
                 try {
-                    console.log(result.docResult[i]._id)
                     const data = {
                         _id: result.docResult[i]._id
                     }
@@ -350,9 +345,6 @@ export class ComclassComponent implements OnInit {
                     const file = await this.fileService.readFile(res);
 
                     result.docResult[i].fileBuffer = file;
-
-                    console.log(file)
-
                 } catch (err) {
                     console.log(err);
                     return err;
@@ -386,10 +378,10 @@ export class ComclassComponent implements OnInit {
 
         // 현재 저장된 PDF Array 변수
         let pdfVarArray = this.pdfStorageService.pdfVarArray;
-        console.log(pdfVarArray)
+
         // 문서 개수의 차이
         const diff = documentData.length - pdfVarArray.length;
-        console.log('diff : ', diff)
+        
         // document length가 더 긴경우 : 배열 추가
         if (diff > 0) {
             for (let i = 0; i < diff; i++) {
@@ -407,7 +399,7 @@ export class ComclassComponent implements OnInit {
         for (let i = 0; i < documentData.length; i++) {
             //1. Document 별 판서 Event 저장
             this.drawStorageService.setDrawEventSet(i + 1, documentData[i].drawingEventSet);
-            console.log(this.drawStorageService.drawVarArray)
+
             // 2. PDF 관련값 저장 및 PDF 변환
             pdfVarArray[i]._id = documentData[i]._id;
             pdfVarArray[i].fileBuffer = documentData[i].fileBuffer;
@@ -422,8 +414,6 @@ export class ComclassComponent implements OnInit {
 
         //  PDF Docouments storage에 저장
         this.pdfStorageService.setPdfVarArray(pdfVarArray);
-        console.log(this.pdfStorageService.pdfVarArray)
-        console.log(this.drawStorageService.drawVarArray)
 
         return;
     }
@@ -441,9 +431,6 @@ export class ComclassComponent implements OnInit {
 
     updateViewInfoStore() {
         let documentInfo = [...this.viewInfoService.state.documentInfo];
-        console.log(documentInfo)
-        console.log(this.pdfStorageService.pdfVarArray)
-        console.log(this.viewInfoService.state.pageInfo.currentDocId)
         const diff = this.pdfStorageService.pdfVarArray.length - documentInfo.length
         if (diff > 0) {
             for (let item of this.pdfStorageService.pdfVarArray) {
@@ -468,6 +455,7 @@ export class ComclassComponent implements OnInit {
 
         // 최초 load인 경우 document ID는 처음 것으로 설정
         if (!this.viewInfoService.state.pageInfo.currentDocId) {
+            console.log('여기```````````11111111111111111111111')
             obj.pageInfo = {
                 currentDocId: documentInfo[0]._id,
                 currentDocNum: 1,
@@ -484,9 +472,9 @@ export class ComclassComponent implements OnInit {
             // 문서 삭제 시 현재 바라보는 문서와 같은 곳일 경우 팝업 창과 함께 첫 화이트보드로 돌아온다.
             // 현재 바라보는 문서 ID와 DB에서 받아온 문서 ID가 일치하는게 없으면 첫 페이지로 돌아오고 문서가 삭제됐다고 알림
             const res = this.pdfStorageService.pdfVarArray.filter((x) => x._id == this.viewInfoService.state.pageInfo.currentDocId);
-            console.log(res)
 
             if (res.length == 0) {
+                console.log('여기```````````222222222222222')
                 obj.pageInfo = {
                     currentDocId: documentInfo[0]._id,
                     currentDocNum: 1,
