@@ -128,6 +128,14 @@ export class ComclassComponent implements OnInit {
 
         ////////////////////////////////////////////////
 
+        ////////////////////////////////////////////////
+        // 상대방이 나갈 시 oneOnOneMode를 false로 변경
+        this.socket.on('change:oneOnOneMode', ((data: any) => {
+            const editInfo = Object.assign({}, this.editInfoService.state);
+            editInfo.oneOnOneMode = false;
+            this.editInfoService.setEditInfo(editInfo);
+        }))
+        ////////////////////////////////////////////////
 
         ////////////////////////////////////////////////////////
         // sidebar의 view mode : HTML 내에서 사용
@@ -194,11 +202,15 @@ export class ComclassComponent implements OnInit {
     ///////////////////////////////////////////////////////////
 
     ngOnDestroy() {
+        this.socket.emit('close:oneOnOneMode')
         // unsubscribe all subscription
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
         // this.pdfStorageService.memoryRelease();
+
         // socket off
+        this.socket.off("close:oneOnOneMode");
+        this.socket.off("change:oneOnOneMode");
         this.socket.off("draw:teacher");
         this.socket.off("check:documents");
         this.socket.close()

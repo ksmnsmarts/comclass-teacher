@@ -90,7 +90,7 @@ export class ComclassStudentComponent implements OnInit {
 
 
         this.socket.on('teacher:studentViewInfo', ((data: any) => {
-            for (let i = 0; i < data.drawData.length; i++) {
+            for (let i = 0; i < data?.drawData?.length; i++) {
               this.drawStorageService.setDrawEvent(data.currentDocNum, data.currentPage, data.drawData[i])
             }
             const viewInfo = Object.assign({}, this.viewInfoService.state);
