@@ -191,6 +191,10 @@ export class ComclassComponent implements OnInit {
           .pipe(takeUntil(this.unsubscribe$), pluck('oneOnOneMode') )
           .subscribe((oneOnOneMode) => {
             this.oneOnOneMode = oneOnOneMode;
+            if (oneOnOneMode == false){
+              this.drawStorageService.resetStudentDrawingEvents();
+            }
+
           });
         ///////////////////////////////////////////////////////
 
@@ -381,7 +385,7 @@ export class ComclassComponent implements OnInit {
 
         // 문서 개수의 차이
         const diff = documentData.length - pdfVarArray.length;
-        
+
         // document length가 더 긴경우 : 배열 추가
         if (diff > 0) {
             for (let i = 0; i < diff; i++) {
