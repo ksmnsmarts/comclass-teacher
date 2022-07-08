@@ -54,7 +54,7 @@ export class ComclassComponent implements OnInit {
     leftSideView;
 
     syncMode:Boolean = true;
-    oneOnOneMode: Boolean;
+    oneOnOneMode: Boolean = false;
     studentName;
 
     mode = 'defaultMode';
