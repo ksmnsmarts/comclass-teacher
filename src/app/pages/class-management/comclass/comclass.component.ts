@@ -19,6 +19,9 @@ import { ClassService } from 'src/app/0.shared/services/class/class.service';
 import { ClassInfoService } from 'src/app/0.shared/store/class-info';
 import { faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons';
 import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
+import { DialogService } from 'src/app/0.shared/dialog/dialog.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SpinnerDialogComponent } from 'src/app/0.shared/dialog/dialog.component';
 
 
 
@@ -70,7 +73,9 @@ export class ComclassComponent implements OnInit {
         private zoomService: ZoomService,
         private socketService: SocketService,
         private route: ActivatedRoute,
-        private editInfoService: EditInfoService
+        private editInfoService: EditInfoService,
+        private dialogService: DialogService,
+        public dialog: MatDialog,
     ) {
         this.socket = this.socketService.socket;
     }
@@ -268,8 +273,22 @@ export class ComclassComponent implements OnInit {
 
         // Meeting ID에 해당하는 document 정보 수신
         const result: any = await this.comclassService.getDocumentsInfo(data).toPromise();
+        console.log('[API] <----- RX Documents Info : ', result);       
 
-        console.log('[API] <----- RX Documents Info : ', result);
+        ///////////////////////////////////////////////////////////////////
+        /*---------------------------------------
+            pdf 로딩 spinnser
+        -----------------------------------------*/
+        const dialogRef = this.dialog.open(SpinnerDialogComponent, {
+            // width: '300px',
+            data: {
+                content: '잠시만 기다려주세요!',
+                length: result.docResult.length
+            }
+        });
+        this.eventBusService.emit(new EventData('spinner', dialogRef))
+        ///////////////////////////////////////////////////////////////////
+
 
         // 문서가 없으면 동작 안함
         if (!result.docResult || result.docResult.length == 0) {
@@ -285,19 +304,9 @@ export class ComclassComponent implements OnInit {
 
         // 3. view status update
         this.updateViewInfoStore();
-
-        ///////////////////////////////////////////////////////////////////
-        /*---------------------------------------
-          pdf 업로드 시 spinner
-        -----------------------------------------*/
-        this.eventBusService.on('spinner', this.unsubscribe$, (dialogRef) => {
-            this.spinner = dialogRef;
-        })
-
-        if (this.spinner) {
-            this.spinner.close();
-        }
-        ///////////////////////////////////////////////////////////////////
+        
+        // 스피너 종료
+        await dialogRef.close();
     }
 
 
