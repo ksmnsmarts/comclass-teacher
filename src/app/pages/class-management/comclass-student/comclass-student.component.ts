@@ -63,10 +63,10 @@ export class ComclassStudentComponent implements OnInit {
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe(async (classInfo) => {
                 this.studentList = classInfo.currentMembers
-                this.renderFileList();    
+                this.renderFileList();
             });
-                                    
-            
+
+
         this.viewInfoService.state$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((viewInfo) => {
@@ -87,9 +87,9 @@ export class ComclassStudentComponent implements OnInit {
             }
         );
 
-        /*------------------------------------------        
-        * 1:1 모드 
-        * 학생에게 받은 현재 페이지정보를 이용하여 해당 페이지로 이동   
+        /*------------------------------------------
+        * 1:1 모드
+        * 학생에게 받은 현재 페이지정보를 이용하여 해당 페이지로 이동
         -------------------------------------------*/
         this.socket.on('teacher:studentViewInfo', (async (data: any) => {
 
@@ -97,15 +97,13 @@ export class ComclassStudentComponent implements OnInit {
                 this.drawStorageService.setDrawEvent(data.currentDocNum, data.currentPage, data.drawData[i])
             }
             const viewInfo = Object.assign({}, this.viewInfoService.state);
-            
             viewInfo.pageInfo.currentDocId = data.currentDocId
             viewInfo.pageInfo.currentDocNum = data.currentDocNum
             viewInfo.pageInfo.currentPage = data.currentPage
             viewInfo.pageInfo.zoomScale = data.zoomScale
             viewInfo.leftSideView = 'thumbnail';
-            
-            await this.viewInfoService.setViewInfo(viewInfo);
 
+            await this.viewInfoService.setViewInfo(viewInfo);
             this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
         }))
 
@@ -119,7 +117,7 @@ export class ComclassStudentComponent implements OnInit {
         //     this.socket.emit('studentList:docInfo');
         // });
         this.socket.emit('studentList:docInfo');
-
+        
         this.socket.on('studentList:sendDocInfo', async (docData) => {     
 
             const canvas = (document.getElementById('student_monitoring' + docData.studentName) as HTMLInputElement);
@@ -166,7 +164,7 @@ export class ComclassStudentComponent implements OnInit {
                         await this.drawingService.drawThumb(docData.drawingEvent[j], canvas, scale);
                     }
                 }
-            }            
+            }
         })
 
 
@@ -176,7 +174,7 @@ export class ComclassStudentComponent implements OnInit {
          * 학생이 보고 있는 문서 페이지가 업데이트 됐을 때 업데이트 된 페이지 보여주기
          ************************************************************/
         this.socket.on('send:monitoringCanvas', async (data) => {
-            
+
             for (let i = 0; i < this.studentList.length; i++) {
                 if (this.studentList[i].studentName == data.studentName) {
                     this.studentList[i].pageInfo = data.pageInfo
@@ -269,7 +267,7 @@ export class ComclassStudentComponent implements OnInit {
      * @returns
      */
     async renderFileList() {
-        
+
         this.thumbArray = [];
         let thumbSize;
 
@@ -282,7 +280,7 @@ export class ComclassStudentComponent implements OnInit {
 
         // this.eventBusService.emit(new EventData('studentList:docInfo', ''));
 
-        
+
         // await new Promise(res => setTimeout(res, 0));
         // for (let i = 0; i < this.studentList.length; i++) {
         //     await this.renderingService.renderThumbBackground(this.studentBgRef.toArray()[i].nativeElement, 1, 1);

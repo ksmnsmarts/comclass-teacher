@@ -41,4 +41,9 @@ export class ClassService {
         return this.http.get('/api/v1/admin/classInfo/getPdfFile/', { responseType: 'blob', params: data});
     }
 
+    deleteClassPdfFile(_id) {
+        console.log('[API] -----> get: deleteClassPdfFile');
+        return this.http.delete('/api/v1/admin/classInfo/deleteClassPdfFile/', { params: _id });
+    }
+
 }

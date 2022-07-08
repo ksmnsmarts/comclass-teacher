@@ -242,6 +242,17 @@ export class DrawStorageService {
   }
 
 
+  resetStudentDrawingEvents() {
+
+    for (let i = 0; i < this.drawVarArray.length; i++) {
+      const drawingEventSet = this.drawVarArray[i]?.drawingEventSet;
+      drawingEventSet?.filter((item) => (item.oneOnOneMode == false && item.participantName == 'teacher'))
+      console.log(drawingEventSet)
+    }
+
+
+  }
+
   /**
    * draw event 정보 모두 제거
    */
