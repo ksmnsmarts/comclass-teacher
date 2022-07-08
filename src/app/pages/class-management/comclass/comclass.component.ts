@@ -289,7 +289,6 @@ export class ComclassComponent implements OnInit {
         this.eventBusService.emit(new EventData('spinner', dialogRef))
         ///////////////////////////////////////////////////////////////////
 
-
         // 문서가 없으면 동작 안함
         if (!result.docResult || result.docResult.length == 0) {
             console.log('no Documents');

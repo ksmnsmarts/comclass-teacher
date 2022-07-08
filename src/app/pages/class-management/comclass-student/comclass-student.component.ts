@@ -97,7 +97,6 @@ export class ComclassStudentComponent implements OnInit {
                 this.drawStorageService.setDrawEvent(data.currentDocNum, data.currentPage, data.drawData[i])
             }
             const viewInfo = Object.assign({}, this.viewInfoService.state);
-            console.log(data)
             
             viewInfo.pageInfo.currentDocId = data.currentDocId
             viewInfo.pageInfo.currentDocNum = data.currentDocNum
@@ -106,7 +105,7 @@ export class ComclassStudentComponent implements OnInit {
             viewInfo.leftSideView = 'thumbnail';
             
             await this.viewInfoService.setViewInfo(viewInfo);
-            console.log(this.viewInfoService.state)
+
             this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
         }))
 
@@ -122,6 +121,7 @@ export class ComclassStudentComponent implements OnInit {
         this.socket.emit('studentList:docInfo');
 
         this.socket.on('studentList:sendDocInfo', async (docData) => {     
+
             const canvas = (document.getElementById('student_monitoring' + docData.studentName) as HTMLInputElement);
             const studentImgBg = (document.getElementById('studentBg' + docData.studentName) as HTMLInputElement);
             const viewport = await this.pdfStorageService.getViewportSize(docData.currentDocNum, docData.currentPage);
