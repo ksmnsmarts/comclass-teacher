@@ -118,10 +118,9 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
                 this.currentPage = pageInfo.currentPage;
                 // 초기 load 포함 변경사항에 대해 수행
                 // (doc change, page change, zoom change 등)
-  
-                console.log('onChangePage and rendering')
-                this.onChangePage();
-                
+                if (pageInfo.currentDocId) {
+                    this.onChangePage();
+                }
             });
 
         ///////////////////////////////////////////////

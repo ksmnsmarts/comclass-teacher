@@ -462,7 +462,6 @@ export class ComclassComponent implements OnInit {
             const res = this.pdfStorageService.pdfVarArray.filter((x) => x._id == this.viewInfoService.state.pageInfo.currentDocId);
 
             if (res.length == 0) {
-                console.log('여기```````````222222222222222')
                 obj.pageInfo = {
                     currentDocId: documentInfo[0]._id,
                     currentDocNum: 1,
