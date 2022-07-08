@@ -205,19 +205,6 @@ export class ComclassFileViewComponent implements OnInit {
             // @OUTPUT -> comclass component로 전달
             this.newLocalDocumentFile.emit(event.target.files[0]);
 
-            ///////////////////////////////////////////////////////////////////
-            /*---------------------------------------
-            pdf 업로드 시 spinner
-            -----------------------------------------*/
-            const dialogRef = this.dialog.open(SpinnerDialogComponent, {
-                // width: '300px',
-
-                data: {
-                    content: 'Upload'
-                }
-            });
-            this.eventBusService.emit(new EventData('spinner', dialogRef))
-            ///////////////////////////////////////////////////////////////////
         }
 
 
@@ -241,27 +228,7 @@ export class ComclassFileViewComponent implements OnInit {
                 console.log('>> click PDF : delete');
                 const res : any = await lastValueFrom(this.classService.deleteClassPdfFile({ _id }))
                 // document delete 확인 후 socket room안의 모든 User에게 전송 (나 포함)
-                console.log('res :', res)
                 this.socket.emit('check:documents', res?.classId);
-                console.log('check:documents :')
-
-                ///////////////////////////////////////////////////////////////////
-                /*---------------------------------------
-                    pdf 삭제 시 spinner
-                -----------------------------------------*/
-                const dialogRef = this.dialog.open(SpinnerDialogComponent, {
-                    // width: '300px',
-
-                    data: {
-                        content: 'Delete'
-                    }
-                });
-
-
-                this.renderFileList().then(async (value) => {
-                    console.log(value)
-                    await dialogRef.close();
-                });
             }
         });
 

@@ -140,6 +140,7 @@ export class ComclassComponent implements OnInit {
             const editInfo = Object.assign({}, this.editInfoService.state);
             editInfo.oneOnOneMode = false;
             this.editInfoService.setEditInfo(editInfo);
+            this.socket.emit('close:oneOnOneMode')
         }))
         ////////////////////////////////////////////////
 
@@ -289,7 +290,7 @@ export class ComclassComponent implements OnInit {
 
         // Meeting ID에 해당하는 document 정보 수신
         const result: any = await this.comclassService.getDocumentsInfo(data).toPromise();
-        console.log('[API] <----- RX Documents Info : ', result);       
+        console.log('[API] <----- RX Documents Info : ', result);
 
         ///////////////////////////////////////////////////////////////////
         /*---------------------------------------
@@ -319,7 +320,7 @@ export class ComclassComponent implements OnInit {
 
         // 3. view status update
         this.updateViewInfoStore();
-        
+
         // 스피너 종료
         await dialogRef.close();
     }

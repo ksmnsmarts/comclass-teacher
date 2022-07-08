@@ -218,7 +218,7 @@ export class DrawStorageService {
     //페이지랑 일치하는 애들만 모은 후
     const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
     //한번 더 oneOnOneMode와 참가자가 일치하지 않은 애들을 가져온다
-    const res = result?.drawingEvent?.filter((item) => !(item.oneOnOneMode === true && item.participantName == participantName))
+    const res = result?.drawingEvent?.filter((item) => !(item.oneOnOneMode === true && item.participantName === 'teacher'))
     const drawEvent = [{
       pageNum: pageNum,
       drawingEvent: res
