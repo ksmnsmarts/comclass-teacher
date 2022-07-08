@@ -34,9 +34,9 @@ export class ApiService {
     return this.http.get(this.URL + 'comclass' + `/document/` + _id, { responseType: 'blob' });
   }
 
-  deleteMeetingPdfFile(_id) {
-    console.log('[API] -----> get: deleteMeetingPdfFile');
-    return this.http.delete(this.URL + 'comclass' + `/deleteMeetingPdfFile/`,  {params: _id});
+  deleteClassPdfFile(_id) {
+    console.log('[API] -----> get: deleteClassPdfFile');
+    return this.http.delete('/api/v1/admin/classInfo/deleteClassPdfFile/',  {params: _id});
   }
 
   deleteDrawingEvent(_id, currentDocNum, currentPage) {

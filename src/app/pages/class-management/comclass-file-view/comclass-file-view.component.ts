@@ -2,11 +2,12 @@ import { Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren, Outp
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
-import { Subject } from 'rxjs';
+import { lastValueFrom, Subject } from 'rxjs';
 import { pluck, takeUntil, distinctUntilChanged } from 'rxjs/operators';
 import { SpinnerDialogComponent } from 'src/app/0.shared/dialog/dialog.component';
 import { DialogService } from 'src/app/0.shared/dialog/dialog.service';
 import { ApiService } from 'src/app/0.shared/services/apiService/api.service';
+import { ClassService } from 'src/app/0.shared/services/class/class.service';
 import { EventBusService } from 'src/app/0.shared/services/eventBus/event-bus.service';
 import { EventData } from 'src/app/0.shared/services/eventBus/event.class';
 
@@ -42,6 +43,7 @@ export class ComclassFileViewComponent implements OnInit {
         private dialogService: DialogService,
         public dialog: MatDialog,
         private zoomService: ZoomService,
+        private classService: ClassService
     ) {
         this.socket = this.socketService.socket;
     }
@@ -234,15 +236,14 @@ export class ComclassFileViewComponent implements OnInit {
 
         event.stopPropagation();
 
-        this.dialogService.openDialogConfirm('Are you sure you want to delete it?').subscribe(result => {
+        this.dialogService.openDialogConfirm('Are you sure you want to delete it?').subscribe(async (result) => {
             if (result) {
                 console.log('>> click PDF : delete');
-                this.apiService.deleteMeetingPdfFile({ _id }).subscribe(async (data: any) => {
-
-                    // document delete 확인 후 socket room안의 모든 User에게 전송 (나 포함)
-                    await this.socket.emit('check:documents', data.meetingId);
-                })
-
+                const res : any = await lastValueFrom(this.classService.deleteClassPdfFile({ _id }))
+                // document delete 확인 후 socket room안의 모든 User에게 전송 (나 포함)
+                console.log('res :', res)
+                this.socket.emit('check:documents', res?.classId);
+                console.log('check:documents :')
 
                 ///////////////////////////////////////////////////////////////////
                 /*---------------------------------------
@@ -258,6 +259,7 @@ export class ComclassFileViewComponent implements OnInit {
 
 
                 this.renderFileList().then(async (value) => {
+                    console.log(value)
                     await dialogRef.close();
                 });
             }
