@@ -142,8 +142,6 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
         this.editInfoService.state$
             .pipe(takeUntil(this.unsubscribe$))
             .subscribe((editInfo) => {
-                console.log('[Editor Setting]: ', editInfo);
-
                 this.editDisabled = editInfo.toolDisabled || editInfo.editDisabled;
                 this.syncMode = editInfo.syncMode
                 if (this.oneOnOneMode != editInfo.oneOnOneMode){
@@ -336,8 +334,6 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
 
         console.log('>>> page Render! [background and board] + addEventHandler');
 
-        console.log(currentDocNum, currentPage)
-
         // PDF Rendering
         await this.renderingService.renderBackground(this.tmpCanvas, this.bgCanvas, currentDocNum, currentPage);
 
@@ -374,7 +370,6 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
         * document.getElementById('thumb_' + pageNum) (이미지)가 정의되지 않아 오류가 난다.
         * 그래서 doc을 클릭하여 thumbnail view 일 경우에만 실행하도록 설정함.
         ****************************************************/
-       console.log(this.prevViewInfo)
         if (this.prevViewInfo === 'thumbnail') {
             ctx.drawImage(imgElement, 0, 0, targetCanvas.width, targetCanvas.height);
         }

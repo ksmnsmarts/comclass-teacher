@@ -711,9 +711,6 @@ export class DrawingService {
 
   // Thumbnail에 그리기
   clearThumb(data, thumbCanvas, thumbScale) {
-    console.log('clearThumb')
-    // console.log(thumbCanvas)
-    // console.log(thumbScale)
     const thumbCtx = thumbCanvas.getContext('2d');
     thumbCtx.clearRect(0, 0, thumbCanvas.width/thumbScale, thumbCanvas.height/thumbScale);
 
@@ -788,7 +785,6 @@ export class DrawingService {
 
 
   async rxDrawingFunc() {
-    // console.log('rxDrawingFunc~~~~~~~~~~')
     if (this.dataArray.length === 0) return;
 
     const data = await this.dataArray[0].data;

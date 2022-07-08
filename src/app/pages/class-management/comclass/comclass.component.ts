@@ -54,7 +54,7 @@ export class ComclassComponent implements OnInit {
     leftSideView;
 
     syncMode:Boolean = true;
-    oneOnOneMode: Boolean = false;
+    oneOnOneMode: Boolean;
     studentName;
 
     mode = 'defaultMode';
@@ -443,7 +443,6 @@ export class ComclassComponent implements OnInit {
 
         // 최초 load인 경우 document ID는 처음 것으로 설정
         if (!this.viewInfoService.state.pageInfo.currentDocId) {
-            console.log('여기```````````11111111111111111111111')
             obj.pageInfo = {
                 currentDocId: documentInfo[0]._id,
                 currentDocNum: 1,

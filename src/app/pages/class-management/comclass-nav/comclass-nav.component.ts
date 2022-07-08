@@ -112,7 +112,6 @@ export class ComclassNavComponent implements OnInit {
         this.editInfoService.state$
             .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged())
             .subscribe((editInfo) => {
-                console.log(editInfo);
                 this.syncMode = editInfo.syncMode;
                 this.oneOnOneMode = editInfo.onOnOneMode;
                 this.mode = editInfo.mode;
@@ -288,7 +287,6 @@ export class ComclassNavComponent implements OnInit {
     // student list
     studentList() {
         this.eventBusService.emit(new EventData('studentList', 'studentListMode'));
-        console.log(this.currentDocId)
         this.viewInfoService.setViewInfo({ leftSideView: 'fileList' });
         // this.socket.emit('studentList:docInfo');
     }

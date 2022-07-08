@@ -45,7 +45,6 @@ export class DrawStorageService {
     const drawingEventSet = this.drawVarArray[docNum - 1]?.drawingEventSet;
     //페이지랑 일치하는 애들만 모은 후
     const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
-    console.log(result)
     //한번 더 oneOnOneMode와 참가자가 일치하는 애들을 가져온다
     const res = result?.drawingEvent?.filter((item) => item.oneOnOneMode === true &&item.participantName === 'teacher')
     const drawEvent = {
@@ -61,7 +60,6 @@ export class DrawStorageService {
     const drawingEventSet = this.drawVarArray[docNum - 1]?.drawingEventSet;
     //페이지랑 일치하는 애들만 모은 후
     const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
-    console.log(result)
     //한번 더 oneOnOneMode와 참가자가 일치하는 애들을 가져온다
     const res = result?.drawingEvent?.filter((item) => item.participantName !== 'teacher')
     const drawEvent = {
@@ -173,8 +171,6 @@ export class DrawStorageService {
 
 
   setStudentDrawArry(data:Array<String>){
-    console.log(data)
-    console.log(this.drawVarArray)
     this.drawVarArray.concat(data)
     console.log(this.drawVarArray)
   }
@@ -185,11 +181,9 @@ export class DrawStorageService {
    */
   clearDrawingEvents(pdfnum, pageNum, oneOnOneMode, participantName) {
     const drawingEventSet = this.drawVarArray[pdfnum - 1]?.drawingEventSet;
-    console.log(drawingEventSet)
     //페이지랑 일치하는 애들만 모은 후
     const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
     //한번 더 oneOnOneMode와 참가자가 일치하지 않은 애들을 가져온다
-    console.log(result)
     const res = result?.drawingEvent?.filter((item) => !(item.oneOnOneMode === false && item.participantName == participantName))
     const drawEvent = [{
         pageNum: pageNum,
@@ -206,11 +200,9 @@ export class DrawStorageService {
    */
   clearTeacherDrawingEvents(pdfnum, pageNum, participantName) {
     const drawingEventSet = this.drawVarArray[pdfnum - 1]?.drawingEventSet;
-    console.log(drawingEventSet)
     //페이지랑 일치하는 애들만 모은 후
     const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
     //한번 더 oneOnOneMode와 참가자가 일치하지 않은 애들을 가져온다
-    console.log(result)
     const res = result?.drawingEvent?.filter((item) => !(item.oneOnOneMode === false && item.participantName == participantName))
     const drawEvent = [{
       pageNum: pageNum,
@@ -223,7 +215,6 @@ export class DrawStorageService {
 
   clearOneOnOneDrawingEvents(pdfnum, pageNum, participantName) {
     const drawingEventSet = this.drawVarArray[pdfnum - 1]?.drawingEventSet;
-    console.log(drawingEventSet)
     //페이지랑 일치하는 애들만 모은 후
     const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
     //한번 더 oneOnOneMode와 참가자가 일치하지 않은 애들을 가져온다
@@ -239,7 +230,6 @@ export class DrawStorageService {
 
   clearStudentDrawingEvents(pdfnum, pageNum) {
     const drawingEventSet = this.drawVarArray[pdfnum - 1]?.drawingEventSet;
-    console.log(drawingEventSet)
     //페이지랑 일치하는 애들만 모은 후
     const result = drawingEventSet?.find((item) => item.pageNum === pageNum)
     //한번 더 oneOnOneMode와 참가자가 일치하지 않은 애들을 가져온다
