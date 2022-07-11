@@ -4,13 +4,16 @@
         <ul class="nav navbar-nav main-nav">
 
             <li class="class-info">
-                <div class="class-name">{{classInfo.subject}} </div>
-                <div class="student-info" ng-show="!vm.offLine" (click)="studentList()">
-                  <i class="material-icons">
-                    face
-                  </i>
-                  <span>&nbsp;{{studentCount}}</span>
+                <div class="class-inner">
+                    <div class="class-name">{{classInfo.subject}} </div>
+                    <div class="student-info" ng-show="!vm.offLine" (click)="studentList()">
+                      <i class="material-icons">
+                        face
+                      </i>
+                      <span>&nbsp;{{studentCount}}</span>
+                    </div>
                 </div>
+                <div class="access-name">수업 코드 : {{classInfo.access_key}}  </div>
             </li>
 
             <li class="drawing-config">

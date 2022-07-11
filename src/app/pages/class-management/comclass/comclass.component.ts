@@ -80,7 +80,7 @@ export class ComclassComponent implements OnInit {
         this.socket = this.socketService.socket;
     }
 
-    ngOnInit(): void {
+    async ngOnInit() {
 
         this.mobileWidth = window.screen.width;
 
@@ -88,7 +88,7 @@ export class ComclassComponent implements OnInit {
         // param을 가져와 룸 번호 클래스 생성
         this.classId = this.route.snapshot.params['id'];
         // this.socket.emit('join:class', this.classId);
-        this.getMeetingInfo()
+        await this.getMeetingInfo()
 
         this.updateDocuments();
         ////////////////////////////////////////////////
@@ -240,6 +240,8 @@ export class ComclassComponent implements OnInit {
             _id: this.classId
         }
         const classInfo: any = await lastValueFrom(this.comclassService.getClassInfo(data))
+
+        console.log(classInfo)
 
         classInfo.role = 'teacher';
         this.socket.emit('join:class', classInfo);

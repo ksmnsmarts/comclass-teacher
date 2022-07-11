@@ -68,7 +68,6 @@ export class LobbyComponent implements OnInit {
     getClass() {
         this.classService.getClass().subscribe((data) => {
             this.meetingList = data;
-
         })
     }
 
