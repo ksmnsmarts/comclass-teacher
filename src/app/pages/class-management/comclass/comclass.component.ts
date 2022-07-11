@@ -212,7 +212,6 @@ export class ComclassComponent implements OnInit {
     ///////////////////////////////////////////////////////////
 
     ngOnDestroy() {
-        this.socket.emit('close:oneOnOneMode')
         // unsubscribe all subscription
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
