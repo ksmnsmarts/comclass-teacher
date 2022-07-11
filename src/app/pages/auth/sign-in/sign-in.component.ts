@@ -47,7 +47,7 @@ export class SignInComponent implements OnInit {
         this.authService.signIn(this.signInFormData).subscribe(
             (data: any) => {
                 if (data.token != '' && data.token != null) {
-                    this.router.navigate(['comclass/main']);
+                    this.router.navigate(['main']);
                 }
             },
             err => {

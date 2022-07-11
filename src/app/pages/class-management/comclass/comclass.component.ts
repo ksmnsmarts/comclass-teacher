@@ -237,7 +237,7 @@ export class ComclassComponent implements OnInit {
 
     async getMeetingInfo() {
         const data = {
-            _id: this.classId
+            access_key: this.classId
         }
         const classInfo: any = await lastValueFrom(this.comclassService.getClassInfo(data))
 
