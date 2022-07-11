@@ -26,6 +26,11 @@ export class ClassService {
         return this.http.post('/api/v1/admin/classInfo/addClass', data);
     }
 
+    // 수업 삭제
+    deleteClass(data) {
+      return this.http.delete('/api/v1/admin/classInfo/deleteClass', { params: data });
+    }
+
     // 파일 업로드
     uploadDocument(formData, classId) {
         return this.http.post(`/api/v1/admin/classInfo/upload/${classId}`, formData);

@@ -76,4 +76,13 @@ export class LobbyComponent implements OnInit {
         this.router.navigate([`/${meeting?.access_key}`]);
     }
 
+    // 수업 삭제
+    deleteClass(meetingId) {
+      const data = {
+        _id: meetingId
+      }
+      this.classService.deleteClass(data).subscribe((data:any) => {
+        this.getClass();
+      })
+    }
 }

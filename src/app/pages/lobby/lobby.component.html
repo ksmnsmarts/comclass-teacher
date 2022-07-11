@@ -43,7 +43,7 @@
                         <br>
                         <span class="mat-subheader">
                             <!-- {{val.teacher}} 선생님 -->
-                            수업 코드 : {{meeting?.access_key}} 
+                            수업 코드 : {{meeting?.access_key}}
                         </span>
                     </mat-card-title>
                 </mat-card-title>
@@ -54,7 +54,7 @@
                 </mat-card-content>
                 <mat-card-actions layout="row" layout-align="center center" style="margin-bottom: 20px; display: flex;  justify-content: center;">
                     <button mat-raised-button style="color: rgb(96, 96, 221);" (click)="openClass(meeting)">개설</button>
-                    <button mat-raised-button style="color: rgb(235, 79, 79);">삭제</button>
+                    <button mat-raised-button style="color: rgb(235, 79, 79);" (click)="deleteClass(meeting._id)">삭제</button>
                 </mat-card-actions>
 
             </mat-card>
