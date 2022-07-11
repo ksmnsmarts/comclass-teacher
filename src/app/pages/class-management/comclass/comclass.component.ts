@@ -80,7 +80,7 @@ export class ComclassComponent implements OnInit {
         this.socket = this.socketService.socket;
     }
 
-    ngOnInit(): void {
+    async ngOnInit() {
 
         this.mobileWidth = window.screen.width;
 
@@ -88,7 +88,7 @@ export class ComclassComponent implements OnInit {
         // param을 가져와 룸 번호 클래스 생성
         this.classId = this.route.snapshot.params['id'];
         // this.socket.emit('join:class', this.classId);
-        this.getMeetingInfo()
+        await this.getMeetingInfo()
 
         this.updateDocuments();
         ////////////////////////////////////////////////
@@ -241,6 +241,8 @@ export class ComclassComponent implements OnInit {
         }
         const classInfo: any = await lastValueFrom(this.comclassService.getClassInfo(data))
 
+        console.log(classInfo)
+
         classInfo.role = 'teacher';
         this.socket.emit('join:class', classInfo);
         this.socket.on('update:classInfo', (classInfo) => {
@@ -302,7 +304,6 @@ export class ComclassComponent implements OnInit {
                 length: result.docResult.length
             }
         });
-        this.eventBusService.emit(new EventData('spinner', dialogRef))
         ///////////////////////////////////////////////////////////////////
 
         // 문서가 없으면 동작 안함

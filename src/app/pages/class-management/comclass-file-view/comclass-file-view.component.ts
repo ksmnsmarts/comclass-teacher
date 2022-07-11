@@ -204,7 +204,6 @@ export class ComclassFileViewComponent implements OnInit {
 
             // @OUTPUT -> comclass component로 전달
             this.newLocalDocumentFile.emit(event.target.files[0]);
-
         }
 
 
