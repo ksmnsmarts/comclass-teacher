@@ -140,6 +140,7 @@ export class ComclassComponent implements OnInit {
             const editInfo = Object.assign({}, this.editInfoService.state);
             editInfo.oneOnOneMode = false;
             this.editInfoService.setEditInfo(editInfo);
+            this.socket.emit('close:oneOnOneMode')
         }))
         ////////////////////////////////////////////////
 
@@ -211,7 +212,6 @@ export class ComclassComponent implements OnInit {
     ///////////////////////////////////////////////////////////
 
     ngOnDestroy() {
-        this.socket.emit('close:oneOnOneMode')
         // unsubscribe all subscription
         this.unsubscribe$.next();
         this.unsubscribe$.complete();
