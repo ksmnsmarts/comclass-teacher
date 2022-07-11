@@ -73,7 +73,7 @@ export class LobbyComponent implements OnInit {
 
     // 수업 개설
     openClass(meeting) {
-        this.router.navigate([`comclass/${meeting?._id}`]);
+        this.router.navigate([`/${meeting?._id}`]);
     }
 
 }

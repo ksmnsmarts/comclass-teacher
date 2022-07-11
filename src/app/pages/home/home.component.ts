@@ -43,6 +43,6 @@ export class HomeComponent implements OnInit {
 
 
     openClassList() {
-        this.router.navigate(['comclass/lobby']);
+        this.router.navigate(['lobby']);
     }
 }
