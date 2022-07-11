@@ -6,22 +6,20 @@
             </button>
             <h2 flex mat-truncate>수업 목록</h2>
 
-            <button ui-sref="home" class="mat-icon-button exitBtn" aria-label="exit"
-                style="margin-right: 10px; padding:0;">
+            <button ui-sref="home" class="mat-icon-button exitBtn" >
                 <mat-icon style="font-size:40px;width:40px;height:40px">exit_to_app</mat-icon>
             </button>
 
         </div>
 
-        <div class="mat-toolbar-tools bottom-toolbar animated fadeInDown">
-            <h2 flex mat-truncate style="margin-left:20px;"> 총 개의 수업이 있습니다. </h2>
-            <button mat-raised-button class="mat-raised mat-primary" aria-label="add class" (click)="addClass();">
-                수업 추가
-            </button>
-
-            <button mat-raised-button class="mat-raised mat-primary" aria-label="remove classes">
-                수업 모두 삭제
-            </button>
+        <div class="mat-toolbar-tools">
+            <h2 flex mat-truncate style="margin-left:20px;"> 총 {{meetingList.length}}개의 수업이 있습니다. </h2>
+            <div class="toolbarBtn_container">
+                <button mat-raised-button class="mat-raised mat-primary toolbarBtn" aria-label="add class" (click)="addClass();">
+                    수업 추가
+                </button>
+            </div>
+            
         </div>
     </mat-toolbar>
 

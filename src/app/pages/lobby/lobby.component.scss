@@ -1,8 +1,8 @@
 .lobby {
-	min-width:1024px;
-	min-height:100vh; 
-    background-color:#eee;
-    
+    min-width: 1024px;
+    min-height: 100vh;
+    background-color: #eee;
+
 
     .lobby_container {
         display: flex;
@@ -13,8 +13,8 @@
     .mat-toolbar-tools {
         display: flex;
         width: 100%;
-        background-color: rgb(40,53,147);
-        color: rgba(255,255,255,0.87);
+        background-color: rgb(40, 53, 147);
+        color: rgba(255, 255, 255, 0.87);
         align-items: center;
 
     }
@@ -30,16 +30,18 @@
     }
 
 
-	.bottom-toolbar {
-		background: linear-gradient(60deg, #2c297d,#3f51b5);	
-		box-shadow: 0 12px 20px -10px rgba(0, 188, 212, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 188, 212, 0.2);
-	}
+    .bottom-toolbar {
+        background: linear-gradient(60deg, #2c297d, #3f51b5);
+        box-shadow: 0 12px 20px -10px rgba(0, 188, 212, 0.28), 0 4px 20px 0px rgba(0, 0, 0, 0.12), 0 7px 8px -5px rgba(0, 188, 212, 0.2);
+    }
 
 
     span {
         background-color: white;
     }
-    .add-class-btn, .delete-class-btn {
+
+    .add-class-btn,
+    .delete-class-btn {
         //background-color: rgb(204, 147, 139);
         background-color: #795548;
         color: white;
@@ -47,15 +49,17 @@
         border-radius: 20px;
     }
 
-    .add-class-btn:hover, .delete-class-btn:hover {
+    .add-class-btn:hover,
+    .delete-class-btn:hover {
         //background-color:  rgb(218, 107, 92);
         background-color: #5D4037;
     }
+
     // div {
     //     border: 1px solid;
     // }
 
-    .header{
+    .header {
         margin-left: 2%;
     }
 
@@ -73,23 +77,23 @@
     mat-card-title {
         text-align: center;
     }
-  
+
 
     .mat-headline {
         text-align: center;
     }
-    
+
     .mat-subheader {
         text-align: right;
     }
 
-	// https://stackoverflow.com/questions/21537806/css-height-same-as-width
+    // https://stackoverflow.com/questions/21537806/css-height-same-as-width
     .class-img {
-        border-radius: 50%;		
-		margin:auto;
+        border-radius: 50%;
+        margin: auto;
         background-repeat: no-repeat;
         background-size: cover;
-        background-position:center;
+        background-position: center;
 
         img {
             width: 100%;
@@ -103,5 +107,36 @@
         width: 100%;
         height: 100vh;
     }
-	
+
 }
+
+.lobby_container {
+    height: 130px;
+}
+
+::ng-deep .mat-toolbar-tools {
+    height: 130px !important;
+    
+}
+
+
+
+::ng-deep .mat-icon {
+    line-height: 40px !important;
+}
+
+.exitBtn {
+    position: fixed;
+    right: 20px;
+}
+
+.toolbarBtn_container {
+    position: fixed;
+    right: 4px;
+    margin: 10px;
+}
+
+.toolbarBtn {
+    margin: 0 10px;
+}
+
