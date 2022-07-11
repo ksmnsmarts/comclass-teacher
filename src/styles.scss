@@ -24,6 +24,11 @@ body { margin: 0; font-family: 'Noto Sans', 'Roboto', "Helvetica Neue", sans-ser
 }
 
 
+.cdk-global-scrollblock {
+    position: static;
+    overflow: hidden !important;
+}
+
 // breakpointObserver
 // sidebar auto change error solution ( because of dialog ) 
 @media screen and (min-width: 1280px) {
