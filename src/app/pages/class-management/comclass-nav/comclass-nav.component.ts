@@ -102,11 +102,12 @@ export class ComclassNavComponent implements OnInit {
 
         // 현재 Page 변경
         this.viewInfoService.state$
-            .pipe(takeUntil(this.unsubscribe$), pluck('pageInfo'), distinctUntilChanged())
-            .subscribe((pageInfo) => {
-                this.currentDocNum = pageInfo.currentDocNum;
-                this.currentPage = pageInfo.currentPage;
-                this.currentDocId = pageInfo.currentDocId;
+            .pipe(takeUntil(this.unsubscribe$), distinctUntilChanged())
+            .subscribe((viewInfo) => {
+
+                this.currentDocNum = viewInfo.pageInfo.currentDocNum;
+                this.currentPage = viewInfo.pageInfo.currentPage;
+                this.currentDocId = viewInfo.pageInfo.currentDocId;
             });
 
         this.editInfoService.state$
@@ -264,6 +265,7 @@ export class ComclassNavComponent implements OnInit {
                 this.socket.emit('clearDrawingEvents', data)
                 // 자기자신한테 있는 드로우 이벤트 제거
                 if (editInfo.oneOnOneMode) {
+                    console.log('teacher oneOnOnes')
                     this.drawStorageService.clearOneOnOneDrawingEvents(this.currentDocNum, this.currentPage, 'teacher');
                 } else {
                     this.drawStorageService.clearTeacherDrawingEvents(this.currentDocNum, this.currentPage, 'teacher');

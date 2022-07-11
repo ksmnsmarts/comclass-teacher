@@ -227,9 +227,7 @@ export class ComclassFileViewComponent implements OnInit {
                 console.log('>> click PDF : delete');
                 const res : any = await lastValueFrom(this.classService.deleteClassPdfFile({ _id }))
                 // document delete 확인 후 socket room안의 모든 User에게 전송 (나 포함)
-                console.log('res :', res)
                 this.socket.emit('check:documents', res?.classId);
-                console.log('check:documents :')
             }
         });
 

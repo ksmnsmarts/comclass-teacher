@@ -102,7 +102,6 @@ export class ComclassStudentComponent implements OnInit {
             viewInfo.pageInfo.currentPage = data.currentPage
             viewInfo.pageInfo.zoomScale = data.zoomScale
             viewInfo.leftSideView = 'thumbnail';
-
             await this.viewInfoService.setViewInfo(viewInfo);
             this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
         }))
@@ -117,8 +116,8 @@ export class ComclassStudentComponent implements OnInit {
         //     this.socket.emit('studentList:docInfo');
         // });
         this.socket.emit('studentList:docInfo');
-        
-        this.socket.on('studentList:sendDocInfo', async (docData) => {     
+
+        this.socket.on('studentList:sendDocInfo', async (docData) => {
 
             const canvas = (document.getElementById('student_monitoring' + docData.studentName) as HTMLInputElement);
             const studentImgBg = (document.getElementById('studentBg' + docData.studentName) as HTMLInputElement);

@@ -46,7 +46,7 @@ export class ComclassComponent implements OnInit {
     // 화이트보드 비디오 오버레이
     hiddenVideoMode = false;
     dragOn = true;
-    classId;
+    access_key;
     private unsubscribe$ = new Subject<void>();
     private socket;
     id;
@@ -59,7 +59,7 @@ export class ComclassComponent implements OnInit {
     syncMode:Boolean = true;
     oneOnOneMode: Boolean = false;
     studentName;
-
+    private classId: String;
     mode = 'defaultMode';
 
     constructor(
@@ -86,8 +86,9 @@ export class ComclassComponent implements OnInit {
 
         ////////////////////////////////////////////////
         // param을 가져와 룸 번호 클래스 생성
-        this.classId = this.route.snapshot.params['id'];
-        // this.socket.emit('join:class', this.classId);
+        this.access_key = this.route.snapshot.params['id'];
+        console.log(this.access_key)
+        // this.socket.emit('join:class', this.access_key);
         await this.getMeetingInfo()
 
         this.updateDocuments();
@@ -237,11 +238,11 @@ export class ComclassComponent implements OnInit {
 
     async getMeetingInfo() {
         const data = {
-            access_key: this.classId
+            access_key: this.access_key
         }
         const classInfo: any = await lastValueFrom(this.comclassService.getClassInfo(data))
 
-        console.log(classInfo)
+        this.classId = classInfo._id
 
         classInfo.role = 'teacher';
         this.socket.emit('join:class', classInfo);
@@ -261,11 +262,11 @@ export class ComclassComponent implements OnInit {
         const formData: any = new FormData();
         formData.append("DocFile", newDocumentFile);
 
-        this.comclassService.uploadDocument(formData, this.classId).subscribe((result: any) => {
+        this.comclassService.uploadDocument(formData, this.access_key).subscribe((result: any) => {
             console.log('[API] <---- upload completed:', result);
 
             // document upload 확인 후 socket room안의 모든 User에게 전송 (나 포함)
-            this.socket.emit('check:documents', this.classId);
+            this.socket.emit('check:documents', this.access_key);
 
 
         }, (err) => {
@@ -291,7 +292,7 @@ export class ComclassComponent implements OnInit {
 
         // Meeting ID에 해당하는 document 정보 수신
         const result: any = await this.comclassService.getDocumentsInfo(data).toPromise();
-        console.log('[API] <----- RX Documents Info : ', result);       
+        console.log('[API] <----- RX Documents Info : ', result);
 
         ///////////////////////////////////////////////////////////////////
         /*---------------------------------------
@@ -320,7 +321,7 @@ export class ComclassComponent implements OnInit {
 
         // 3. view status update
         this.updateViewInfoStore();
-        
+
         // 스피너 종료
         await dialogRef.close();
     }
