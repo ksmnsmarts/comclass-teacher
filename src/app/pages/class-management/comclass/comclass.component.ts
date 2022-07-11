@@ -56,7 +56,7 @@ export class ComclassComponent implements OnInit {
     // Left Side Bar
     leftSideView;
 
-    syncMode:Boolean = true;
+    syncMode: Boolean = true;
     oneOnOneMode: Boolean = false;
     studentName;
     private classId: String;
@@ -121,14 +121,14 @@ export class ComclassComponent implements OnInit {
         ////////////////////////////////////////////////
         // 새로운 판서 Event 수신
         this.socket.on('clearDrawingEvents', ((data: any) => {
-            if (data.oneOnOneMode == false && data.participantName == 'teacher'){
-              this.drawStorageService.clearTeacherDrawingEvents(data.currentDocNum, data.currentPage,  data.participantName);
+            if (data.oneOnOneMode == false && data.participantName == 'teacher') {
+                this.drawStorageService.clearTeacherDrawingEvents(data.currentDocNum, data.currentPage, data.participantName);
             }
-            else if (data.oneOnOneMode == true && data.participantName == 'teacher'){
-              this.drawStorageService.clearOneOnOneDrawingEvents(data.currentDocNum, data.currentPage, data.participantName);
+            else if (data.oneOnOneMode == true && data.participantName == 'teacher') {
+                this.drawStorageService.clearOneOnOneDrawingEvents(data.currentDocNum, data.currentPage, data.participantName);
             }
-            else if (data.participantName !== 'teacher'){
-              this.drawStorageService.clearStudentDrawingEvents(data.currentDocNum, data.currentPage);
+            else if (data.participantName !== 'teacher') {
+                this.drawStorageService.clearStudentDrawingEvents(data.currentDocNum, data.currentPage);
             }
             this.eventBusService.emit(new EventData('receive:clearDrawEvent', data));
         }))
@@ -175,8 +175,8 @@ export class ComclassComponent implements OnInit {
             }
 
             console.log(newDataEvent);
-            if (!data.oneOnOneMode){
-              this.socket.emit('draw:teacher', newDataEvent);
+            if (!data.oneOnOneMode) {
+                this.socket.emit('draw:teacher', newDataEvent);
             }
         });
         //////////////////////////////////////////////////////////////////
@@ -195,14 +195,14 @@ export class ComclassComponent implements OnInit {
             });
 
         this.editInfoService.state$
-          .pipe(takeUntil(this.unsubscribe$), pluck('oneOnOneMode') )
-          .subscribe((oneOnOneMode) => {
-            this.oneOnOneMode = oneOnOneMode;
-            if (oneOnOneMode == false){
-              this.drawStorageService.resetStudentDrawingEvents();
-            }
+            .pipe(takeUntil(this.unsubscribe$), pluck('oneOnOneMode'))
+            .subscribe((oneOnOneMode) => {
+                this.oneOnOneMode = oneOnOneMode;
+                if (oneOnOneMode == false) {
+                    this.drawStorageService.resetStudentDrawingEvents();
+                }
 
-          });
+            });
         ///////////////////////////////////////////////////////
 
 
@@ -262,11 +262,11 @@ export class ComclassComponent implements OnInit {
         const formData: any = new FormData();
         formData.append("DocFile", newDocumentFile);
 
-        this.comclassService.uploadDocument(formData, this.access_key).subscribe((result: any) => {
+        this.comclassService.uploadDocument(formData, this.classId).subscribe((result: any) => {
             console.log('[API] <---- upload completed:', result);
 
             // document upload 확인 후 socket room안의 모든 User에게 전송 (나 포함)
-            this.socket.emit('check:documents', this.access_key);
+            this.socket.emit('check:documents', this.classId);
 
 
         }, (err) => {
