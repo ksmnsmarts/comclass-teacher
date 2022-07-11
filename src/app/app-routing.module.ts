@@ -8,10 +8,10 @@ import { HomeComponent } from './pages/home/home.component';
 import { IndexComponent } from './pages/index/index.component';
 
 const routes: Routes = [
-    { 
+    {
         path: 'welcome',
         component: IndexComponent,
-        canActivate: [SignInGuard] 
+        canActivate: [SignInGuard]
     },
     {
         path: 'sign-in',
@@ -56,8 +56,8 @@ const routes: Routes = [
 	// 		},
     //     ]
     // },
-    
-    
+
+
     // 잘못된 URL을 사용했을때 메인으로 보냄
     {
         path: '**',
