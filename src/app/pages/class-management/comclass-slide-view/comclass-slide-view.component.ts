@@ -78,7 +78,9 @@ export class ComclassSlideViewComponent implements OnInit {
 
     ngOnInit(): void {
 
-        this.meetingId = this.route.snapshot.params['id'];
+		this.eventBusService.on('get:classId', this.unsubscribe$, (data) => {
+			this.meetingId = data;
+		});
 
         // PageInfo 저장해서 사용
         this.viewInfoService.state$

@@ -245,6 +245,7 @@ export class ComclassComponent implements OnInit {
         this.classId = classInfo._id
 
         classInfo.role = 'teacher';
+		this.eventBusService.emit(new EventData('get:classId', classInfo._id));
         this.socket.emit('join:class', classInfo);
         this.socket.on('update:classInfo', (classInfo) => {
             this.classInfoService.setClassInfo(classInfo);
@@ -494,7 +495,7 @@ export class ComclassComponent implements OnInit {
                     zoomScale: this.zoomService.setInitZoomScale(1, 1)
                 }
                 obj.leftSideView = 'fileList';
-                alert('The pdf file has been deleted');
+                alert('현재 보고있는 PDF 파일이 삭제 되었습니다.');
             }
         }
 

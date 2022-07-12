@@ -66,7 +66,9 @@ export class ComclassFileViewComponent implements OnInit {
 
     ngOnInit(): void {
 
-        this.meetingId = this.route.snapshot.params['id'];
+		this.eventBusService.on('get:classId', this.unsubscribe$, (data) => {
+			this.meetingId = data;
+		});
 
         // Document가 Update 된 경우 : File List rendering
         this.viewInfoService.state$
