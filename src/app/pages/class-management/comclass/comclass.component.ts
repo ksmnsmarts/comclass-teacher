@@ -22,7 +22,7 @@ import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
 import { DialogService } from 'src/app/0.shared/dialog/dialog.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SpinnerDialogComponent } from 'src/app/0.shared/dialog/dialog.component';
-
+import { ChangeDetectorRef } from '@angular/core';
 
 
 
@@ -76,6 +76,7 @@ export class ComclassComponent implements OnInit {
         private editInfoService: EditInfoService,
         private dialogService: DialogService,
         public dialog: MatDialog,
+        private cdRef:ChangeDetectorRef
     ) {
         this.socket = this.socketService.socket;
     }
@@ -211,6 +212,13 @@ export class ComclassComponent implements OnInit {
         })
     }
     ///////////////////////////////////////////////////////////
+
+
+    // oneOnOneMode true / false 값 변경 시 오류 나오는 문제 해결 (기능 상 문제는 없지만..)
+    ngAfterViewChecked(){
+        this.cdRef.detectChanges();
+    }
+
 
     ngOnDestroy() {
         // unsubscribe all subscription
