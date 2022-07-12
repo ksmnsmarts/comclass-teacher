@@ -119,8 +119,8 @@ export class ComclassStudentComponent implements OnInit {
 
         this.socket.on('studentList:sendDocInfo', async (docData) => {
 
-            const canvas = (document.getElementById('student_monitoring' + docData.studentName) as HTMLInputElement);
-            const studentImgBg = (document.getElementById('studentBg' + docData.studentName) as HTMLInputElement);
+            const canvas: any = document.getElementById('student_monitoring' + docData.studentName);
+            const studentImgBg: any = document.getElementById('studentBg' + docData.studentName);
             const viewport = await this.pdfStorageService.getViewportSize(docData.currentDocNum, docData.currentPage);
 
             await new Promise(res => setTimeout(res, 300));
@@ -180,8 +180,8 @@ export class ComclassStudentComponent implements OnInit {
                 }
             }
 
-            const canvas = (document.getElementById('student_monitoring' + data.studentName) as HTMLInputElement);
-            const studentImgBg = (document.getElementById('studentBg' + data.studentName) as HTMLInputElement);
+            const canvas: any = document.getElementById('student_monitoring' + data.studentName);
+            const studentImgBg: any = document.getElementById('studentBg' + data.studentName);
             const viewport = await this.pdfStorageService.getViewportSize(data.pageInfo.currentDocNum, data.pageInfo.currentPage);
 
             await new Promise(res => setTimeout(res, 500));
