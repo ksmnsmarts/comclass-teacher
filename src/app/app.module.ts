@@ -21,6 +21,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { AdminGuard } from './0.shared/guard/admin.guard';
 import { SignInGuard } from './0.shared/guard/signIn.guard';
 import { DragScrollDirective } from './0.shared/directives/drag-scroll.directive';
+import { ClassGuard } from './0.shared/guard/class.guard';
 
 
 
@@ -59,7 +60,7 @@ export function tokenGetter() {
         MatIconModule,
         IconModule,
     ],
-    providers: [SignInGuard, AdminGuard],
+    providers: [SignInGuard, AdminGuard, ClassGuard],
     bootstrap: [AppComponent]
 })
 export class AppModule { }

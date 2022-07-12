@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AdminGuard } from './0.shared/guard/admin.guard';
+import { ClassGuard } from './0.shared/guard/class.guard';
 import { SignInGuard } from './0.shared/guard/signIn.guard';
 import { SignInComponent } from './pages/auth/sign-in/sign-in.component';
 import { SignUpComponent } from './pages/auth/sign-up/sign-up.component';
@@ -33,7 +34,7 @@ const routes: Routes = [
 	},
     {
 		path: ':id',
-		canActivate: [SignInGuard, AdminGuard],
+		canActivate: [SignInGuard, AdminGuard, ClassGuard],
         loadChildren: () => import(`./pages/class-management/class-management.module`).then(m => m.ClassManagementModule),
 	},
     // {
