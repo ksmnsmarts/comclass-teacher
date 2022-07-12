@@ -67,7 +67,7 @@ export class ComclassSlideViewComponent implements OnInit {
     scrollRatio: any;
 
     stopRendering = false;
-
+	oneOnOneMode
     syncMode;
 
 
@@ -101,7 +101,6 @@ export class ComclassSlideViewComponent implements OnInit {
                 }
 
             });
-
 
         // if (this.editInfoService.state.syncMode != 'nonSync') {
         //     this.socket.emit('sync:page', data)
@@ -179,7 +178,10 @@ export class ComclassSlideViewComponent implements OnInit {
 
         // 내가 그린 Event thumbnail에 그리기
         this.eventBusService.on('gen:newDrawEvent', this.unsubscribe$, async (data) => {
-            this.drawThumb(data);
+			const oneOnOneMode = this.editInfoService.state.oneOnOneMode;
+			if (!oneOnOneMode){
+            	this.drawThumb(data);
+			}
         });
 
 
