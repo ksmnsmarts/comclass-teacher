@@ -78,11 +78,11 @@ export class LobbyComponent implements OnInit {
 
     // 수업 삭제
     deleteClass(meetingId) {
-      const data = {
-        _id: meetingId
-      }
-      this.classService.deleteClass(data).subscribe((data:any) => {
-        this.getClass();
-      })
+        const data = {
+            _id: meetingId
+        }
+        this.classService.deleteClass(data).subscribe((data: any) => {
+            this.getClass();
+        })
     }
 }

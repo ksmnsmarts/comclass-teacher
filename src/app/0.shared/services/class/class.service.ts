@@ -18,7 +18,7 @@ export class ClassService {
 
     // 수업 가져오기
     getClassInfo(data) {
-      return this.http.get('/api/v1/admin/classInfo/getClassInfo', { params: data });
+        return this.http.get('/api/v1/admin/classInfo/getClassInfo', { params: data });
     }
 
     // 수업 등록
@@ -28,7 +28,7 @@ export class ClassService {
 
     // 수업 삭제
     deleteClass(data) {
-      return this.http.delete('/api/v1/admin/classInfo/deleteClass', { params: data });
+        return this.http.delete('/api/v1/admin/classInfo/deleteClass', { params: data });
     }
 
     // 파일 업로드
@@ -38,12 +38,12 @@ export class ClassService {
 
     // 문서 정보 불러오기
     getDocumentsInfo(data) {
-        return this.http.get(`/api/v1/admin/classInfo/documentInfo`, {params: data})
+        return this.http.get(`/api/v1/admin/classInfo/documentInfo`, { params: data })
     }
 
     // 각 pdf 요청
     getPdfFile(data) {
-        return this.http.get('/api/v1/admin/classInfo/getPdfFile/', { responseType: 'blob', params: data});
+        return this.http.get('/api/v1/admin/classInfo/getPdfFile/', { responseType: 'blob', params: data });
     }
 
     deleteClassPdfFile(_id) {
