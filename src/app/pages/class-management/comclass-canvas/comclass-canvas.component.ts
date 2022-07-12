@@ -370,7 +370,7 @@ export class ComclassCanvasComponent implements OnInit, OnDestroy {
         * document.getElementById('thumb_' + pageNum) (이미지)가 정의되지 않아 오류가 난다.
         * 그래서 doc을 클릭하여 thumbnail view 일 경우에만 실행하도록 설정함.
         ****************************************************/
-        if (this.prevViewInfo === 'thumbnail') {
+        if (this.prevViewInfo === 'thumbnail' && imgElement) {
             ctx.drawImage(imgElement, 0, 0, targetCanvas.width, targetCanvas.height);
         }
     }
