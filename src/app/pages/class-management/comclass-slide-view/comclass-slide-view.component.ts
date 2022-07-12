@@ -67,7 +67,7 @@ export class ComclassSlideViewComponent implements OnInit {
     scrollRatio: any;
 
     stopRendering = false;
-	oneOnOneMode
+
     syncMode;
 
 
