@@ -124,6 +124,7 @@ export class ComclassStudentComponent implements OnInit {
             const viewport = await this.pdfStorageService.getViewportSize(docData.currentDocNum, docData.currentPage);
 
             await new Promise(res => setTimeout(res, 300));
+
             // landscape 문서 : 가로를 300px(studentListMaxSize)로 설정
             if (viewport.width > viewport.height) {
                 canvas.width = CANVAS_CONFIG.studentListMaxSize;
@@ -254,6 +255,16 @@ export class ComclassStudentComponent implements OnInit {
             }
         });
 
+    }
+
+
+    ngOnDestroy() {
+        // unsubscribe all subscription
+        this.unsubscribe$.next();
+        this.unsubscribe$.complete();
+      
+        this.socket.off("studentList:sendDocInfo");
+        this.socket.off("send:monitoringCanvas");
     }
 
 
