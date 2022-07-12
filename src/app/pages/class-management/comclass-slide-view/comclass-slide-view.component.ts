@@ -181,10 +181,10 @@ export class ComclassSlideViewComponent implements OnInit {
         });
 
 
-        // 다른 사람이 그린 Event thumbnail에 그리기
-        this.eventBusService.on('receive:drawEvent', this.unsubscribe$, async (data) => {
-            this.drawThumbRx(data);
-        });
+        // // 다른 사람이 그린 Event thumbnail에 그리기
+        // this.eventBusService.on('receive:drawEvent', this.unsubscribe$, async (data) => {
+        //     this.drawThumbRx(data);
+        // });
 
         /**
              * 자신이 보고있는 판서 드로잉 삭제
@@ -368,25 +368,25 @@ export class ComclassSlideViewComponent implements OnInit {
         this.drawingService.drawThumb(data, thumbCanvas, thumbScale);
     };
 
-    /**
-     * 수신 받은 판서 그리기
-     *
-     * @param data
-     */
-    drawThumbRx(data) {
-        // console.log(data);
+    // /**
+    //  * 수신 받은 판서 그리기
+    //  *
+    //  * @param data
+    //  */
+    // drawThumbRx(data) {
+    //     // console.log(data);
 
-        // 현재 viewmode가 filelist인 경우 Thumbnail 무시
-        if (this.viewInfoService.state.leftSideView == 'fileList') return;
+    //     // 현재 viewmode가 filelist인 경우 Thumbnail 무시
+    //     if (this.viewInfoService.state.leftSideView == 'fileList') return;
 
-        // num 대신 ID로 (number로 해도 상관은 없을 듯)
-        if (this.currentDocId == data.docId) {
-            // const thumbCanvas = document.getElementById('thumbCanvas' + data.pageNum);
+    //     // num 대신 ID로 (number로 해도 상관은 없을 듯)
+    //     if (this.currentDocId == data.docId) {
+    //         // const thumbCanvas = document.getElementById('thumbCanvas' + data.pageNum);
 
-            const thumbCanvas = this.thumbCanvasRef.toArray()[data.pageNum - 1].nativeElement;
-            const thumbScale = this.thumbArray[this.currentPageNum - 1].scale;
-            this.drawingService.drawThumb(data.drawingEvent, thumbCanvas, thumbScale);
-        }
-    };
+    //         const thumbCanvas = this.thumbCanvasRef.toArray()[data.pageNum - 1].nativeElement;
+    //         const thumbScale = this.thumbArray[this.currentPageNum - 1].scale;
+    //         this.drawingService.drawThumb(data.drawingEvent, thumbCanvas, thumbScale);
+    //     }
+    // };
 
 }
