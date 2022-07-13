@@ -18,6 +18,8 @@ import eraserIcon from '@iconify/icons-mdi/eraser';
 import markerIcon from '@iconify/icons-mdi/marker';
 import shapeOutlineIcon from '@iconify/icons-mdi/shape-outline';
 import highlighterF from '@iconify/icons-jam/highlighter-f';
+import openWithRounded from '@iconify/icons-material-symbols/open-with-rounded';
+import penIcon from '@iconify/icons-fa-solid/pen';
 
 
 import { ClassInfoService } from 'src/app/0.shared/store/class-info';
@@ -56,6 +58,8 @@ export class ComclassNavComponent implements OnInit {
     shapeOutlineIcon = shapeOutlineIcon;
     markerIcon = markerIcon;
     highlighterF = highlighterF;
+    openWithRounded = openWithRounded;
+    penIcon = penIcon;
     //////////////////////////////////////
 
     // Width: 3단계 설정
