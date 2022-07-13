@@ -257,7 +257,7 @@ export class ComclassNavComponent implements OnInit {
 
 
         if (editInfo.tool == 'eraser' && editInfo.mode == 'draw' && tool == 'eraser') {
-            if (confirm("Do you want to delete all drawings on the current page?")) {
+            if (confirm("판서를 삭제하시겠습니까?\n현재 페이지의 판서 내용이 삭제됩니다.")) {
                 const data = {
                     participantName: 'teacher',
                     docId: this.currentDocId,

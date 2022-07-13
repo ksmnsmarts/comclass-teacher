@@ -12,6 +12,7 @@ import { PdfStorageService } from 'src/app/0.shared/storage/pdf-storage.service'
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
 import { DrawStorageService } from 'src/app/0.shared/storage/draw-storage.service';
+import { DialogService } from 'src/app/0.shared/dialog/dialog.service';
 
 @Component({
     selector: 'app-lobby',
@@ -34,6 +35,7 @@ export class LobbyComponent implements OnInit {
         private editInfoService: EditInfoService,
         private drawStorageService: DrawStorageService,
         private sockService: SocketService,
+        private dialogService: DialogService
     ) {
         this.socket = socketService.socket;
     }
@@ -81,8 +83,14 @@ export class LobbyComponent implements OnInit {
         const data = {
             _id: meetingId
         }
-        this.classService.deleteClass(data).subscribe((data: any) => {
-            this.getClass();
+
+        this.dialogService.openDialogConfirm(`삭제하시겠습니까?`).subscribe((result) => {
+            if(result) {
+                this.classService.deleteClass(data).subscribe((data: any) => {
+                    this.getClass();
+                })
+            }
         })
+        
     }
 }
