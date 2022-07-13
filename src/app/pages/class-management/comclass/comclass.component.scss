@@ -110,12 +110,23 @@ $navbar-height: 70px;
     width: 120px;
 }
 
+.matMenu {
+    width: 40px !important;
+}
+
+.matMenuBtn {
+    text-align: center; 
+}
 
 
+::ng-deep .mat-menu-panel {
+    // min-width: 50px !important;
+}
 
-
-
-
+::ng-deep .cdk-overlay-connected-position-bounding-box {
+    // width: 50px !important;
+    // left: 1835px !important;
+}
 
 
 

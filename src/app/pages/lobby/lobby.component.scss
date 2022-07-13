@@ -119,6 +119,24 @@
     height: 130px;
 }
 
+.mat-subheader-teacher {
+    font-size: 15px;
+    color: gray;
+    float: right;
+}
+
+.mat-subheader-code {
+
+    .mat-subheader-code-weight {
+        font-weight: 300;
+    }
+
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+
 ::ng-deep .mat-toolbar-tools {
     height: 130px !important;
     
