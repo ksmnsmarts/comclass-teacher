@@ -17,7 +17,7 @@ import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
 
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 
-
+import arrowIosBackFill from '@iconify/icons-eva/arrow-ios-back-fill';
 
 @Component({
     selector: 'app-comclass-slide-view',
@@ -28,6 +28,10 @@ import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 export class ComclassSlideViewComponent implements OnInit {
 
     private socket;
+
+    // iconify TEST //////////////////////
+    arrowIosBackFill = arrowIosBackFill;
+    //////////////////////////////////////
 
     constructor(
         private route: ActivatedRoute,

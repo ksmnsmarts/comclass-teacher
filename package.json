@@ -44,6 +44,7 @@
     "@angular-devkit/build-angular": "~13.2.0",
     "@angular/cli": "~13.2.0",
     "@angular/compiler-cli": "~13.2.0",
+    "@iconify/icons-eva": "^1.2.3",
     "@iconify/icons-fa-solid": "^1.2.3",
     "@iconify/icons-ic": "^1.2.8",
     "@iconify/icons-jam": "^1.2.3",
