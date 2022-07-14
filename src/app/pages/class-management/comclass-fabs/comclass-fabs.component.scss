@@ -11,7 +11,13 @@
     }
 }
 
+.mat-fab-icons {
+	line-height: 1;
+}
 
+// :host .mat-icon {
+// 	line-height: 40px !important;
+// }
 
 @media screen and (max-width: 780px) {
     mat-icon {
