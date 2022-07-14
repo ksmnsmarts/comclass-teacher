@@ -1,3 +1,4 @@
+
 .lobby {
     min-width: 1024px;
     min-height: 100vh;
@@ -16,7 +17,10 @@
         background-color: rgb(40, 53, 147);
         color: rgba(255, 255, 255, 0.87);
         align-items: center;
-
+        h2 {
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+        
     }
 
     .mat-toolbar-tools2 {
@@ -113,6 +117,10 @@
         height: 100vh;
     }
 
+}
+
+span, button {
+    font-family: 'Gowun Dodum', sans-serif;
 }
 
 .lobby_container {
