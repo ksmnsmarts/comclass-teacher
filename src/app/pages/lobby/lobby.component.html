@@ -1,6 +1,6 @@
 <div class="lobby">
     <mat-toolbar class="lobby_container">
-        <div class="mat-toolbar-tools ">
+        <div class="mat-toolbar-tools">
             <button class="mat-icon-button" aria-label="Settings" ng-disabled="true">
                 <mat-icon style="color:#ccc">list</mat-icon>
             </button>
@@ -12,7 +12,7 @@
 
         </div>
 
-        <div class="mat-toolbar-tools">
+        <div class="mat-toolbar-tools mat-toolbar-tools2">
             <h2 flex mat-truncate style="margin-left:20px;"> 총 {{meetingList?.length}}개의 수업이 있습니다. </h2>
             <div class="toolbarBtn_container">
                 <button mat-raised-button class="mat-raised mat-primary toolbarBtn" aria-label="add class" (click)="addClass();">
@@ -34,15 +34,11 @@
                             {{meeting?.subject}}
                         </span>
                         <br>
-                        <span class="mat-subheader">
+                        <span class="mat-subheader-teacher">
                             <!-- {{val.teacher}} 선생님 -->
                             {{meeting?.teacher}} 선생님
                         </span>
-                        <br>
-                        <span class="mat-subheader">
-                            <!-- {{val.teacher}} 선생님 -->
-                            수업 코드 : {{meeting?.access_key}}
-                        </span>
+                        <br>                        
                     </mat-card-title>
                 </mat-card-title>
                 <mat-card-content>
@@ -50,6 +46,11 @@
                         <img src="assets/img/teacher/noimage.png" height="30px">
                     </div>
                 </mat-card-content>
+                <div class="mat-subheader-code">
+                    <span class="mat-subheader-code-weight">수업 코드 : </span>
+                    <span>{{meeting?.access_key}}</span>
+                </div>
+                
                 <mat-card-actions layout="row" layout-align="center center" style="margin-bottom: 20px; display: flex;  justify-content: center;">
                     <button mat-raised-button style="color: rgb(96, 96, 221);" (click)="openClass(meeting)">개설</button>
                     <button mat-raised-button style="color: rgb(235, 79, 79);" (click)="deleteClass(meeting._id)">삭제</button>

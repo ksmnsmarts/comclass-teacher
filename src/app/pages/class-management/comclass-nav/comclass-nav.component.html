@@ -50,14 +50,14 @@
                     <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
                         <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' "
                             (click)="changeTool('pen');" mat-icon-button>
-                            <mat-icon [ngClass]="(currentTool == 'pen') && (mode == 'draw')?'active':''" >draw</mat-icon>
+                            <ic-icon [icon]="penIcon" [width]="35" [height]="35" [ngClass]="(currentTool == 'pen') && (mode == 'draw')?'active':''" >draw</ic-icon>
                         </button>
                     </div>
 
                     <div [ngClass]="myRole == 'Participant' ? 'wrap': '' ">
                         <button type="button" [ngClass]="myRole == 'Participant' ? 'participant': '' "
                             (click)="changeTool('highlighter');" mat-icon-button>
-                            <ic-icon [icon]="highlighterF" [width]="30" [height]="30" [ngClass]="(currentTool == 'highlighter') && (mode == 'draw')?'active':''" ></ic-icon>
+                            <ic-icon [icon]="highlighterF" [width]="40" [height]="40" [ngClass]="(currentTool == 'highlighter') && (mode == 'draw')?'active':''" ></ic-icon>
                             <span class="iconify" data-icon="mdi:marker"></span>
                         </button>
                     </div>
@@ -81,7 +81,7 @@
 
                     <div>
                         <button type="button" (click)="changeMode('move');" mat-icon-button>
-                            <mat-icon [ngClass]="(mode == 'move')?'active':''" > open_with </mat-icon>
+                            <ic-icon [icon]="openWithRounded" [width]="40" [height]="40" [ngClass]="(mode == 'move')?'active':''" > open_with </ic-icon>
                         </button>
                     </div>
                     <div>

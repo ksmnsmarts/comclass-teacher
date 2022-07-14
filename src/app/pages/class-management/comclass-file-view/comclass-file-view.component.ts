@@ -19,6 +19,9 @@ import { EditInfoService } from 'src/app/0.shared/store/edit-info.service';
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
 
 
+import baselineFileOpen from '@iconify/icons-ic/baseline-file-open';
+
+
 /**
  * File View Component
  * - File Open 처리
@@ -58,6 +61,12 @@ export class ComclassFileViewComponent implements OnInit {
     private unsubscribe$ = new Subject<void>();
 
     private socket;
+
+    // iconify TEST //////////////////////
+    baselineFileOpen = baselineFileOpen;
+    //////////////////////////////////////
+
+
     meetingId: any;
     myRole: any = 'Presenter'; // 나의 역할(권한)
 

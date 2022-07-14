@@ -1,3 +1,4 @@
+
 .lobby {
     min-width: 1024px;
     min-height: 100vh;
@@ -16,7 +17,15 @@
         background-color: rgb(40, 53, 147);
         color: rgba(255, 255, 255, 0.87);
         align-items: center;
+        h2 {
+            font-family: 'Gowun Dodum', sans-serif;
+        }
+        
+    }
 
+    .mat-toolbar-tools2 {
+        background-color: #000f7b;
+        color: rgba(255, 255, 255, 0.87);
     }
 
     .toolbar_container {}
@@ -110,9 +119,31 @@
 
 }
 
+span, button {
+    font-family: 'Gowun Dodum', sans-serif;
+}
+
 .lobby_container {
     height: 130px;
 }
+
+.mat-subheader-teacher {
+    font-size: 15px;
+    color: gray;
+    float: right;
+}
+
+.mat-subheader-code {
+
+    .mat-subheader-code-weight {
+        font-weight: 300;
+    }
+
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
 
 ::ng-deep .mat-toolbar-tools {
     height: 130px !important;

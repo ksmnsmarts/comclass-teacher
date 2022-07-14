@@ -37,7 +37,7 @@ export class ClassGuard implements CanActivate, OnInit {
             } 
 
         } catch (error) {
-            this.dialogService.openDialogNegative("Can't find the room.");
+            this.dialogService.openDialogNegative("방을 찾을 수 없습니다.");
             this.router.navigate(['']);
 
             // window.open('http://localhost:4200/', "_self");
