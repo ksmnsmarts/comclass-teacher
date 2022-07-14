@@ -124,15 +124,17 @@ $navbar-height: 70px;
 }
 
 ::ng-deep .mat-menu-panel {
-    // min-width: 50px !important;
     min-height: 36px !important;
-    // min-width: 50px !important; 
+    max-width: none !important;
+    
 }
 
 ::ng-deep .cdk-overlay-connected-position-bounding-box {
     height: 30px;
     // width: 50px !important;
-    // left: 1835px !important;
+    // right: 35px !important;
+    
+    
 }
 
 

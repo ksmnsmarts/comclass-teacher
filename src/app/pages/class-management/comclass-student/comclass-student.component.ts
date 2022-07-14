@@ -50,7 +50,8 @@ export class ComclassStudentComponent implements OnInit {
         private pdfStorageService: PdfStorageService,
         private editInfoService: EditInfoService,
         private drawStorageService: DrawStorageService,
-        private drawingService: DrawingService
+        private drawingService: DrawingService,
+        private zoomService: ZoomService,
     ) {
         this.socket = this.socketService.socket;
     }
@@ -100,7 +101,7 @@ export class ComclassStudentComponent implements OnInit {
             viewInfo.pageInfo.currentDocId = data.currentDocId
             viewInfo.pageInfo.currentDocNum = data.currentDocNum
             viewInfo.pageInfo.currentPage = data.currentPage
-            viewInfo.pageInfo.zoomScale = data.zoomScale
+            viewInfo.pageInfo.zoomScale = this.zoomService.setInitZoomScale(data.currentDocNum, data.currentPage)
             viewInfo.leftSideView = 'thumbnail';
             await this.viewInfoService.setViewInfo(viewInfo);
             this.eventBusService.emit(new EventData('studentList', 'defaultMode'));
