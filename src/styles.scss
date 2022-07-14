@@ -16,7 +16,7 @@ body {
 em { 
 	font-style: initial;
 }
-// body { margin: 0; font-family: 'Noto Sans', 'Roboto', "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: 'Noto Sans', 'Roboto', "Helvetica Neue", sans-serif; }
 
 
 
@@ -31,6 +31,7 @@ em {
     position: static;
     overflow: hidden !important;
 }
+
 
 // breakpointObserver
 // sidebar auto change error solution ( because of dialog ) 
