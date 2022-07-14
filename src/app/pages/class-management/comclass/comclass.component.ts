@@ -305,14 +305,14 @@ export class ComclassComponent implements OnInit {
 
         ///////////////////////////////////////////////////////////////////
         /*---------------------------------------
-            pdf 로딩 spinnser
+            pdf 로딩 spinner
         -----------------------------------------*/
         const dialogRef = this.dialog.open(SpinnerDialogComponent, {
             // width: '300px',
             data: {
                 content: '잠시만 기다려주세요!',
                 length: result.docResult.length
-            }
+            },            
         });
         ///////////////////////////////////////////////////////////////////
 
