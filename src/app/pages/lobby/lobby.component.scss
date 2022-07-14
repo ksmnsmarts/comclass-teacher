@@ -155,7 +155,8 @@ span, button {
 }
 
 
-:host ::ng-deep .mat-icon {
+
+:host .mat-icon {
     line-height: 40px !important;
 }
 
