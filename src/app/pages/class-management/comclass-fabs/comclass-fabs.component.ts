@@ -3,8 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { ZoomService } from 'src/app/0.shared/services/zoom/zoom.service'
 
 import { ViewInfoService } from 'src/app/0.shared/store/view-info.service';
-import plusIcon from '@iconify/icons-akar-icons/plus';
-import minusIcon from '@iconify/icons-akar-icons/minus';
 
 @Component({
 	selector: 'app-comclass-fabs',
@@ -13,8 +11,7 @@ import minusIcon from '@iconify/icons-akar-icons/minus';
 })
 export class ComclassFabsComponent implements OnInit {
 
-	plusIcon = plusIcon
-	minusIcon = minusIcon
+
 	constructor(
 		private viewInfoService: ViewInfoService,
 		private zoomService: ZoomService
