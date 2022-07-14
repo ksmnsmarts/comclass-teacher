@@ -118,15 +118,23 @@ $navbar-height: 70px;
     text-align: center; 
 }
 
+.mat-menu-item{
+    line-height: 20px;
+    height: 20px;
+}
 
 ::ng-deep .mat-menu-panel {
     // min-width: 50px !important;
+    min-height: 36px !important;
+    // min-width: 50px !important; 
 }
 
 ::ng-deep .cdk-overlay-connected-position-bounding-box {
+    height: 30px;
     // width: 50px !important;
     // left: 1835px !important;
 }
+
 
 
 @media screen and (max-width: 780px) {
