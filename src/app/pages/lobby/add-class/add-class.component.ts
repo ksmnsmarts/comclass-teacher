@@ -7,7 +7,7 @@ import { ClassService } from 'src/app/0.shared/services/class/class.service';
 @Component({
     selector: 'app-add-class',
     templateUrl: './add-class.component.html',
-    styleUrls: ['./add-class.component.scss']
+    styleUrls: ['./add-class.component.scss'],
 })
 export class AddClassComponent implements OnInit {
 

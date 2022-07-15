@@ -57,7 +57,7 @@ export class LobbyComponent implements OnInit {
         const dialogRef = this.dialog.open(AddClassComponent, {
             data: {
             },
-            width: "400px"
+            width: "400px",
         });
 
         dialogRef.afterClosed().subscribe((data) => {
