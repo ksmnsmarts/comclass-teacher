@@ -112,10 +112,6 @@ export class ComclassStudentComponent implements OnInit {
         /************************************************************
         * 학생 리스트에 들어왔을 때 학생들이 현재 바라보고 있는 문서 페이지 보여주기
         ************************************************************/
-        // this.eventBusService.on('studentList:docInfo', this.unsubscribe$, ()=> {
-        //     console.log('이벤트 버스')
-        //     this.socket.emit('studentList:docInfo');
-        // });
         this.socket.emit('studentList:docInfo');
 
         this.socket.on('studentList:sendDocInfo', async (docData) => {
@@ -160,7 +156,7 @@ export class ComclassStudentComponent implements OnInit {
             // 학생이 학생의 로컬에 그린 판서 데이터를 받아와서 해당 페이지에 그려주기
             for (let i = 0; i < this.thumbArray.length; i++) {
                 const scale = this.thumbArray[i].scale;
-                if ((this.thumbArray[i].studentName == docData.studentName) && docData.drawingEvent) {
+                if ((this.thumbArray[i].studentName == docData.studentName) && (this.thumbArray[i].drawingEvent != undefined)) {
                     for (let j = 0; j < docData.drawingEvent.length; j++) {
                         await this.drawingService.drawThumb(docData.drawingEvent[j], canvas, scale);
                     }
@@ -224,7 +220,7 @@ export class ComclassStudentComponent implements OnInit {
                 const scale = this.thumbArray[i].scale;
                 if (this.thumbArray[i].studentName == data.studentName) {
                     for (let j = 0; j < data.drawingEvent?.drawingEvent.length; j++) {
-                        if (data.drawingEvent.pageNum == data.pageInfo.currentPage) {
+                        if ((data.drawingEvent.pageNum == data.pageInfo.currentPage) && (this.thumbArray[i].drawingEvent != undefined)) {
                             await this.drawingService.drawThumb(data.drawingEvent.drawingEvent[j], canvas, scale);
                         }
                     }
